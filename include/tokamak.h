@@ -32,7 +32,7 @@
 #define TOKAMAK_API 
 #endif
 
-#define NE_INTERFACE(n) protected: n(){}; n& operator = (const n & e){return (*this);}
+#define NE_INTERFACE(n) protected: n(){}; n& operator = (const n & e){(void)e;return (*this);}
 
 class TOKAMAK_API neRigidBody;
 
@@ -80,6 +80,7 @@ public:
 		usedMem = 0;
 	}
 	neByte * Alloc(s32 size, s32 alignment = 0) {
+        (void) alignment;
 		
 		usedMem += size;
 

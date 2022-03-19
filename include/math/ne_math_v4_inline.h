@@ -35,6 +35,17 @@ NEINLINE neV4::neV4( const neV4& V )
 
 //=========================================================================
 
+NEINLINE neV4& neV4::operator=( const neV4& V )
+{
+    this->X = V.X;
+    this->Y = V.Y;
+    this->Z = V.Z;
+    this->W = V.W;
+    return *this;
+}
+
+//=========================================================================
+
 NEINLINE neV4::neV4( const neV3& V, f32 w )
 {
     X = V.X(); Y = V.Y(); Z = V.Z(); W = w;    

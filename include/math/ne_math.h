@@ -35,6 +35,12 @@
 static s32 neNextDim1[] = {1, 2, 0};
 static s32 neNextDim2[] = {2, 0, 1};
 
+NEINLINE void suppress_neNextDim_notUsed(void)
+{
+    (void)neNextDim1;
+    (void)neNextDim2;
+}
+
 typedef struct neQ neQ;
 
 typedef struct neM3 neM3;
@@ -142,6 +148,7 @@ struct neV4
     NEINLINE neV4 ( f32 x, f32 y, f32 z, f32 w );
     NEINLINE neV4 ( const neV3& V, f32 w );
     NEINLINE neV4 ( const neV4& V );
+    NEINLINE neV4& operator=( const neV4& V );
     NEINLINE void SetZero ( void );
     NEINLINE void Set ( f32 x, f32 y, f32 z, f32 w );
 
