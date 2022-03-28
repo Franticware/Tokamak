@@ -100,7 +100,8 @@ neRigidBody_::neRigidBody_()
 	IbodyInv.M[1][1] = ne_Default_Mass;
 	IbodyInv.M[2][2] = ne_Default_Mass;
 
-	cookies = 0;
+    cookies.u = 0;
+    cookies.p = 0;
 
 	force.SetZero();
 	torque.SetZero();

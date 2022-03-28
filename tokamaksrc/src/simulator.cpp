@@ -127,7 +127,8 @@ neFixedTimeStepSimulator::neFixedTimeStepSimulator(const neSimulatorSizeInfo & _
 
 	fakeCollisionBody.id = -1;
 
-	fakeCollisionBody.cookies = 0;
+    fakeCollisionBody.cookies.u = 0;
+    fakeCollisionBody.cookies.p = 0;
 
 	fakeCollisionBody.isActive = true;
 

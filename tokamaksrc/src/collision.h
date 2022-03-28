@@ -163,7 +163,7 @@ struct TConvex
 	f32		envelope;
 	u32		type;
 	s32		matIndex;
-	u32		userData;
+    neUserData userData;
 	neBreakInfo breakInfo;
 	neV3 *	vertices;
 
@@ -183,9 +183,13 @@ struct TConvex
 	neT3	GetTransform();
 	void	SetUserData(u32 ud)
 	{
-			userData = ud;
+			userData.u = ud;
 	}
-	u32		GetUserData()
+	void	SetUserData(void* ud)
+	{
+			userData.p = ud;
+	}
+	neUserData GetUserData()
 	{
 			return userData;
 	}
@@ -247,7 +251,7 @@ public:
 
 	f32 length;
 
-	u32 cookies;
+	neUserData cookies;
 
 	//results
 	
@@ -267,7 +271,8 @@ public:
 	{
 		pos.SetZero();
 		dir.SetZero();
-		cookies = 0;
+        cookies.u = 0;
+        cookies.p = 0;
 		normal.SetZero();
 		depth = 0;
 		materialID = 0;

@@ -55,6 +55,12 @@ typedef u8                  neByte;
 typedef s32                 neErr;
 typedef s32                 neBool;
 
+union neUserData
+{
+	u32 u;
+	void* p;
+};
+
 #if _MSC_VER
 	typedef signed   __int64    s64;
 	typedef unsigned __int64    u64;

@@ -246,7 +246,7 @@ public:
 
 	neSensorItem * sensorCursor;
 
-	u32 cookies;
+	neUserData cookies;
 	
 	neCollision col;
 	

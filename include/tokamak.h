@@ -193,7 +193,9 @@ public:
 
 	void	SetUserData(u32 userData);
 
-	u32		GetUserData();
+    void	SetUserData(void* userData);
+
+    neUserData GetUserData();
 
 	/*
 		Box
@@ -276,7 +278,8 @@ public:
 		indices[0] = -1;
 		indices[1] = -1;
 		indices[2] = -1;
-		userData = 0;
+        userData.u = 0;
+        userData.p = 0;
 	}
 
 	enum
@@ -287,7 +290,7 @@ public:
 	s32 indices[3];
 	s32 materialID;
 	u32 flag;
-	u32 userData;
+	neUserData userData;
 };
 
 class neTriangleMesh
@@ -325,7 +328,9 @@ public:
 
 	void	SetUserData(u32 userData);
 
-	u32		GetUserData();
+    void	SetUserData(void* userData);
+
+    neUserData GetUserData();
 
 	neV3	GetLineVector();
 
@@ -383,8 +388,10 @@ public:
 	s32		GetCollisionID();
 	
 	void	SetUserData(u32 userData);
-	
-	u32		GetUserData();
+
+    void	SetUserData(void* userData);
+
+    neUserData GetUserData();
 	
 	s32		GetGeometryCount();
 	
@@ -481,8 +488,10 @@ public:
 	s32		GetCollisionID();
 	
 	void	SetUserData(u32 userData);
-	
-	u32		GetUserData();
+
+    void	SetUserData(void* userData);
+
+    neUserData GetUserData();
 	
 	s32		GetGeometryCount();
 

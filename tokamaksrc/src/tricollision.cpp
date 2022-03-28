@@ -689,7 +689,9 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 	
 	s32 terrainMatID = 0;
 
-	u32 userData = 0;
+    neUserData userData;
+    userData.u = 0;
+    userData.p = 0;
 /*
 	callCnt++;
 
@@ -779,7 +781,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 
 		result.depth = res[currentRes].depth;
 
-		result.convexB = (TConvex*)userData;
+        result.convexB = (TConvex*)userData.p;
 
 		//result.collisionFrame[0] = res[currentRes].contactX;
 		//result.collisionFrame[1] = res[currentRes].contactY;

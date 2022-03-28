@@ -774,7 +774,8 @@ void TConvex::Initialise()
 	SetTransform(t);
 	matIndex = 0;
 	//id = 0;
-	userData = 0;
+    userData.u = 0;
+    userData.p = 0;
 
 	breakInfo.mass = 1.0f;
 	breakInfo.inertiaTensor = neBoxInertiaTensor(1.0f, 1.0f, 1.0f, 1.0f);
