@@ -1,29 +1,29 @@
-#include "dxut\dxstdafx.h"
-#include "resource.h"
-#include "d3dapp.h"
-#include "tokamaksampleApp.h"
+#include "tok_sample_glapp.h"
+
+#define TOKAMAK_SAMPLE_NAME "rad dude"
+const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
 const s32 WALL_NUMBER = 1;
 
-D3DXHANDLE g_hShaderTechTokamak;
+neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f },
+    { -1.f, 1.f, 1.f, 0.f }
+};
 
-D3DXVECTOR4 vLightWorld[NUM_LIGHT] = {	D3DXVECTOR4(1.f,2.f,1.f,0.f),
-										D3DXVECTOR4(-1.f,1.f,1.f,0.f)};
+neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f },
+    { 0.5f, 0.5f, 0.5f, 0.f }
+};
 
-D3DXVECTOR4 vLightColor[NUM_LIGHT] = {	D3DXVECTOR4(0.7f,0.7f,0.7f,0.f),
-										D3DXVECTOR4(0.5f,0.5f,0.5f,0.f)};
-
-const D3DXVECTOR3 g_MinBound( -4.0f, -GROUND_Y, -6.0f );
-const D3DXVECTOR3 g_MaxBound( 4.0f, GROUND_Y, 6.0f );
+// const D3DXVECTOR3 g_MinBound( -4.0f, -GROUND_Y, -6.0f );
+// const D3DXVECTOR3 g_MaxBound( 4.0f, GROUND_Y, 6.0f );
 
 struct DemoData
 {
-	neV3 pos;
-	neV3 boxSize;
-	neV3 colour;
+    neV3 pos;
+    neV3 boxSize;
+    neV3 colour;
 };
 
-DemoData gFloor = {	{0.0f,-11.0f,0.0f}, {200.0f,2.0f,200.0f}, {0.3f,0.3f,0.6f}};
+DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.3f, 0.6f } };
 
 #define RAD_DUDE_BOX 0
 #define RAD_DUDE_SPHERE 1
@@ -31,74 +31,74 @@ DemoData gFloor = {	{0.0f,-11.0f,0.0f}, {200.0f,2.0f,200.0f}, {0.3f,0.3f,0.6f}};
 
 struct BoneData
 {
-	s32 geometryType;
-	f32 zRotation;
-	neV3 pos;
-	neV3 size;
-	neV3 colour;
+    s32 geometryType;
+    f32 zRotation;
+    neV3 pos;
+    neV3 size;
+    neV3 colour;
 };
 
-BoneData bones[] = 
+BoneData bones[] =
 {
-	{RAD_DUDE_BOX,		0.0f, {0.0f, 0.0f, 0.0f}, {0.55f, 0.7f, 0.3f}, {0.8f, 0.2f, 0.2f}}, //body 		
-	{RAD_DUDE_SPHERE,	0.0f, {0.0f, 0.55f, 0.0f}, {0.4f, 0.35f, 0.2f}, {0.8f, 0.8f, 0.2f}}, //head 
-	
-	{RAD_DUDE_CYLINDER, -NE_PI / 2.0f, {-0.45f, 0.28f, 0.0f}, {0.25f, 0.4f, 0.2f}, {0.2f, 0.2f, 0.8f}}, //right arm 
-	{RAD_DUDE_CYLINDER, NE_PI / 2.0f, {0.45f, 0.28f, 0.0f}, {0.25f, 0.4f, 0.2f}, {0.2f, 0.2f, 0.8f}}, //left arm
+    { RAD_DUDE_BOX, 0.0f, { 0.0f, 0.0f, 0.0f }, { 0.55f, 0.7f, 0.3f }, { 0.8f, 0.2f, 0.2f } }, // body
+    { RAD_DUDE_SPHERE, 0.0f, { 0.0f, 0.55f, 0.0f }, { 0.4f, 0.35f, 0.2f }, { 0.8f, 0.8f, 0.2f } }, // head
 
-	{RAD_DUDE_BOX, -NE_PI / 2.0f, {-0.9f, 0.28f, 0.0f}, {0.24f, 0.6f, 0.24f}, {0.2f, 0.2f, 0.8f}}, //right forearm
-	{RAD_DUDE_BOX, NE_PI / 2.0f, {0.9f, 0.28f, 0.0f}, {0.24f, 0.6f, 0.24f}, {0.2f, 0.2f, 0.8f}}, //left forearm
+    { RAD_DUDE_CYLINDER, -NE_PI / 2.0f, { -0.45f, 0.28f, 0.0f }, { 0.25f, 0.4f, 0.2f }, { 0.2f, 0.2f, 0.8f } }, // right arm
+    { RAD_DUDE_CYLINDER, NE_PI / 2.0f, { 0.45f, 0.28f, 0.0f }, { 0.25f, 0.4f, 0.2f }, { 0.2f, 0.2f, 0.8f } }, // left arm
 
-	{RAD_DUDE_CYLINDER, 0.0f, {-0.20f, -0.6f, 0.0f}, {0.27f, 0.7f, 0.2f}, {0.3f, 0.7f, 0.2f}}, //right thigh 
-	{RAD_DUDE_CYLINDER, 0.0f, {0.20f, -0.6f, 0.0f}, {0.27f, 0.7f, 0.2f}, {0.3f, 0.7f, 0.2f}}, //left thigh 
-	
-	{RAD_DUDE_BOX, 0.0f, {-0.20f, -1.3f, 0.0f}, {0.3f, 0.8f, 0.3f}, {0.3f, 0.7f, 0.2f}}, //right leg
-	{RAD_DUDE_BOX, 0.0f, {0.20f, -1.3f, 0.0f}, {0.3f, 0.8f, 0.3f}, {0.3f, 0.7f, 0.2f}}, //left leg
+    { RAD_DUDE_BOX, -NE_PI / 2.0f, { -0.9f, 0.28f, 0.0f }, { 0.24f, 0.6f, 0.24f }, { 0.2f, 0.2f, 0.8f } }, // right forearm
+    { RAD_DUDE_BOX, NE_PI / 2.0f, { 0.9f, 0.28f, 0.0f }, { 0.24f, 0.6f, 0.24f }, { 0.2f, 0.2f, 0.8f } }, // left forearm
+
+    { RAD_DUDE_CYLINDER, 0.0f, { -0.20f, -0.6f, 0.0f }, { 0.27f, 0.7f, 0.2f }, { 0.3f, 0.7f, 0.2f } }, // right thigh
+    { RAD_DUDE_CYLINDER, 0.0f, { 0.20f, -0.6f, 0.0f }, { 0.27f, 0.7f, 0.2f }, { 0.3f, 0.7f, 0.2f } }, // left thigh
+
+    { RAD_DUDE_BOX, 0.0f, { -0.20f, -1.3f, 0.0f }, { 0.3f, 0.8f, 0.3f }, { 0.3f, 0.7f, 0.2f } }, // right leg
+    { RAD_DUDE_BOX, 0.0f, { 0.20f, -1.3f, 0.0f }, { 0.3f, 0.8f, 0.3f }, { 0.3f, 0.7f, 0.2f } }, // left leg
 };
 
 enum
 {
-	BONE_BODY,
-	BONE_HEAD,
-	BONE_RIGHT_ARM,
-	BONE_LEFT_ARM,
-	BONE_RIGHT_FOREARM,
-	BONE_LEFT_FOREARM,
-	BONE_RIGHT_THIGH,
-	BONE_LEFT_THIGH,
-	BONE_RIGHT_LEG,
-	BONE_LEFT_LEG,
+    BONE_BODY,
+    BONE_HEAD,
+    BONE_RIGHT_ARM,
+    BONE_LEFT_ARM,
+    BONE_RIGHT_FOREARM,
+    BONE_LEFT_FOREARM,
+    BONE_RIGHT_THIGH,
+    BONE_LEFT_THIGH,
+    BONE_RIGHT_LEG,
+    BONE_LEFT_LEG,
 };
 
 struct JointData
 {
-	s32 bodyA;
-	s32 bodyB;
-	neV3 pos;
-	s32 type; // 0 = ball joint, 1 = hinge joint
-	f32 xAxisAngle;
-	f32 lowerLimit;
-	f32 upperLimit;
-	neBool enableLimit;
-	neBool enableTwistLimit;
-	f32 twistLimit;
+    s32 bodyA;
+    s32 bodyB;
+    neV3 pos;
+    s32 type; // 0 = ball joint, 1 = hinge joint
+    f32 xAxisAngle;
+    f32 lowerLimit;
+    f32 upperLimit;
+    neBool enableLimit;
+    neBool enableTwistLimit;
+    f32 twistLimit;
 };
 
-JointData joints[] = 
+JointData joints[] =
 {
-	{BONE_HEAD, BONE_BODY,				{0.0f, 0.35f, 0.0f}, 1, 0.0f, -NE_PI / 4.0f, NE_PI / 4.0f, true, false, 0.0f}, //head <-> body
-	
-	{BONE_RIGHT_ARM, BONE_BODY,			{-0.22f, 0.28f, 0.0f}, 0, NE_PI, 0.0f, NE_PI / 2.5f, true, true, 0.1f}, //
-	{BONE_LEFT_ARM, BONE_BODY,			{0.22f, 0.28f, 0.0f}, 0, 0.0f, 0.0f, NE_PI / 2.5f, true, true, 0.1f},
+    { BONE_HEAD, BONE_BODY, { 0.0f, 0.35f, 0.0f }, 1, 0.0f, -NE_PI / 4.0f, NE_PI / 4.0f, true, false, 0.0f }, // head <-> body
 
-	{BONE_RIGHT_FOREARM, BONE_RIGHT_ARM,{-0.65f, 0.28f, 0.0f}, 1, NE_PI, 0.0f, NE_PI / 2.0f, true, false},
-	{BONE_LEFT_FOREARM, BONE_LEFT_ARM,	{0.65f, 0.28f, 0.0f}, 1, 0.0f, 0.0f, NE_PI / 2.0f, true, false},
+    { BONE_RIGHT_ARM, BONE_BODY, { -0.22f, 0.28f, 0.0f }, 0, NE_PI, 0.0f, NE_PI / 2.5f, true, true, 0.1f }, //
+    { BONE_LEFT_ARM, BONE_BODY, { 0.22f, 0.28f, 0.0f }, 0, 0.0f, 0.0f, NE_PI / 2.5f, true, true, 0.1f },
 
-	{BONE_RIGHT_THIGH, BONE_BODY,		{-0.20f, -0.32f, 0.0f}, 0, NE_PI * 6.0f / 8.0f, 0.0f, NE_PI / 4.0f, true, true, 0.8f},
-	{BONE_LEFT_THIGH, BONE_BODY,		{0.20f, -0.32f, 0.0f}, 0, NE_PI * 2.0f / 8.0f, 0.0f, NE_PI / 4.0f, true, true, 0.8f},
+    { BONE_RIGHT_FOREARM, BONE_RIGHT_ARM, { -0.65f, 0.28f, 0.0f }, 1, NE_PI, 0.0f, NE_PI / 2.0f, true, false, 0.f },
+    { BONE_LEFT_FOREARM, BONE_LEFT_ARM, { 0.65f, 0.28f, 0.0f }, 1, 0.0f, 0.0f, NE_PI / 2.0f, true, false, 0.f },
 
-	{BONE_RIGHT_LEG, BONE_RIGHT_THIGH,	{-0.20f, -0.95f, 0.0f}, 1, -NE_PI * 0.5f, -NE_PI / 2.0f, 0.0f, true, false},
-	{BONE_LEFT_LEG, BONE_LEFT_THIGH,	{0.20f, -0.95f, 0.0f}, 1, -NE_PI * 0.5f, -NE_PI / 2.0f, 0.0f, true, false},
+    { BONE_RIGHT_THIGH, BONE_BODY, { -0.20f, -0.32f, 0.0f }, 0, NE_PI * 6.0f / 8.0f, 0.0f, NE_PI / 4.0f, true, true, 0.8f },
+    { BONE_LEFT_THIGH, BONE_BODY, { 0.20f, -0.32f, 0.0f }, 0, NE_PI * 2.0f / 8.0f, 0.0f, NE_PI / 4.0f, true, true, 0.8f },
+
+    { BONE_RIGHT_LEG, BONE_RIGHT_THIGH, { -0.20f, -0.95f, 0.0f }, 1, -NE_PI * 0.5f, -NE_PI / 2.0f, 0.0f, true, false, 0.f },
+    { BONE_LEFT_LEG, BONE_LEFT_THIGH, { 0.20f, -0.95f, 0.0f }, 1, -NE_PI * 0.5f, -NE_PI / 2.0f, 0.0f, true, false, 0.f },
 };
 
 const s32 N_DUDE = 20;
@@ -110,447 +110,433 @@ const s32 N_STEP = 40;
 class CSampleRadDude
 {
 public:
-	neSimulator * sim;
-	neAllocatorDefault allocator;
-	nePerformanceReport perfReport;
+    neSimulator* sim;
+    neAllocatorDefault allocator;
+    nePerformanceReport perfReport;
 
-	CRenderPrimitive groundRender;
-	neAnimatedBody * ground;
+    CRenderPrimitive groundRender;
+    neAnimatedBody* ground;
 
-	neRigidBody * rigidBodies[N_BODY];
-	CRenderPrimitive rigidBodiesRender[N_BODY];
+    neRigidBody* rigidBodies[N_BODY];
+    CRenderPrimitive rigidBodiesRender[N_BODY];
 
-	neAnimatedBody * steps[N_STEP];
-	CRenderPrimitive stepsRender[N_STEP];
+    neAnimatedBody* steps[N_STEP];
+    CRenderPrimitive stepsRender[N_STEP];
 
-	CSampleRadDude() : sim(NULL) {};
+    CSampleRadDude()
+        : sim(NULL) {};
 
-	void CreateSimulator();
-	
-	void CreateGround();
+    void CreateSimulator();
 
-	void CreateSteps();
+    void CreateGround();
 
-	void CreateRadDude(neV3 position, s32 & index);
+    void CreateSteps();
 
-	void Reset();
+    void CreateRadDude(neV3 position, s32& index);
 
-	void Cleanup();
+    void Reset();
+
+    void Cleanup();
 };
 
 CSampleRadDude sample;
 
 void CSampleRadDude::CreateSimulator()
 {
-	if (sim)
-	{
-		neSimulator::DestroySimulator(sim);
+    if (sim)
+    {
+        neSimulator::DestroySimulator(sim);
 
-		sim = NULL;
-	}
-	// creat the physics simulation
+        sim = NULL;
+    }
+    // creat the physics simulation
 
-	neSimulatorSizeInfo sizeInfo;
+    neSimulatorSizeInfo sizeInfo;
 
-	sizeInfo.rigidBodiesCount = N_BODY;
-	sizeInfo.animatedBodiesCount = WALL_NUMBER + N_STEP;
-	sizeInfo.geometriesCount = N_BODY + WALL_NUMBER + N_STEP;
-	sizeInfo.constraintsCount = N_BODY * JOINTS_PER_DUDE;
-	s32 totalBody = N_BODY + WALL_NUMBER;
-	sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
-	neV3 gravity; gravity.Set(0.0f, -9.0f, 0.0f);
-	{ //dont need any of these
-		sizeInfo.rigidParticleCount = 0;
-		//sizeInfo.terrainNodesStartCount = 0;
-	}
+    sizeInfo.rigidBodiesCount = N_BODY;
+    sizeInfo.animatedBodiesCount = WALL_NUMBER + N_STEP;
+    sizeInfo.geometriesCount = N_BODY + WALL_NUMBER + N_STEP;
+    sizeInfo.constraintsCount = N_BODY * JOINTS_PER_DUDE;
+    s32 totalBody = N_BODY + WALL_NUMBER;
+    sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
+    neV3 gravity;
+    gravity.Set(0.0f, -9.0f, 0.0f);
+    {
+        // dont need any of these
+        sizeInfo.rigidParticleCount = 0;
+        // sizeInfo.terrainNodesStartCount = 0;
+    }
 
-	sim = neSimulator::CreateSimulator(sizeInfo, &allocator, &gravity);
+    sim = neSimulator::CreateSimulator(sizeInfo, &allocator, &gravity);
 }
 
 void CSampleRadDude::CreateGround()
 {
-	ground = sim->CreateAnimatedBody();
+    ground = sim->CreateAnimatedBody();
 
-	neGeometry * geom = ground->AddGeometry();	 
+    neGeometry* geom = ground->AddGeometry();
 
-	geom->SetBoxSize(gFloor.boxSize);
+    geom->SetBoxSize(gFloor.boxSize);
 
-	ground->UpdateBoundingInfo();
+    ground->UpdateBoundingInfo();
 
-	ground->SetPos(gFloor.pos);
+    ground->SetPos(gFloor.pos);
 
-	groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
+    groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
 }
 
 void CSampleRadDude::CreateSteps()
 {
-	for (s32 i = 0; i < N_STEP; i++)
-	{
-		steps[i] = sim->CreateAnimatedBody();
+    for (s32 i = 0; i < N_STEP; i++)
+    {
+        steps[i] = sim->CreateAnimatedBody();
 
-		neGeometry * geom = steps[i]->AddGeometry();
+        neGeometry* geom = steps[i]->AddGeometry();
 
-		const f32 stepHeight = 0.5f;//1.2f;
+        const f32 stepHeight = 0.5f; // 1.2f;
 
-		const f32 stepDepth = 0.5f;//1.2f;
+        const f32 stepDepth = 0.5f; // 1.2f;
 
-		neV3 stepSize; stepSize.Set(30.0f, stepHeight, stepDepth);
+        neV3 stepSize;
+        stepSize.Set(30.0f, stepHeight, stepDepth);
 
-		geom->SetBoxSize(stepSize);
+        geom->SetBoxSize(stepSize);
 
-		steps[i]->UpdateBoundingInfo();
+        steps[i]->UpdateBoundingInfo();
 
-		neV3 pos;
+        neV3 pos;
 
-		pos.Set(0.0f, 8.0f - stepHeight * i, (-1.0f + stepDepth * i));
+        pos.Set(0.0f, 8.0f - stepHeight * i, (-1.0f + stepDepth * i));
 
-		steps[i]->SetPos(pos);
+        steps[i]->SetPos(pos);
 
-		stepsRender[i].SetGraphicBox(30.0f, stepHeight, stepDepth);
-	}
+        stepsRender[i].SetGraphicBox(30.0f, stepHeight, stepDepth);
+    }
 }
 
-void CSampleRadDude::CreateRadDude(neV3 position, s32 & index)
+void CSampleRadDude::CreateRadDude(neV3 position, s32& index)
 {
-//		const f32 groundLevel = -10.0f;
+    //		const f32 groundLevel = -10.0f;
 
-	s32 cur = 0;
+    s32 cur = 0;
 
-	f32 scale = 1.0f;
+    f32 scale = 1.0f;
 
-	for (s32 i = 0; i < BONES_PER_DUDE; i++)
-	{
-		cur = index + i;
+    for (s32 i = 0; i < BONES_PER_DUDE; i++)
+    {
+        cur = index + i;
 
-		rigidBodies[cur] = sim->CreateRigidBody();
+        rigidBodies[cur] = sim->CreateRigidBody();
 
-		rigidBodies[cur]->CollideConnected(true);
+        rigidBodies[cur]->CollideConnected(true);
 
-		neV3 inertiaTensor;
+        neV3 inertiaTensor;
 
-		f32 mass;
-		
-		mass = 8.0f;
+        f32 mass;
 
-		if (i == 0)
-			mass = 20.0f;
-		else if (i == 8 || i ==9)
-			mass = 8.0f;
+        mass = 8.0f;
 
-		neGeometry * geom = rigidBodies[cur]->AddGeometry();
+        if (i == 0)
+        {
+            mass = 20.0f;
+        }
+        else if (i == 8 || i == 9)
+        {
+            mass = 8.0f;
+        }
 
-		switch (bones[i].geometryType)
-		{
-		case RAD_DUDE_BOX:
-			
-			geom->SetBoxSize(bones[i].size[0] * scale, bones[i].size[1] * scale, bones[i].size[2] * scale);
+        neGeometry* geom = rigidBodies[cur]->AddGeometry();
 
-			inertiaTensor = neBoxInertiaTensor(bones[i].size[0]* scale, 
-													bones[i].size[1]* scale, 
-													bones[i].size[2]* scale, mass);
+        switch (bones[i].geometryType)
+        {
+        case RAD_DUDE_BOX:
 
-			rigidBodiesRender[cur].SetGraphicBox(bones[i].size[0] * scale, bones[i].size[1] * scale, bones[i].size[2] * scale);
+            geom->SetBoxSize(bones[i].size[0] * scale, bones[i].size[1] * scale, bones[i].size[2] * scale);
 
-			break;
+            inertiaTensor = neBoxInertiaTensor(bones[i].size[0] * scale,
+                                               bones[i].size[1] * scale,
+                                               bones[i].size[2] * scale, mass);
 
-		case RAD_DUDE_SPHERE:
+            rigidBodiesRender[cur].SetGraphicBox(bones[i].size[0] * scale, bones[i].size[1] * scale, bones[i].size[2] * scale);
 
-			geom->SetSphereDiameter(bones[i].size[0] * scale);
+            break;
 
-			inertiaTensor = neSphereInertiaTensor(bones[i].size[0]* scale, mass);
+        case RAD_DUDE_SPHERE:
 
-			rigidBodiesRender[cur].SetGraphicSphere(bones[i].size[0] * scale * 0.5f);
+            geom->SetSphereDiameter(bones[i].size[0] * scale);
 
-			break;
+            inertiaTensor = neSphereInertiaTensor(bones[i].size[0] * scale, mass);
 
-		case RAD_DUDE_CYLINDER:
+            rigidBodiesRender[cur].SetGraphicSphere(bones[i].size[0] * scale * 0.5f);
 
-			geom->SetCylinder(bones[i].size[0] * scale, bones[i].size[1] * scale);
+            break;
 
-			inertiaTensor = neCylinderInertiaTensor(bones[i].size[0], bones[i].size[1], mass);
+        case RAD_DUDE_CYLINDER:
 
-			rigidBodiesRender[cur].SetGraphicCylinder(bones[i].size[0] * scale * 0.5f, bones[i].size[1] * scale);
-			
-			break;
-		}
+            geom->SetCylinder(bones[i].size[0] * scale, bones[i].size[1] * scale);
 
-		rigidBodiesRender[cur].SetDiffuseColor(D3DXCOLOR(bones[i].colour[0],
-														bones[i].colour[1],
-														bones[i].colour[2], 1));
+            inertiaTensor = neCylinderInertiaTensor(bones[i].size[0], bones[i].size[1], mass);
 
-		rigidBodies[cur]->UpdateBoundingInfo();
+            rigidBodiesRender[cur].SetGraphicCylinder(bones[i].size[0] * scale * 0.5f, bones[i].size[1] * scale);
 
-		rigidBodies[cur]->SetInertiaTensor(inertiaTensor);
+            break;
+        }
 
-		rigidBodies[cur]->SetMass(mass);
+        rigidBodiesRender[cur].SetDiffuseColor(bones[i].colour[0],
+                                               bones[i].colour[1],
+                                               bones[i].colour[2], 1);
 
-		neV3 pos;
-		
-		pos = bones[i].pos * scale+ position;
+        rigidBodies[cur]->UpdateBoundingInfo();
 
-		rigidBodies[cur]->SetPos(pos);
+        rigidBodies[cur]->SetInertiaTensor(inertiaTensor);
 
-		neQ quat;
+        rigidBodies[cur]->SetMass(mass);
 
-		neV3 zAxis; zAxis.Set(0.0f, 0.0f, 1.0f);
+        neV3 pos;
 
-		quat.Set(bones[i].zRotation, zAxis);
-		
-		rigidBodies[cur]->SetRotation(quat);
+        pos = bones[i].pos * scale + position;
 
-		rigidBodies[cur]->SetSleepingParameter(0.5f); //make it easier to sleep
-	}
-	neJoint * joint;
-		
-	neT3 jointFrame;
+        rigidBodies[cur]->SetPos(pos);
 
-	for (s32 i = 0; i < JOINTS_PER_DUDE; i++)
-	{
-		joint = sim->CreateJoint(rigidBodies[joints[i].bodyA + index], rigidBodies[joints[i].bodyB + index]);
+        neQ quat;
 
-		jointFrame.SetIdentity();
+        neV3 zAxis;
+        zAxis.Set(0.0f, 0.0f, 1.0f);
 
-		jointFrame.pos = joints[i].pos * scale + position;
-			
-		if (joints[i].type == 0)
-		{
-			joint->SetType(neJoint::NE_JOINT_BALLSOCKET);
+        quat.Set(bones[i].zRotation, zAxis);
 
-			neQ q;
+        rigidBodies[cur]->SetRotation(quat);
 
-			neV3 zAxis; zAxis.Set(0.0f, 0.0f, 1.0f);
+        rigidBodies[cur]->SetSleepingParameter(0.5f); // make it easier to sleep
+    }
+    neJoint* joint;
 
-			q.Set(joints[i].xAxisAngle, zAxis);
+    neT3 jointFrame;
 
-			jointFrame.rot = q.BuildMatrix3();
-		}
-		else
-		{
-			joint->SetType(neJoint::NE_JOINT_HINGE);
+    for (s32 i = 0; i < JOINTS_PER_DUDE; i++)
+    {
+        joint = sim->CreateJoint(rigidBodies[joints[i].bodyA + index], rigidBodies[joints[i].bodyB + index]);
 
-			if (i == 3)
-			{
-				jointFrame.rot[0].Set(1.0f, 0.0f, 0.0f);
-				jointFrame.rot[1].Set(0.0f, 1.0f, 0.0f);
-				jointFrame.rot[2].Set(0.0f, 0.0f, 1.0f);
-			}
-			else if (i == 4)
-			{
-				jointFrame.rot[0].Set(-1.0f, 0.0f, 0.0f);
-				jointFrame.rot[1].Set(0.0f, -1.0f, 0.0f);
-				jointFrame.rot[2].Set(0.0f, 0.0f, 1.0f);
-			}
-			else
-			{
-				jointFrame.rot[0].Set(0.0f, 0.0f, -1.0f);
-				jointFrame.rot[1].Set(-1.0f, 0.0f, 0.0f);
-				jointFrame.rot[2].Set(0.0f, 1.0f, 0.0f);
-			}
-		}
+        jointFrame.SetIdentity();
 
-		joint->SetJointFrameWorld(jointFrame);
-		
-		if (i == 5|| i == 6) // right
-		{
-			neT3 body2w = rigidBodies[joints[i].bodyB+index]->GetTransform();
+        jointFrame.pos = joints[i].pos * scale + position;
 
-			neT3 w2Body = body2w.FastInverse();
+        if (joints[i].type == 0)
+        {
+            joint->SetType(neJoint::NE_JOINT_BALLSOCKET);
 
-			neM3 m;
+            neQ q;
 
-			neQ q1, q2;
+            neV3 zAxis;
+            zAxis.Set(0.0f, 0.0f, 1.0f);
 
-			neV3 zAxis; zAxis.Set(0.0f, 0.0f, 1.0f);
+            q.Set(joints[i].xAxisAngle, zAxis);
 
-			q1.Set(joints[i].xAxisAngle, zAxis);
+            jointFrame.rot = q.BuildMatrix3();
+        }
+        else
+        {
+            joint->SetType(neJoint::NE_JOINT_HINGE);
 
-			neV3 xAxis; xAxis.Set(1.0f, 0.0f, 0.0f);
+            if (i == 3)
+            {
+                jointFrame.rot[0].Set(1.0f, 0.0f, 0.0f);
+                jointFrame.rot[1].Set(0.0f, 1.0f, 0.0f);
+                jointFrame.rot[2].Set(0.0f, 0.0f, 1.0f);
+            }
+            else if (i == 4)
+            {
+                jointFrame.rot[0].Set(-1.0f, 0.0f, 0.0f);
+                jointFrame.rot[1].Set(0.0f, -1.0f, 0.0f);
+                jointFrame.rot[2].Set(0.0f, 0.0f, 1.0f);
+            }
+            else
+            {
+                jointFrame.rot[0].Set(0.0f, 0.0f, -1.0f);
+                jointFrame.rot[1].Set(-1.0f, 0.0f, 0.0f);
+                jointFrame.rot[2].Set(0.0f, 1.0f, 0.0f);
+            }
+        }
 
-			q2.Set(-NE_PI * 0.30f, xAxis);
+        joint->SetJointFrameWorld(jointFrame);
 
-			neQ q; q = q2 * q1;
+        if (i == 5 || i == 6) // right
+        {
+            neT3 body2w = rigidBodies[joints[i].bodyB + index]->GetTransform();
 
-			m = q.BuildMatrix3();
+            neT3 w2Body = body2w.FastInverse();
 
-			neT3 frame2body;
+            neM3 m;
 
-			frame2body.rot = w2Body.rot * m;
+            neQ q1, q2;
 
-			frame2body.pos = w2Body * jointFrame.pos;
+            neV3 zAxis;
+            zAxis.Set(0.0f, 0.0f, 1.0f);
 
-			//neT3 frame2w = body2w * frame2body;
+            q1.Set(joints[i].xAxisAngle, zAxis);
 
-			joint->SetJointFrameB(frame2body);
-		}
-		joint->SetLowerLimit(joints[i].lowerLimit);
+            neV3 xAxis;
+            xAxis.Set(1.0f, 0.0f, 0.0f);
 
-		joint->SetUpperLimit(joints[i].upperLimit);
+            q2.Set(-NE_PI * 0.30f, xAxis);
 
-		if (joints[i].enableLimit)
-			joint->EnableLimit(true);
+            neQ q;
+            q = q2 * q1;
 
-		if (joints[i].enableTwistLimit)
-		{
-			joint->SetLowerLimit2(joints[i].twistLimit);
+            m = q.BuildMatrix3();
 
-			joint->EnableLimit2(true);
-		}
+            neT3 frame2body;
 
-		joint->SetIteration(4);
-		
-		joint->Enable(true);
-	}
-	index = cur+1;
+            frame2body.rot = w2Body.rot * m;
+
+            frame2body.pos = w2Body * jointFrame.pos;
+
+            // neT3 frame2w = body2w * frame2body;
+
+            joint->SetJointFrameB(frame2body);
+        }
+        joint->SetLowerLimit(joints[i].lowerLimit);
+
+        joint->SetUpperLimit(joints[i].upperLimit);
+
+        if (joints[i].enableLimit)
+        {
+            joint->EnableLimit(true);
+        }
+
+        if (joints[i].enableTwistLimit)
+        {
+            joint->SetLowerLimit2(joints[i].twistLimit);
+
+            joint->EnableLimit2(true);
+        }
+
+        joint->SetIteration(4);
+
+        joint->Enable(true);
+    }
+    index = cur + 1;
 }
 
 void CSampleRadDude::Reset()
 {
-	Cleanup();
+    Cleanup();
 
-	// reset the camera position
-	D3DXVECTOR3 vecEye (30.0f, 12.0f, 40.0f);//(0.0f, -GROUND_Y + 1.7f, 0.0f);
-	D3DXVECTOR3 vecAt (0.0f, 0.0f, 1.0f);//(0.0f, -GROUND_Y + 1.7f, 1.0f);
-	g_Camera.SetViewParams( &vecEye, &vecAt );
+    // reset the camera position
+    neV3 vecEye;
+    vecEye.Set(30.0f, 12.0f, 40.0f); //(0.0f, -GROUND_Y + 1.7f, 0.0f);
+    neV3 vecAt;
+    vecAt.Set(0.0f, 0.0f, 1.0f); //(0.0f, -GROUND_Y + 1.7f, 1.0f);
+    g_Camera.SetViewParams(vecEye, vecAt);
 
-	CreateSimulator();
+    CreateSimulator();
 
-	CreateGround();
+    CreateGround();
 
-	CreateSteps();
+    CreateSteps();
 
-	neV3 position;
+    neV3 position;
 
-	position.SetZero();
+    position.SetZero();
 
-	s32 i = 0;
+    s32 i = 0;
 
-	for (s32 j = 0; j < N_DUDE; j++)
-	{
-		position.Set(-5 + (j % 5) * 2.0f, 11.0f + 4.0f * (j / 5), 0.0f);
+    for (s32 j = 0; j < N_DUDE; j++)
+    {
+        position.Set(-5 + (j % 5) * 2.0f, 11.0f + 4.0f * (j / 5), 0.0f);
 
-		CreateRadDude(position, i);	
-	}
+        CreateRadDude(position, i);
+    }
 }
 
 void CSampleRadDude::Cleanup()
 {
-	sample.groundRender.mMesh.Destroy();
+    neSimulator::DestroySimulator(sample.sim);
 
-	for (s32 i = 0; i < N_STEP; i++)
-	{
-		sample.stepsRender[i].mMesh.Destroy();
-	}
-
-	for (s32 i = 0; i < N_BODY; i++)
-	{
-		sample.rigidBodiesRender[i].mMesh.Destroy();
-	}
-
-	neSimulator::DestroySimulator(sample.sim);
-
-	sim = NULL;
+    sim = NULL;
 }
 
 void MyAppInit()
 {
-    // TODO: Perform any application-level initialization here
-    // Setup the camera
-    D3DXVECTOR3 MinBound( g_MinBound.x + CAMERA_SIZE, g_MinBound.y + CAMERA_SIZE, g_MinBound.z + CAMERA_SIZE );
-    D3DXVECTOR3 MaxBound( g_MaxBound.x - CAMERA_SIZE, g_MaxBound.y - CAMERA_SIZE, g_MaxBound.z - CAMERA_SIZE );
+    neV3 vecEye;
+    vecEye.Set(0.0f, 0.0f, -10.0f); //(0.0f, -GROUND_Y + 1.7f, 0.0f);
+    neV3 vecAt;
+    vecAt.Set(0.0f, 0.0f, 1.0f); //(0.0f, -GROUND_Y + 1.7f, 1.0f);
+    g_Camera.SetViewParams(vecEye, vecAt);
 
-    g_Camera.SetEnableYAxisMovement( true );
-    g_Camera.SetRotateButtons( false, false, true );
-    g_Camera.SetScalers( 0.01f, 50.0f );
-    D3DXVECTOR3 vecEye (0.0f, 0.0f, -10.0f);//(0.0f, -GROUND_Y + 1.7f, 0.0f);
-    D3DXVECTOR3 vecAt (0.0f, 0.0f, 1.0f);//(0.0f, -GROUND_Y + 1.7f, 1.0f);
-    g_Camera.SetViewParams( &vecEye, &vecAt );
-
-	for (s32 i = 0; i < NUM_LIGHT; i++)
-		D3DXVec4Normalize(&vLightWorld[i], &vLightWorld[i]);
-
-//	OnMyAppDestroyDevice(g_pD3dDevice);
-
-	sample.Reset();
+    for (s32 i = 0; i < NUM_LIGHT; i++)
+    {
+        vLightWorld[i].Normalize();
+    }
+    sample.Reset();
 };
 
-void CALLBACK OnMyAppFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
-	f32 t = 1.0f / 30.0f;//(f32)delta / 1000.0f;
+    (void)fTime;
+    (void)fElapsedTime;
+    f32 t = 1.0f / 30.0f; //(f32)delta / 1000.0f;
 
-	//sim->Advance(TIME_STEP, 1, &g_PerfReport);
-	sample.sim->Advance(t, 1.0f / 60.0f, 1.0f/ 30.0f, NULL);
+    // sim->Advance(TIME_STEP, 1, &g_PerfReport);
+    sample.sim->Advance(t, 1.0f / 60.0f, 1.0f / 30.0f, NULL);
 }
 
-void CALLBACK OnMyAppFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameRender()
 {
-	neT3 t;
-	
-	t = sample.ground->GetTransform();
+    neT3 t;
 
-	t.MakeD3DCompatibleMatrix();
+    t = sample.ground->GetTransform();
 
-    sample.groundRender.Render(pd3dDevice, &t);
+    t.MakeD3DCompatibleMatrix();
 
-	for (s32 i = 0; i < N_STEP; i++)
-	{
-		t = sample.steps[i]->GetTransform();
+    sample.groundRender.Render(&t);
 
-		t.MakeD3DCompatibleMatrix();
+    for (s32 i = 0; i < N_STEP; i++)
+    {
+        t = sample.steps[i]->GetTransform();
 
-		sample.stepsRender[i].Render(pd3dDevice, &t);
-	}
+        t.MakeD3DCompatibleMatrix();
 
-	for (s32 i = 0; i < N_BODY; i++)
-	{
-		t = sample.rigidBodies[i]->GetTransform();
+        sample.stepsRender[i].Render(&t);
+    }
 
-		t.MakeD3DCompatibleMatrix();
+    for (s32 i = 0; i < N_BODY; i++)
+    {
+        t = sample.rigidBodies[i]->GetTransform();
 
-		sample.rigidBodiesRender[i].Render(pd3dDevice, &t);
-	}
+        t.MakeD3DCompatibleMatrix();
 
-	WCHAR * str[2];
-	
-	str[0] = L"Tokamak Rad Dude Sample";
-	str[1] = L"";
+        sample.rigidBodiesRender[i].Render(&t);
+    }
 
-	MyRenderText(str, 2);
+    const char* str[2];
+
+    str[0] = "Tokamak Rad Dude Sample";
+    str[1] = "";
+
+    MyRenderText(str, 2);
 }
 
-LRESULT CALLBACK MyAppMsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
-                      bool* pbNoFurtherProcessing, void* pUserContext )
+void OnMyAppDestroyDevice()
 {
-	return 0;
+    sample.Cleanup();
 }
 
-void CALLBACK OnMyAppDestroyDevice( void* pUserContext )
+void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
 {
-	SAFE_RELEASE( g_pEffect );
+    (void)bAltDown;
+    if (bKeyDown)
+    {
+        switch (nChar)
+        {
+        case SDLK_r:
+        {
+            sample.Reset();
+        }
+        break;
 
-	sample.Cleanup();
+        default:
+            break;
+        }
+    }
 }
-
-void CALLBACK MyAppKeyboardProc( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
-{
-	if( bKeyDown )
-	{
-		 switch( nChar )
-		 {
-		 case 'R':
-			 {
-				//OnMyAppDestroyDevice(g_pD3dDevice);
-
-				sample.Reset();
-			 }
-			 break;
-
-		 default:
-			 break;
-		 }
-	}
-}
-
-
-
-
-

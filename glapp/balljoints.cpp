@@ -1,370 +1,288 @@
-#include "dxut\dxstdafx.h"
-#include "resource.h"
-#include "d3dapp.h"
-#include "tokamaksampleApp.h"
+#include "tok_sample_glapp.h"
 
-D3DXHANDLE g_hShaderTechTokamak;
+#define TOKAMAK_SAMPLE_NAME "ball joints"
+const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
-D3DXVECTOR4 vLightWorld[NUM_LIGHT] = {	D3DXVECTOR4(1.f,2.f,1.f,0.f),
-D3DXVECTOR4(-1.f,1.f,1.f,0.f)};
+neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } };
 
-D3DXVECTOR4 vLightColor[NUM_LIGHT] = {	D3DXVECTOR4(0.7f,0.7f,0.7f,0.f),
-D3DXVECTOR4(0.5f,0.5f,0.5f,0.f)};
+neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
 const s32 MAX_OVERLAPPED_PAIR = 300;
 const s32 WALL_NUMBER = 1;
-const f32 EPSILON  = 0.1f;
+const f32 EPSILON = 0.1f;
 
 struct DemoData
 {
-	neV3 pos;
-	neV3 boxSize;
-	neV3 colour;
+    neV3 pos;
+    neV3 boxSize;
+    neV3 colour;
 };
 
-DemoData gFloor = {	{0.0f,-11.0f,0.0f}, {200.0f,2.0f,200.0f}, {0.3f,0.3f,0.6f}};
-
-
+DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.3f, 0.6f } };
 
 class CSampleBallJoints
 {
 public:
-	CSampleBallJoints() { 
-		paused = false;
-	}
+    CSampleBallJoints()
+    {
+        paused = false;
+    }
 
-	void Initialise();
+    void Initialise();
 
-	void Shutdown();
+    void Shutdown();
 
-	void Process(XINPUT_STATE & InputState);
+    void Process();
 
-	void InititialisePhysics();
+    void InititialisePhysics();
 
 public:
-	enum
-	{
-		N_BODY = 30,
-	};
+    enum
+    {
+        N_BODY = 30,
+    };
 
-	neSimulator * sim;
+    neSimulator* sim;
 
-	neRigidBody * box[N_BODY];
+    neRigidBody* box[N_BODY];
 
-	CRenderPrimitive boxRenderPrimitives[N_BODY];
+    CRenderPrimitive boxRenderPrimitives[N_BODY];
 
-	neJoint * lastJoint;
+    neJoint* lastJoint;
 
-	neAllocatorDefault all;
+    neAllocatorDefault all;
 
-	nePerformanceReport perfReport;
+    nePerformanceReport perfReport;
 
-	bool paused;
+    bool paused;
 
-	CRenderPrimitive groundRender;
-	neAnimatedBody * ground;
+    CRenderPrimitive groundRender;
+    neAnimatedBody* ground;
 };
 
 CSampleBallJoints sample;
 
-void CSampleBallJoints::Initialise() 
+void CSampleBallJoints::Initialise()
 {
-	InititialisePhysics();
+    InititialisePhysics();
 }
 
-void CSampleBallJoints::Process(XINPUT_STATE & InputState)
+void CSampleBallJoints::Process()
 {
+    s32 actOnBody = N_BODY - 1;
 
-	// Zero value if thumbsticks are within the dead zone 
-	if( (InputState.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) )
-	{	
-		InputState.Gamepad.sThumbLX = 0;
-		InputState.Gamepad.sThumbLY = 0;
-	}
-
-	if( (InputState.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) ) 
-	{
-		InputState.Gamepad.sThumbRX = 0;
-		InputState.Gamepad.sThumbRY = 0;
-	}
-
-
-	s32 actOnBody = N_BODY - 1;
-
-
-	if (GetAsyncKeyState('P'))
-	{
-		paused = !paused;
-	}
-
-	neV3 vel;
-
-	if (GetAsyncKeyState('T'))
-	{
-		vel.Set (0.0f,30.0f,0.0f);
-
-		box[actOnBody]->SetVelocity(vel);
-	}
-
+    if (sdlGetAsyncKeyState(SDLK_t))
+    {
+        neV3 vel;
+        vel.Set(0.0f, 30.0f, 0.0f);
+        box[actOnBody]->SetVelocity(vel);
+    }
 }
 
-
-void CSampleBallJoints::Shutdown() 
+void CSampleBallJoints::Shutdown()
 {
-	sample.groundRender.mMesh.Destroy();
+    neSimulator::DestroySimulator(sim);
 
-	for (s32 i = 0; i < sample.N_BODY; i++)
-	{
-		sample.boxRenderPrimitives[i].mMesh.Destroy();
-	}
-
-	neSimulator::DestroySimulator(sim);
-
-	sim = NULL;
+    sim = NULL;
 }
 
 void CSampleBallJoints::InititialisePhysics()
 {
-	neV3 gravity; gravity.Set(0.0f, -8.0f, 0.0f);
+    neV3 gravity;
+    gravity.Set(0.0f, -8.0f, 0.0f);
 
-	f32 linkLength = 1.2f;
+    f32 linkLength = 1.2f;
 
-	neSimulatorSizeInfo sizeInfo;
+    neSimulatorSizeInfo sizeInfo;
 
-	sizeInfo.rigidBodiesCount = N_BODY;
-	sizeInfo.animatedBodiesCount = WALL_NUMBER;
-	sizeInfo.geometriesCount = N_BODY + WALL_NUMBER;
-	sizeInfo.overlappedPairsCount = MAX_OVERLAPPED_PAIR;
+    sizeInfo.rigidBodiesCount = N_BODY;
+    sizeInfo.animatedBodiesCount = WALL_NUMBER;
+    sizeInfo.geometriesCount = N_BODY + WALL_NUMBER;
+    sizeInfo.overlappedPairsCount = MAX_OVERLAPPED_PAIR;
 
-	sizeInfo.controllersCount = 1;
-	{ //dont need any of these
-		sizeInfo.rigidParticleCount = 0;
-		sizeInfo.terrainNodesStartCount = 0;
-	}
+    sizeInfo.controllersCount = 1;
+    {
+        // dont need any of these
+        sizeInfo.rigidParticleCount = 0;
+        sizeInfo.terrainNodesStartCount = 0;
+    }
 
-	sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
+    sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
 
-	neRigidBody * lastbox = NULL;
+    neRigidBody* lastbox = NULL;
 
-	for (s32 j = 0; j < N_BODY; j++)
-	{
-		f32 mass = 0.1f;
+    for (s32 j = 0; j < N_BODY; j++)
+    {
+        f32 mass = 0.1f;
 
-		neRigidBody * rigidBody = sim->CreateRigidBody();
+        neRigidBody* rigidBody = sim->CreateRigidBody();
 
-		rigidBody->CollideConnected(true);
+        rigidBody->CollideConnected(true);
 
-		neGeometry * geom = rigidBody->AddGeometry();
+        neGeometry* geom = rigidBody->AddGeometry();
 
-		neV3 boxSize; 
+        neV3 boxSize;
 
-		boxSize.Set(1.2f, 0.5f, 0.5f);
+        boxSize.Set(1.2f, 0.5f, 0.5f);
 
-		geom->SetBoxSize(boxSize[0],boxSize[1],boxSize[2]);
+        geom->SetBoxSize(boxSize[0], boxSize[1], boxSize[2]);
 
-		neV3 tensorSize;
+        neV3 tensorSize;
 
-		tensorSize = boxSize;;
+        tensorSize = boxSize;
+        ;
 
-		rigidBody->UpdateBoundingInfo();
+        rigidBody->UpdateBoundingInfo();
 
-		//rigidBody->SetInertiaTensor(neBoxInertiaTensor(tensorSize, mass));
+        // rigidBody->SetInertiaTensor(neBoxInertiaTensor(tensorSize, mass));
 
-		rigidBody->SetInertiaTensor(neSphereInertiaTensor(tensorSize[0], mass));
+        rigidBody->SetInertiaTensor(neSphereInertiaTensor(tensorSize[0], mass));
 
-		rigidBody->SetMass(mass);
+        rigidBody->SetMass(mass);
 
-		neV3 pos;
+        neV3 pos;
 
-		if (j == 0)
-		{
-			pos.Set(-linkLength, 0.0f, 0.0f);
-		}
-		else if (j != 0)
-		{
-			pos.Set(-linkLength * (j+1), 0.0f, 0.0f);
-		}
+        if (j == 0)
+        {
+            pos.Set(-linkLength, 0.0f, 0.0f);
+        }
+        else if (j != 0)
+        {
+            pos.Set(-linkLength * (j + 1), 0.0f, 0.0f);
+        }
 
-		rigidBody->SetPos(pos);
+        rigidBody->SetPos(pos);
 
-		neJoint * joint = NULL;
+        neJoint* joint = NULL;
 
-		neT3 jointFrame;
+        neT3 jointFrame;
 
-		jointFrame.SetIdentity();
+        jointFrame.SetIdentity();
 
-		if (j != 0)
-		{
-			joint = sim->CreateJoint(rigidBody, lastbox);
-			//joint = sim->CreateJoint(lastbox, rigidBody);
+        if (j != 0)
+        {
+            joint = sim->CreateJoint(rigidBody, lastbox);
+            // joint = sim->CreateJoint(lastbox, rigidBody);
 
-			jointFrame.pos.Set(-linkLength * (0.5f + j), 0.0f, 0.0f);
+            jointFrame.pos.Set(-linkLength * (0.5f + j), 0.0f, 0.0f);
 
-			joint->SetJointFrameWorld(jointFrame);
-		}
-		if (j == N_BODY - 1)
-		{
-			lastJoint = joint;
-		}
+            joint->SetJointFrameWorld(jointFrame);
+        }
+        if (j == N_BODY - 1)
+        {
+            lastJoint = joint;
+        }
 
-		if (joint)
-		{
-			joint->SetType(neJoint::NE_JOINT_BALLSOCKET);
+        if (joint)
+        {
+            joint->SetType(neJoint::NE_JOINT_BALLSOCKET);
 
-			joint->Enable(true);
-		}
+            joint->Enable(true);
+        }
 
-		/* set up the graphical models */
-		{
-			this->boxRenderPrimitives[j].SetGraphicBox(boxSize[0],boxSize[1],boxSize[2]);
-			geom->SetUserData((u32)&(boxRenderPrimitives[j]));
-			this->boxRenderPrimitives[j].SetDiffuseColor(D3DXCOLOR(0.8f,0.2f,0.2f,1.0f));
-			
-		}
-		box[j] = rigidBody;
+        /* set up the graphical models */
+        {
+            this->boxRenderPrimitives[j].SetGraphicBox(boxSize[0], boxSize[1], boxSize[2]);
+            geom->SetUserData(&(boxRenderPrimitives[j]));
+            this->boxRenderPrimitives[j].SetDiffuseColor(0.8f, 0.2f, 0.2f, 1.0f);
+        }
+        box[j] = rigidBody;
 
-		lastbox = rigidBody;
-	}
-	if (lastJoint)
-	{
-		lastJoint->SetEpsilon(EPSILON);
+        lastbox = rigidBody;
+    }
+    if (lastJoint)
+    {
+        lastJoint->SetEpsilon(EPSILON);
 
-		lastJoint->SetIteration(5);
-	}
+        lastJoint->SetIteration(5);
+    }
 
-	//SetUpRoom
+    // SetUpRoom
 
-	ground = sim->CreateAnimatedBody();
+    ground = sim->CreateAnimatedBody();
 
-	neGeometry * geom = ground->AddGeometry();	 
+    neGeometry* geom = ground->AddGeometry();
 
-	geom->SetBoxSize(gFloor.boxSize);
+    geom->SetBoxSize(gFloor.boxSize);
 
-	ground->UpdateBoundingInfo();
+    ground->UpdateBoundingInfo();
 
-	ground->SetPos(gFloor.pos);
+    ground->SetPos(gFloor.pos);
 
-	groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
-
-
+    groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
 }
-
 
 void MyAppInit()
 {
-    // TODO: Perform any application-level initialization here
+    neV3 vecEye;
+    vecEye.Set(-10.0f, 5.0f, 50.0f);
+    neV3 vecAt;
+    vecAt.Set(-30.0f, 0.0f, 0.0f);
+    g_Camera.SetViewParams(vecEye, vecAt);
 
-
-
-	D3DXVECTOR3 vecEye (-10.0f, 5.0f, 50.0f);
-	D3DXVECTOR3 vecAt (-30.0f, 0.0f, 0.0f);
-	g_Camera.SetViewParams( &vecEye, &vecAt );
-
-    g_Camera.SetEnableYAxisMovement( true );
-    g_Camera.SetRotateButtons( false, false, true );
-    g_Camera.SetScalers( 0.01f, 50.0f );
-
-
-
-	for (s32 i = 0; i < NUM_LIGHT; i++)
-		D3DXVec4Normalize(&vLightWorld[i], &vLightWorld[i]);
-
-	//OnMyAppDestroyDevice(g_pD3dDevice);
-
-	sample.Initialise();
-
-};
-
-void CALLBACK OnMyAppFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
-{
-
-
-	DWORD dwResult;    
-
-	XINPUT_STATE state;
-
-	ZeroMemory( &state, sizeof(XINPUT_STATE) );
-
-	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState( 0, &state );
-
-	////////////////////////////////////////////////////////
-	sample.Process(state);
-
-	if (!sample.paused)
-	{
-		sample.sim->Advance(1.0f / 60.0f,1);
-	}
+    for (s32 i = 0; i < NUM_LIGHT; i++)
+    {
+        vLightWorld[i].Normalize();
+    }
+    sample.Initialise();
 }
 
-void CALLBACK OnMyAppFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
-	
-	neT3 t;
-	t = sample.ground->GetTransform();
-	t.MakeD3DCompatibleMatrix();
-	sample.groundRender.Render(pd3dDevice,&t);
-
-	// Display the boxes
-
-	for (s32 i = 0; i < sample.N_BODY; i++)
-	{
-		t = sample.box[i]->GetTransform();
-		t.MakeD3DCompatibleMatrix();
-		sample.boxRenderPrimitives[i].Render(pd3dDevice,&t);
-	}
-
-	WCHAR * str[8];
-	
-	str[0] = L"Tokamak demo - chain of 30 boxes connected by ball joints - (c) 2010 Tokamak Ltd";
-	str[1] = L"Controls:";
-	str[2] = L"'P' -> pause/unpause the simulation";
-	str[3] = L"'T' -> lift the end of the chain";	
-	str[4] = L"This sample demonstrate the ball joint.";
-	str[5] = L"Note the box can contact each other and the ground is modelled";
-	str[6] = L"as a box, rather than just a plane.";
-	str[7] = L"";
-
-	MyRenderText(str, 8);
+    (void)fTime;
+    (void)fElapsedTime;
+    sample.Process();
+    if (!sample.paused)
+    {
+        sample.sim->Advance(1.0f / 60.0f, 1);
+    }
 }
 
-LRESULT CALLBACK MyAppMsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
-                      bool* pbNoFurtherProcessing, void* pUserContext )
+void OnMyAppFrameRender()
 {
-	return 0;
+    neT3 t;
+    t = sample.ground->GetTransform();
+    sample.groundRender.Render(&t);
+
+    // Display the boxes
+    for (s32 i = 0; i < sample.N_BODY; i++)
+    {
+        t = sample.box[i]->GetTransform();
+        sample.boxRenderPrimitives[i].Render(&t);
+    }
+
+    const char* str[8];
+
+    str[0] = "Tokamak demo - chain of 30 boxes connected by ball joints - (c) 2010 Tokamak Ltd";
+    str[1] = "Controls:";
+    str[2] = "'P' -> pause/unpause the simulation";
+    str[3] = "'T' -> lift the end of the chain";
+    str[4] = "This sample demonstrate the ball joint.";
+    str[5] = "Note the box can contact each other and the ground is modelled";
+    str[6] = "as a box, rather than just a plane.";
+    str[7] = "";
+
+    MyRenderText(str, 8);
 }
 
-void CALLBACK OnMyAppDestroyDevice( void* pUserContext )
+void OnMyAppDestroyDevice()
 {
-
-	SAFE_RELEASE( g_pEffect );
-
-	sample.Shutdown();
-
-
+    sample.Shutdown();
 }
 
-void CALLBACK MyAppKeyboardProc( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
+void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
 {
-	if( bKeyDown )
-	{
-		 switch( nChar )
-		 {
-		 case 'R':
-			 {
-				//OnMyAppDestroyDevice(g_pD3dDevice);
-			 }
-			 break;
+    (void)bAltDown;
+    if (bKeyDown)
+    {
+        switch (nChar)
+        {
+        case SDLK_r:
+        {
+        } break;
 
-		 default:
-			 break;
-		 }
-	}
+        default:
+            break;
+        }
+    }
 }
-

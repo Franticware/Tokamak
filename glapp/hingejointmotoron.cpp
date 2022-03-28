@@ -1,500 +1,408 @@
-#include "dxut\dxstdafx.h"
-#include "resource.h"
-#include "d3dapp.h"
-#include "tokamaksampleApp.h"
+#include "tok_sample_glapp.h"
 
+#define TOKAMAK_SAMPLE_NAME "hinge joint motor on"
+const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
-D3DXHANDLE g_hShaderTechTokamak;
+neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } };
 
-D3DXVECTOR4 vLightWorld[NUM_LIGHT] = {	D3DXVECTOR4(1.f,2.f,1.f,0.f),
-D3DXVECTOR4(-1.f,1.f,1.f,0.f)};
+neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-D3DXVECTOR4 vLightColor[NUM_LIGHT] = {	D3DXVECTOR4(0.7f,0.7f,0.7f,0.f),
-D3DXVECTOR4(0.5f,0.5f,0.5f,0.f)};
-
-const s32 MAX_OVERLAPPED_PAIR = 300;
+// const s32 MAX_OVERLAPPED_PAIR = 300;
 const s32 WALL_NUMBER = 1;
-const f32 EPSILON  = 0.1f;
+// const f32 EPSILON  = 0.1f;
 
 struct DemoData
 {
-	neV3 pos;
-	neV3 boxSize;
-	neV3 colour;
+    neV3 pos;
+    neV3 boxSize;
+    neV3 colour;
 };
 
-DemoData gFloor = {	{0.0f,-11.0f,0.0f}, {200.0f,2.0f,200.0f}, {0.3f,0.3f,0.6f}};
-
-
+DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.3f, 0.6f } };
 
 class CSampleHingeJointMotorOn
 {
 public:
-	CSampleHingeJointMotorOn() { 
-		paused = false;
-	}
+    CSampleHingeJointMotorOn()
+    {
+        paused = false;
+    }
 
-	void Initialise();
+    void Initialise();
 
-	void Shutdown();
+    void Shutdown();
 
-	void Process(XINPUT_STATE & InputState ,double fTime);
+    void Process();
 
-	void InititialisePhysics();
+    void InititialisePhysics();
 
-	void Reset();
+    void Reset();
 
-	void DisplayRigidBodies(neRigidBody ** rb, s32 count , IDirect3DDevice9* pd3dDevice);
-	void DisplayAnimatedBodies(neAnimatedBody ** ab, s32 count , IDirect3DDevice9* pd3dDevice);
+    void DisplayRigidBodies(neRigidBody** rb, s32 count);
 
-
+    void DisplayAnimatedBodies(neAnimatedBody** ab, s32 count);
 
 public:
-	enum
-	{
-		N_BODY =5,
+    enum
+    {
+        N_BODY = 5,
 
-		N_TOTAL_BODIES = N_BODY,
-	};
+        N_TOTAL_BODIES = N_BODY,
+    };
 
-	neSimulator * sim;
+    neSimulator* sim;
 
-	neRigidBody * rigidBodies[N_TOTAL_BODIES];
+    neRigidBody* rigidBodies[N_TOTAL_BODIES];
 
-	CRenderPrimitive renderPrimitives[N_TOTAL_BODIES];
+    CRenderPrimitive renderPrimitives[N_TOTAL_BODIES];
 
-	neJoint * lastJoint;
+    neJoint* lastJoint;
 
-	neAllocatorDefault all;
+    neAllocatorDefault all;
 
-	nePerformanceReport perfReport;
+    nePerformanceReport perfReport;
 
-	bool paused;
+    bool paused;
 
-	CRenderPrimitive groundRender;
-	neAnimatedBody * ground;
+    CRenderPrimitive groundRender;
+    neAnimatedBody* ground;
 };
 
 CSampleHingeJointMotorOn sample;
 
-void CSampleHingeJointMotorOn::DisplayRigidBodies(neRigidBody ** rb, s32 count , IDirect3DDevice9* pd3dDevice)
+void CSampleHingeJointMotorOn::DisplayRigidBodies(neRigidBody** rb, s32 count)
 {
-	while (count-- && *rb)
-	{
-		neRigidBody * body = *rb;
+    while (count-- && *rb)
+    {
+        neRigidBody* body = *rb;
 
-		neT3 trans = body->GetTransform();
+        neT3 trans = body->GetTransform();
 
-		body->BeginIterateGeometry();
+        body->BeginIterateGeometry();
 
-		neGeometry * geom = body->GetNextGeometry();
+        neGeometry* geom = body->GetNextGeometry();
 
-		while (geom)
-		{
-			CRenderPrimitive * t = (CRenderPrimitive *)geom->GetUserData();
+        while (geom)
+        {
+            CRenderPrimitive* t = (CRenderPrimitive*)geom->GetUserData().p;
 
-			if (t)
-			{
-				neT3 geomTrans = geom->GetTransform();
+            if (t)
+            {
+                neT3 geomTrans = geom->GetTransform();
 
-				neT3 worldTrans = trans * geomTrans;
+                neT3 worldTrans = trans * geomTrans;
 
-				worldTrans.MakeD3DCompatibleMatrix();
+                worldTrans.MakeD3DCompatibleMatrix();
 
-				t->Render(pd3dDevice,&worldTrans);			
-
-			}
-			geom = body->GetNextGeometry();
-		}
-		rb++;
-	}
+                t->Render(&worldTrans);
+            }
+            geom = body->GetNextGeometry();
+        }
+        rb++;
+    }
 }
 
-void CSampleHingeJointMotorOn::DisplayAnimatedBodies(neAnimatedBody ** ab, s32 count , IDirect3DDevice9* pd3dDevice)
+void CSampleHingeJointMotorOn::DisplayAnimatedBodies(neAnimatedBody** ab, s32 count)
 {
-	while (count-- && *ab)
-	{
-		neAnimatedBody * body = *ab;
+    while (count-- && *ab)
+    {
+        neAnimatedBody* body = *ab;
 
-		neT3 trans = body->GetTransform();
+        neT3 trans = body->GetTransform();
 
-		body->BeginIterateGeometry();
+        body->BeginIterateGeometry();
 
-		neGeometry * geom = body->GetNextGeometry();
+        neGeometry* geom = body->GetNextGeometry();
 
-		while (geom)
-		{
-			CRenderPrimitive * t = (CRenderPrimitive *)geom->GetUserData();
+        while (geom)
+        {
+            CRenderPrimitive* t = (CRenderPrimitive*)geom->GetUserData().p;
 
-			if (t)
-			{
-				neT3 geomTrans = geom->GetTransform();
+            if (t)
+            {
+                neT3 geomTrans = geom->GetTransform();
 
-				neT3 worldTrans = trans * geomTrans;
+                neT3 worldTrans = trans * geomTrans;
 
-				worldTrans.MakeD3DCompatibleMatrix();
+                worldTrans.MakeD3DCompatibleMatrix();
 
-				t->Render(pd3dDevice,&worldTrans);
-
-			}
-			geom = body->GetNextGeometry();
-		}
-		ab++;
-	}
+                t->Render(/*pd3dDevice,*/ &worldTrans);
+            }
+            geom = body->GetNextGeometry();
+        }
+        ab++;
+    }
 }
-void CSampleHingeJointMotorOn::Initialise() 
+void CSampleHingeJointMotorOn::Initialise()
 {
-	InititialisePhysics();
-}
-
-void CSampleHingeJointMotorOn::Process(XINPUT_STATE & InputState ,double fTime)
-{
-
-	static double mTimeUntilNextToggle = 0;
-
-	if (mTimeUntilNextToggle >= 0)
-		mTimeUntilNextToggle -= fTime;
-
-
-	// Zero value if thumbsticks are within the dead zone 
-	if( (InputState.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) )
-	{	
-		InputState.Gamepad.sThumbLX = 0;
-		InputState.Gamepad.sThumbLY = 0;
-	}
-
-	if( (InputState.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) ) 
-	{
-		InputState.Gamepad.sThumbRX = 0;
-		InputState.Gamepad.sThumbRY = 0;
-	}
-
-
-	if (GetAsyncKeyState('R'))
-	{
-		Reset();
-		return;
-	}
-
-
-	if (GetAsyncKeyState('P') && mTimeUntilNextToggle <= 0)
-	{
-		paused = !paused;
-
-		mTimeUntilNextToggle = 500;
-	}
-
-
-	s32 actOnBody = 0;//N_TOTAL_BODIES - 1;// -20;
-
-	if (GetAsyncKeyState('T') && mTimeUntilNextToggle <= 0)
-	{
-		neV3 vel;
-
-		vel.Set (0.0f, 30.0f, 0.0f);
-
-		rigidBodies[actOnBody]->SetVelocity(vel);
-
-		mTimeUntilNextToggle = 40;
-	}
-
-	
-	
-
-
+    InititialisePhysics();
 }
 
-
-void CSampleHingeJointMotorOn::Shutdown() 
+void CSampleHingeJointMotorOn::Process()
 {
-	sample.groundRender.mMesh.Destroy();
+    if (sdlGetAsyncKeyState(SDLK_r))
+    {
+        Reset();
+        return;
+    }
 
-	for (s32 i = 0; i < sample.N_TOTAL_BODIES; i++)
-	{
-		sample.renderPrimitives[i].mMesh.Destroy();
-	}
+    s32 actOnBody = 0; // N_TOTAL_BODIES - 1;// -20;
 
-	neSimulator::DestroySimulator(sim);
+    if (sdlGetAsyncKeyState(SDLK_t))
+    {
+        neV3 vel;
 
-	sim = NULL;
+        vel.Set(0.0f, 30.0f, 0.0f);
+
+        rigidBodies[actOnBody]->SetVelocity(vel);
+    }
+}
+
+void CSampleHingeJointMotorOn::Shutdown()
+{
+    neSimulator::DestroySimulator(sim);
+
+    sim = NULL;
 }
 
 void CSampleHingeJointMotorOn::Reset()
 {
-	Shutdown();
+    Shutdown();
 
-	InititialisePhysics();
+    InititialisePhysics();
 }
-
 
 void CSampleHingeJointMotorOn::InititialisePhysics()
 {
-	f32 ypos = -7;
+    f32 ypos = -7;
 
-	neV3 gravity; gravity.Set(0.0f, -9.0f, 0.0f);
-	//neV3 gravity; gravity.Set(-9.0f, 0.0f, 0.0f);
+    neV3 gravity;
+    gravity.Set(0.0f, -9.0f, 0.0f);
+    // neV3 gravity; gravity.Set(-9.0f, 0.0f, 0.0f);
 
-	//f32 linkLength = 2.2f;
-	f32 linkLength = -0.0f;
+    // f32 linkLength = 2.2f;
+    // f32 linkLength = -0.0f;
 
-	neSimulatorSizeInfo sizeInfo;
+    neSimulatorSizeInfo sizeInfo;
 
-	sizeInfo.rigidBodiesCount = N_TOTAL_BODIES;
-	sizeInfo.animatedBodiesCount = WALL_NUMBER;
-	sizeInfo.geometriesCount = N_TOTAL_BODIES + WALL_NUMBER;
-	sizeInfo.overlappedPairsCount = 2000;//MAX_OVERLAPPED_PAIR;
+    sizeInfo.rigidBodiesCount = N_TOTAL_BODIES;
+    sizeInfo.animatedBodiesCount = WALL_NUMBER;
+    sizeInfo.geometriesCount = N_TOTAL_BODIES + WALL_NUMBER;
+    sizeInfo.overlappedPairsCount = 2000; // MAX_OVERLAPPED_PAIR;
 
-	{ //dont need any of these
-		sizeInfo.terrainNodesStartCount = 0;
-		sizeInfo.rigidParticleCount = 0;
-	}
+    {
+        // dont need any of these
+        sizeInfo.terrainNodesStartCount = 0;
+        sizeInfo.rigidParticleCount = 0;
+    }
 
-	sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
+    sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
 
-	//create the kart body
+    // create the kart body
 
-	f32 mass = 1.0f;
+    f32 mass = 1.0f;
 
-	rigidBodies[0] = sim->CreateRigidBody();
+    rigidBodies[0] = sim->CreateRigidBody();
 
-	rigidBodies[0]->SetMass(mass);
+    rigidBodies[0]->SetMass(mass);
 
-	neGeometry * geom = rigidBodies[0]->AddGeometry();
+    neGeometry* geom = rigidBodies[0]->AddGeometry();
 
-	neV3 boxSize; boxSize.Set(3.0f, 3.f, 1.0f);
+    neV3 boxSize;
+    boxSize.Set(3.0f, 3.f, 1.0f);
 
-	geom->SetBoxSize(boxSize);
+    geom->SetBoxSize(boxSize);
 
-	rigidBodies[0]->UpdateBoundingInfo();
+    rigidBodies[0]->UpdateBoundingInfo();
 
-	rigidBodies[0]->SetInertiaTensor(neBoxInertiaTensor(boxSize, mass));
+    rigidBodies[0]->SetInertiaTensor(neBoxInertiaTensor(boxSize, mass));
 
-	neV3 pos; pos.Set(0.0f, ypos, 0.0f);
+    neV3 pos;
+    pos.Set(0.0f, ypos, 0.0f);
 
-	rigidBodies[0]->SetPos(pos);
+    rigidBodies[0]->SetPos(pos);
 
-	rigidBodies[0]->SetSleepingParameter(.0f);
+    rigidBodies[0]->SetSleepingParameter(.0f);
 
-	//create the 4 wheels (sphere)
+    // create the 4 wheels (sphere)
 
-	s32 j = 1;
+    s32 j = 1;
 
-	ypos -= 2.0f;
+    ypos -= 2.0f;
 
-	for (int i = 0; i < 4; i++)
-	{
-		neRigidBody * rb;
+    for (int i = 0; i < 4; i++)
+    {
+        neRigidBody* rb;
 
-		rigidBodies[j++] = rb = sim->CreateRigidBody();
+        rigidBodies[j++] = rb = sim->CreateRigidBody();
 
-		rb->SetMass(mass);
+        rb->SetMass(mass);
 
-		geom = rb->AddGeometry();
+        geom = rb->AddGeometry();
 
-		geom->SetBoxSize(2.0f, .5f, 1.0f);//SetSphereDiameter(1.0f);
+        geom->SetBoxSize(2.0f, .5f, 1.0f); // SetSphereDiameter(1.0f);
 
-		//geom->SetSphereDiameter(1.0f);
+        // geom->SetSphereDiameter(1.0f);
 
-		rb->UpdateBoundingInfo();
+        rb->UpdateBoundingInfo();
 
-		//rb->SetInertiaTensor(neSphereInertiaTensor(1.0f, 0.1f));
+        // rb->SetInertiaTensor(neSphereInertiaTensor(1.0f, 0.1f));
 
-		rb->SetInertiaTensor(neBoxInertiaTensor(2.0f, .5f, 1.0f, mass));
+        rb->SetInertiaTensor(neBoxInertiaTensor(2.0f, .5f, 1.0f, mass));
 
-		neV3 pos;
+        neV3 pos;
 
-		switch(i)
-		{
-		case 0: pos.Set(-1.5f, ypos, 1.0f);
-			break;
-		case 1: pos.Set(-1.5f, ypos, -1.0f);
-			break;
-		case 2: pos.Set(1.5f, ypos, 1.0f);
-			break;
-		case 3: pos.Set(1.5f, ypos, -1.0f);
-			break;
-		}
-		rb->SetPos(pos);
+        switch (i)
+        {
+        case 0:
+            pos.Set(-1.5f, ypos, 1.0f);
+            break;
+        case 1:
+            pos.Set(-1.5f, ypos, -1.0f);
+            break;
+        case 2:
+            pos.Set(1.5f, ypos, 1.0f);
+            break;
+        case 3:
+            pos.Set(1.5f, ypos, -1.0f);
+            break;
+        }
+        rb->SetPos(pos);
 
-		neJoint * joint = sim->CreateJoint(rigidBodies[0], rb);
+        neJoint* joint = sim->CreateJoint(rigidBodies[0], rb);
 
-		joint->SetIteration(1);
+        joint->SetIteration(1);
 
-		neT3 jointFrame;
+        neT3 jointFrame;
 
-		jointFrame.rot[0].Set(1.0f, 0.0f, 0.0f);
-		jointFrame.rot[1].Set(0.0f, 0.0f, -1.0f);
-		jointFrame.rot[2].Set(0.0f, 1.0f, 0.0f);
-		jointFrame.pos = pos;
+        jointFrame.rot[0].Set(1.0f, 0.0f, 0.0f);
+        jointFrame.rot[1].Set(0.0f, 0.0f, -1.0f);
+        jointFrame.rot[2].Set(0.0f, 1.0f, 0.0f);
+        jointFrame.pos = pos;
 
-		joint->SetJointFrameWorld(jointFrame);
-		joint->SetType(neJoint::NE_JOINT_HINGE);
-		joint->Enable(true);
-		joint->EnableMotor(true);
-		joint->SetMotor(neJoint::NE_MOTOR_SPEED, 1.f, 50.f);
-	}
+        joint->SetJointFrameWorld(jointFrame);
+        joint->SetType(neJoint::NE_JOINT_HINGE);
+        joint->Enable(true);
+        joint->EnableMotor(true);
+        joint->SetMotor(neJoint::NE_MOTOR_SPEED, 1.f, 50.f);
+    }
 
+    for (int i = 0; i < N_BODY; i++)
+    {
+        rigidBodies[i]->BeginIterateGeometry();
 
-	for (int i = 0; i < N_BODY; i++)
-	{
-		rigidBodies[i]->BeginIterateGeometry();
+        neGeometry* geom = rigidBodies[i]->GetNextGeometry();
 
-		neGeometry * geom = rigidBodies[i]->GetNextGeometry();
+        neV3 scale;
+        if (geom->GetBoxSize(scale))
+        {
+            renderPrimitives[i].SetGraphicBox(scale.X(), scale.Y(), scale.Z());
+        }
+        else
+        {
+            f32 height, diameter;
 
+            if (geom->GetCylinder(diameter, height))
+            {
+                renderPrimitives[i].SetGraphicCylinder(diameter / 2.0f, height);
+            }
+            else if (geom->GetSphereDiameter(diameter))
+            {
+                renderPrimitives[i].SetGraphicSphere(diameter / 2.0);
+            }
+        }
 
-		neV3 scale;
-		if (geom->GetBoxSize(scale))
-		{
-			renderPrimitives[i].SetGraphicBox(scale.X(),scale.Y(),scale.Z());				
-		}
-		else
-		{
-			f32 height, diameter;
+        geom->SetUserData(&renderPrimitives[i]);
+    }
 
-			if (geom->GetCylinder(diameter, height))
-			{	
-				renderPrimitives[i].SetGraphicCylinder(diameter/2.0f,height);
-			}
-			else if (geom->GetSphereDiameter(diameter))
-			{
-				renderPrimitives[i].SetGraphicSphere(diameter/2.0);
-			}
-		}
+    // SetUpRoom
+    {
 
-		geom->SetUserData((u32)&renderPrimitives[i]);
-	}
+        ground = sim->CreateAnimatedBody();
 
+        neGeometry* geom = ground->AddGeometry();
 
-	//SetUpRoom
-	{
+        geom->SetBoxSize(gFloor.boxSize);
 
-		ground = sim->CreateAnimatedBody();
+        ground->UpdateBoundingInfo();
 
-		neGeometry * geom = ground->AddGeometry();	 
+        ground->SetPos(gFloor.pos);
 
-		geom->SetBoxSize(gFloor.boxSize);
-
-		ground->UpdateBoundingInfo();
-
-		ground->SetPos(gFloor.pos);
-
-		groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
-
-	}
-
+        groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
+    }
 }
-
 
 void MyAppInit()
 {
-	// TODO: Perform any application-level initialization here
+    neV3 vecEye;
+    vecEye.Set(-10.0f, 5.0f, 40.0f);
+    neV3 vecAt;
+    vecAt.Set(0.0f, 0.0f, 1.0f);
+    g_Camera.SetViewParams(vecEye, vecAt);
 
-
-
-	D3DXVECTOR3 vecEye (-10.0f, 5.0f, 40.0f);
-	D3DXVECTOR3 vecAt (0.0f, 0.0f, 1.0f);
-	g_Camera.SetViewParams( &vecEye, &vecAt );
-
-	g_Camera.SetEnableYAxisMovement( true );
-	g_Camera.SetRotateButtons( false, false, true );
-	g_Camera.SetScalers( 0.01f, 50.0f );
-
-
-
-	for (s32 i = 0; i < NUM_LIGHT; i++)
-		D3DXVec4Normalize(&vLightWorld[i], &vLightWorld[i]);
-
-	//OnMyAppDestroyDevice(g_pD3dDevice);
-
-	sample.Initialise();
-
+    for (s32 i = 0; i < NUM_LIGHT; i++)
+    {
+        vLightWorld[i].Normalize();
+    }
+    sample.Initialise();
 };
 
-void CALLBACK OnMyAppFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
+    (void)fTime;
+    (void)fElapsedTime;
+    sample.Process();
 
-
-	DWORD dwResult;    
-
-	XINPUT_STATE state;
-
-	ZeroMemory( &state, sizeof(XINPUT_STATE) );
-
-	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState( 0, &state );
-
-	////////////////////////////////////////////////////////
-	sample.Process(state , fTime);
-
-	if (!sample.paused)
-	{
-		sample.sim->Advance(1.0f / 60.0f,1);
-	}
+    if (!sample.paused)
+    {
+        sample.sim->Advance(1.0f / 60.0f, 1);
+    }
 }
 
-void CALLBACK OnMyAppFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameRender()
 {
+    neT3 t;
+    t = sample.ground->GetTransform();
+    t.MakeD3DCompatibleMatrix();
+    sample.groundRender.Render(&t);
 
-	neT3 t;
-	t = sample.ground->GetTransform();
-	t.MakeD3DCompatibleMatrix();
-	sample.groundRender.Render(pd3dDevice,&t);
+    // Display the boxes
 
-	// Display the boxes
+    sample.DisplayRigidBodies(sample.rigidBodies, CSampleHingeJointMotorOn::N_TOTAL_BODIES);
 
-	sample.DisplayRigidBodies(sample.rigidBodies, CSampleHingeJointMotorOn::N_TOTAL_BODIES,pd3dDevice);
+    const char* str[7];
 
-	WCHAR * str[7];
+    str[0] = "Tokamak demo - Hinge joint with Motor turned on - (c) 2010 Tokamak Ltd";
+    str[1] = "Controls:";
+    str[2] = "'P' -> pause/unpause the simulation";
+    str[3] = "'T' -> lift";
+    str[4] = "'R' -> Reset";
+    str[5] = "This sample demonstrate the hinge joint motor.";
+    str[6] = "";
 
-	str[0] = L"Tokamak demo - Hinge joint with Motor turned on - (c) 2010 Tokamak Ltd";
-	str[1] = L"Controls:";
-	str[2] = L"'P' -> pause/unpause the simulation";
-	str[3] = L"'T' -> lift";	
-	str[4] = L"'R' -> Reset";
-	str[5] = L"This sample demonstrate the hinge joint motor.";
-	str[6] = L"";
-
-
-	MyRenderText(str, 7);
+    MyRenderText(str, 7);
 }
 
-LRESULT CALLBACK MyAppMsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
-							  bool* pbNoFurtherProcessing, void* pUserContext )
+void OnMyAppDestroyDevice()
 {
-	return 0;
+    sample.Shutdown();
 }
 
-void CALLBACK OnMyAppDestroyDevice( void* pUserContext )
+void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
 {
+    (void)bAltDown;
+    if (bKeyDown)
+    {
+        switch (nChar)
+        {
+        case SDLK_p:
+        {
+            sample.paused = !sample.paused;
+        }
+        break;
 
-	SAFE_RELEASE( g_pEffect );
-
-	sample.Shutdown();
-
-
+        default:
+            break;
+        }
+    }
 }
-
-void CALLBACK MyAppKeyboardProc( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
-{
-	if( bKeyDown )
-	{
-		switch( nChar )
-		{
-		case 'R':
-			{
-				//OnMyAppDestroyDevice(g_pD3dDevice);
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-

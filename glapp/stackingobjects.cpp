@@ -1,585 +1,498 @@
-#include "dxut\dxstdafx.h"
-#include "resource.h"
-#include "d3dapp.h"
-#include "tokamaksampleApp.h"
+#include "tok_sample_glapp.h"
+
+#define TOKAMAK_SAMPLE_NAME "stacking objects"
+const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
 #define PYRAMID
 //#define COLLISION_CALLBACK_ON
 
-D3DXHANDLE g_hShaderTechTokamak;
+neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } };
+neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-D3DXVECTOR4 vLightWorld[NUM_LIGHT] = {	D3DXVECTOR4(1.f,2.f,1.f,0.f),
-D3DXVECTOR4(-1.f,1.f,1.f,0.f)};
-
-D3DXVECTOR4 vLightColor[NUM_LIGHT] = {	D3DXVECTOR4(0.7f,0.7f,0.7f,0.f),
-D3DXVECTOR4(0.5f,0.5f,0.5f,0.f)};
-
-const s32 MAX_OVERLAPPED_PAIR = 300;
+// const s32 MAX_OVERLAPPED_PAIR = 300;
 const s32 WALL_NUMBER = 1;
-const f32 EPSILON  = 0.1f;
+// const f32 EPSILON  = 0.1f;
 
 struct DemoData
 {
-	neV3 pos;
-	neV3 boxSize;
-	neV3 colour;
+    neV3 pos;
+    neV3 boxSize;
+    neV3 colour;
 };
 
-DemoData gFloor = {	{0.0f,-11.0f,0.0f}, {200.0f,2.0f,200.0f}, {0.3f,0.3f,0.6f}};
-
-
+DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.3f, 0.6f } };
 
 class CSampleStackingObjects
 {
 public:
-	CSampleStackingObjects() { 
-		paused = false;
-	}
+    CSampleStackingObjects()
+    {
+        paused = false;
+    }
 
-	void Initialise();
+    void Initialise();
 
-	void Shutdown();
+    void Shutdown();
 
-	void Process(XINPUT_STATE & InputState ,double fTime);
+    void Process();
 
-	void InititialisePhysics();
+    void InititialisePhysics();
 
-	void MakeStack(neV3 position, s32 & index);
+    void MakeStack(neV3 position, s32& index);
 
-	void MakeBullet(int);
+    void MakeBullet(int);
 
-	void Reset();
-
+    void Reset();
 
 public:
-	enum
-	{
-		STACK_HEIGHT = 10,//4,
+    enum
+    {
+        STACK_HEIGHT = 10, // 4,
 
-		N_STACKS = 5,
+        N_STACKS = 5,
 
-		N_DEPTH = 5,
+        N_DEPTH = 5,
 
-		N_BULLET = 5,
+        N_BULLET = 5,
 
 #ifdef PYRAMID
-		N_BODY = 55 + N_BULLET,
+        N_BODY = 55 + N_BULLET,
 #else
-		N_BODY = STACK_HEIGHT * N_STACKS * N_DEPTH + N_BULLET,
+        N_BODY = STACK_HEIGHT * N_STACKS * N_DEPTH + N_BULLET,
 #endif
-	};
+    };
 
-	neSimulator * sim;
+    neSimulator* sim;
 
-	neRigidBody * box[N_BODY];
+    neRigidBody* box[N_BODY];
 
-	CRenderPrimitive boxRenderPrimitives[N_BODY];
+    CRenderPrimitive boxRenderPrimitives[N_BODY];
 
+    neAllocatorDefault all;
 
-	neAllocatorDefault all;
+    nePerformanceReport perfReport;
 
-	nePerformanceReport perfReport;
+    bool paused;
 
-	bool paused;
-
-	CRenderPrimitive groundRender;
-	neAnimatedBody * ground;
+    CRenderPrimitive groundRender;
+    neAnimatedBody* ground;
 };
 
 CSampleStackingObjects sample;
 
-void CSampleStackingObjects::Initialise() 
+void CSampleStackingObjects::Initialise()
 {
-	InititialisePhysics();
+    InititialisePhysics();
 }
 
-void CSampleStackingObjects::Process(XINPUT_STATE & InputState ,double fTime)
+void CSampleStackingObjects::Process()
 {
+    if (sdlGetAsyncKeyState(SDLK_r))
+    {
+        Reset();
+        return;
+    }
 
-	static double mTimeUntilNextToggle = 0;
+    static s32 nextBullet = 0;
+    if (sdlGetAsyncKeyStateOnce(SDLK_t))
+    {
+        neV3 pos;
+        neV3 dir;
+        neV3 eyept = g_Camera.GetEyePt();
+        neV3 lookatpt = g_Camera.GetLookAtPt();
+        neV3 d3ddir;
+        d3ddir = lookatpt - eyept;
 
-	if (mTimeUntilNextToggle >= 0)
-		mTimeUntilNextToggle -= fTime;
+        pos.Set(eyept);
+        dir.Set(d3ddir);
+        dir.Normalize();
 
+        pos = pos + dir * 3.0f;
 
-	// Zero value if thumbsticks are within the dead zone 
-	if( (InputState.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) )
-	{	
-		InputState.Gamepad.sThumbLX = 0;
-		InputState.Gamepad.sThumbLY = 0;
-	}
+        box[nextBullet]->SetPos(pos);
+        box[nextBullet]->SetVelocity(dir * 40.0f);
 
-	if( (InputState.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) && 
-		(InputState.Gamepad.sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		InputState.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) ) 
-	{
-		InputState.Gamepad.sThumbRX = 0;
-		InputState.Gamepad.sThumbRY = 0;
-	}
-
-
-	if (GetAsyncKeyState('R'))
-	{
-		Reset();
-		return;
-	}
-
-
-	if (GetAsyncKeyState('P') && mTimeUntilNextToggle <= 0)
-	{
-		paused = !paused;
-
-		mTimeUntilNextToggle = 500;
-	}
-
-
-	static s32 nextBullet = 0;
-
-	if (GetAsyncKeyState('T') && mTimeUntilNextToggle <= 0)
-	{
-		neV3 pos;
-		neV3 dir;
-		const D3DXVECTOR3* lookatpt;
-		const D3DXVECTOR3* eyept;
-		eyept = g_Camera.GetEyePt();
-		lookatpt = g_Camera.GetLookAtPt();
-		D3DXVECTOR3 d3ddir;
-		d3ddir = *lookatpt - *eyept;
-
-		pos.Set(eyept->x,eyept->y,eyept->z);
-		dir.Set(d3ddir.x,d3ddir.y,d3ddir.z);
-		dir.Normalize();
-
-		pos = pos + dir * 3.0f;
-
-		s32 bullet = N_BODY - N_BULLET + nextBullet;
-
-		box[bullet]->SetPos(pos);
-
-		box[bullet]->SetVelocity(dir * 40.0f);
-
-		nextBullet = (nextBullet + 1) % N_BULLET;
-
-		mTimeUntilNextToggle = 500;
-	}
-
-	
-	
-
-
+        nextBullet = (nextBullet + 1) % N_BULLET;
+    }
 }
 
-
-void CSampleStackingObjects::Shutdown() 
+void CSampleStackingObjects::Shutdown()
 {
-	sample.groundRender.mMesh.Destroy();
+    neSimulator::DestroySimulator(sim);
 
-	for (s32 i = 0; i < sample.N_BODY; i++)
-	{
-		sample.boxRenderPrimitives[i].mMesh.Destroy();
-	}
-
-	neSimulator::DestroySimulator(sim);
-
-	sim = NULL;
+    sim = NULL;
 }
 
 void CSampleStackingObjects::Reset()
 {
-	Shutdown();
+    Shutdown();
 
-	InititialisePhysics();
+    InititialisePhysics();
 }
 
-void CSampleStackingObjects::MakeStack(neV3 position, s32 & index)
+void CSampleStackingObjects::MakeStack(neV3 position, s32& index)
 {
-	const f32 groundLevel = -10.0f;
+    (void)position;
+    const f32 groundLevel = -10.0f;
 
-	s32 cur = 0;;
+    s32 cur = 0;
+    ;
 
-#ifndef PYRAMID 
+#ifndef PYRAMID
 
-	for (s32 i = 0; i < STACK_HEIGHT; i++)
-	{
-		cur = index + i;
+    for (s32 i = 0; i < STACK_HEIGHT; i++)
+    {
+        cur = index + i;
 
-		box[cur] = sim->CreateRigidBody();
+        box[cur] = sim->CreateRigidBody();
 
-		neGeometry * geom = box[cur]->AddGeometry();
+        neGeometry* geom = box[cur]->AddGeometry();
 
-		neV3 boxSize1; boxSize1.Set(0.8f, 0.8f, 0.8f);
-		//neV3 boxSize1; boxSize1.Set(0.3, 1.9, 0.3);
+        neV3 boxSize1;
+        boxSize1.Set(0.8f, 0.8f, 0.8f);
+        // neV3 boxSize1; boxSize1.Set(0.3, 1.9, 0.3);
 
-		geom->SetBoxSize(boxSize1[0],boxSize1[1],boxSize1[2]);
+        geom->SetBoxSize(boxSize1[0], boxSize1[1], boxSize1[2]);
 
-		box[cur]->UpdateBoundingInfo();
+        box[cur]->UpdateBoundingInfo();
 
-		f32 mass = 1.0f;
+        f32 mass = 1.0f;
 
-		box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize1[0], boxSize1[1], boxSize1[2], mass));
+        box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize1[0], boxSize1[1], boxSize1[2], mass));
 
-		box[cur]->SetMass(mass);
+        box[cur]->SetMass(mass);
 
-		neV3 pos;
+        neV3 pos;
 
-		pos.Set(position[0], groundLevel + boxSize1[1] * (i + 0.5f) + 0.0f, position[2]);
+        pos.Set(position[0], groundLevel + boxSize1[1] * (i + 0.5f) + 0.0f, position[2]);
 
-		box[cur]->SetPos(pos);
+        box[cur]->SetPos(pos);
 
-		boxRenderPrimitives[cur].SetGraphicBox(boxSize1[0],boxSize1[1],boxSize1[2]);
+        boxRenderPrimitives[cur].SetGraphicBox(boxSize1[0], boxSize1[1], boxSize1[2]);
 
-		if ((cur % 4) == 0)
-		{
-			boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.8f, 0.2f, 0.2f, 1.0f));
-		}
-		else if ((cur % 4) == 1)
-		{
-			boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.2f, 0.1f, 0.8f, 1.0f));
-		}
-		else if ((cur % 4) == 2)
-		{
-			boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.0f, 0.8f, 0.0f, 1.0f));
-		}
-		else
-		{
-			boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.8f, 0.8f, 0.2f, 1.0f));
-		}
+        if ((cur % 4) == 0)
+        {
+            boxRenderPrimitives[cur].SetDiffuseColor(0.8f, 0.2f, 0.2f, 1.0f);
+        }
+        else if ((cur % 4) == 1)
+        {
+            boxRenderPrimitives[cur].SetDiffuseColor(0.2f, 0.1f, 0.8f, 1.0f);
+        }
+        else if ((cur % 4) == 2)
+        {
+            boxRenderPrimitives[cur].SetDiffuseColor(0.0f, 0.8f, 0.0f, 1.0f);
+        }
+        else
+        {
+            boxRenderPrimitives[cur].SetDiffuseColor(0.8f, 0.8f, 0.2f, 1.0f);
+        }
 
-		box[cur]->SetUserData(reinterpret_cast<u32>(&boxRenderPrimitives[cur]));
-	}
-	index = cur+1;
+        box[cur]->SetUserData(&boxRenderPrimitives[cur]);
+    }
+    index = cur + 1;
 
 #else
 
-	neV3 boxRadii; boxRadii.Set(.5f, .5f, .5f);
-	neV3 boxSize; boxSize = boxRadii * 2.f;
-	f32 stepX    = boxSize[0] + 0.05f;
-	s32 baseSize = 10;
+    neV3 boxRadii;
+    boxRadii.Set(.5f, .5f, .5f);
+    neV3 boxSize;
+    boxSize = boxRadii * 2.f;
+    f32 stepX = boxSize[0] + 0.05f;
+    s32 baseSize = 10;
 
-	neV3 startPos; startPos.Set( 0.0f, groundLevel + boxSize[1] * 0.5f, 0.0f);
+    neV3 startPos;
+    startPos.Set(0.0f, groundLevel + boxSize[1] * 0.5f, 0.0f);
 
-	int k = 0;
+    int k = 0;
 
-	for(int i=0; i<baseSize; i++)
-	{
-		int rowSize = baseSize - i;
+    for (int i = 0; i < baseSize; i++)
+    {
+        int rowSize = baseSize - i;
 
-		neV3 start; start.Set(-rowSize * stepX * 0.5f + stepX * 0.5f, i * boxSize[1], 0);
+        neV3 start;
+        start.Set(-rowSize * stepX * 0.5f + stepX * 0.5f, i * boxSize[1], 0);
 
-		for(int j=0; j< rowSize; j++)
-		{
-			neV3 boxPos; boxPos.Set(start);
+        for (int j = 0; j < rowSize; j++)
+        {
+            neV3 boxPos;
+            boxPos.Set(start);
 
-			neV3 shift; shift.Set(j * stepX, 0.0f, 0.0f);
+            neV3 shift;
+            shift.Set(j * stepX, 0.0f, 0.0f);
 
-			boxPos += shift;
-			boxPos += startPos;
+            boxPos += shift;
+            boxPos += startPos;
 
-			cur = index + k;
+            cur = index + k;
 
-			box[cur] = sim->CreateRigidBody();
+            box[cur] = sim->CreateRigidBody();
 
-			neGeometry * geom = box[cur]->AddGeometry();
+            neGeometry* geom = box[cur]->AddGeometry();
 
-			geom->SetBoxSize(boxSize[0],boxSize[1],boxSize[2]);
+            geom->SetBoxSize(boxSize[0], boxSize[1], boxSize[2]);
 
-			box[cur]->UpdateBoundingInfo();
+            box[cur]->UpdateBoundingInfo();
 
-			f32 mass = 1.f;
+            f32 mass = 1.f;
 
-			box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize[0], boxSize[1], boxSize[2], mass));
+            box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize[0], boxSize[1], boxSize[2], mass));
 
-			box[cur]->SetMass(mass);
+            box[cur]->SetMass(mass);
 
-			box[cur]->SetPos(boxPos);
+            box[cur]->SetPos(boxPos);
 
-			boxRenderPrimitives[cur].SetGraphicBox(boxSize[0],boxSize[1],boxSize[2]);
+            boxRenderPrimitives[cur].SetGraphicBox(boxSize[0], boxSize[1], boxSize[2]);
 
-			if ((cur % 4) == 0)
-			{
-				boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.8f, 0.2f, 0.2f, 1.0f));
-			}
-			else if ((cur % 4) == 1)
-			{
-				boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.2f, 0.1f, 0.8f, 1.0f));
-			}
-			else if ((cur % 4) == 2)
-			{
-				boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.0f, 0.8f, 0.0f, 1.0f));
-			}
-			else
-			{
-				boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.8f, 0.8f, 0.2f, 1.0f));
-			}
+            if ((cur % 4) == 0)
+            {
+                boxRenderPrimitives[cur].SetDiffuseColor(0.8f, 0.2f, 0.2f, 1.0f);
+            }
+            else if ((cur % 4) == 1)
+            {
+                boxRenderPrimitives[cur].SetDiffuseColor(0.2f, 0.1f, 0.8f, 1.0f);
+            }
+            else if ((cur % 4) == 2)
+            {
+                boxRenderPrimitives[cur].SetDiffuseColor(0.0f, 0.8f, 0.0f, 1.0f);
+            }
+            else
+            {
+                boxRenderPrimitives[cur].SetDiffuseColor(0.8f, 0.8f, 0.2f, 1.0f);
+            }
 
-			box[cur]->SetUserData(reinterpret_cast<u32>(&boxRenderPrimitives[cur]));
+            box[cur]->SetUserData(&boxRenderPrimitives[cur]);
 
-			k++;
-		}
-	}
-	index = cur+1;
+            k++;
+        }
+    }
+    index = cur + 1;
 #endif
 }
 
 void CSampleStackingObjects::MakeBullet(s32 index)
 {
 
-	neV3 boxSize;
-	boxSize.Set(1.0f,1.0f,1.0f);
+    neV3 boxSize;
+    boxSize.Set(1.0f, 1.0f, 1.0f);
 
-	s32 cur = N_BODY - 1 - index;
+    s32 cur = N_BODY - 1 - index;
 
-	box[cur] = sim->CreateRigidBody();
+    box[cur] = sim->CreateRigidBody();
 
-	neGeometry * geom = box[cur]->AddGeometry();
+    neGeometry* geom = box[cur]->AddGeometry();
 
-	geom->SetBoxSize(boxSize);
+    geom->SetBoxSize(boxSize);
 
-	
+    box[cur]->UpdateBoundingInfo();
 
-	box[cur]->UpdateBoundingInfo();
+    f32 mass = 0.6f;
 
-	f32 mass = 0.6f;
+    box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize, mass));
 
-	box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize, mass));
+    box[cur]->SetMass(mass);
 
-	box[cur]->SetMass(mass);
+    neV3 pos;
 
-	neV3 pos;
+    pos.Set(-10.0f, -8.75f + index * 3.0f + 3, 0.0f);
 
-	pos.Set(-10.0f, -8.75f + index * 3.0f+3, 0.0f);
+    box[cur]->SetPos(pos);
 
-	box[cur]->SetPos(pos);
+    // graphic
+    boxRenderPrimitives[cur].SetGraphicBox(boxSize[0], boxSize[1], boxSize[2]);
+    boxRenderPrimitives[cur].SetDiffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
 
-	//graphic
-	boxRenderPrimitives[cur].SetGraphicBox(boxSize[0],boxSize[1],boxSize[2]);
-	boxRenderPrimitives[cur].SetDiffuseColor(D3DXCOLOR(0.8f,0.8f,0.8f,1.0f));
-
-	box[cur]->SetUserData(reinterpret_cast<u32>(&boxRenderPrimitives[cur]));
-
+    box[cur]->SetUserData(&boxRenderPrimitives[cur]);
 }
 
-void CollisionCallback (neCollisionInfo & collisionInfo)
+void CollisionCallback(neCollisionInfo& collisionInfo)
 {
-	if (collisionInfo.typeA == NE_RIGID_BODY)
-	{
-		neRigidBody * rbA = (neRigidBody *)collisionInfo.bodyA;
+    if (collisionInfo.typeA == NE_RIGID_BODY)
+    {
+        neRigidBody* rbA = (neRigidBody*)collisionInfo.bodyA;
 
-		s32 data = rbA->GetUserData();
+        void* data = rbA->GetUserData().p;
 
-		if (data == 0)
-		{
-			return;
-		}
+        if (data == 0)
+        {
+            return;
+        }
 
-		CRenderPrimitive* render = reinterpret_cast<CRenderPrimitive*>(data);
-		render->SetDiffuseColor(D3DXCOLOR(1.0,0,0,1.0f));
-	}
-	if (collisionInfo.typeB == NE_RIGID_BODY)
-	{
-		neRigidBody * rbB = (neRigidBody *)collisionInfo.bodyB;
+        CRenderPrimitive* render = reinterpret_cast<CRenderPrimitive*>(data);
+        render->SetDiffuseColor(1.0, 0, 0, 1.0f);
+    }
+    if (collisionInfo.typeB == NE_RIGID_BODY)
+    {
+        neRigidBody* rbB = (neRigidBody*)collisionInfo.bodyB;
 
-		s32 data = rbB->GetUserData();
+        void* data = rbB->GetUserData().p;
 
-		if (data == 0)
-		{
-			return;
-		}
+        if (data == 0)
+        {
+            return;
+        }
 
-		CRenderPrimitive* render = reinterpret_cast<CRenderPrimitive*>(data);
-		render->SetDiffuseColor(D3DXCOLOR(0,0.5f,0.5,1.0f));
-	}
+        CRenderPrimitive* render = reinterpret_cast<CRenderPrimitive*>(data);
+        render->SetDiffuseColor(0, 0.5f, 0.5, 1.0f);
+    }
 }
 
 void CSampleStackingObjects::InititialisePhysics()
 {
-	neV3 gravity; gravity.Set(0.0f, -9.0f, 0.0f);
+    neV3 gravity;
+    gravity.Set(0.0f, -9.0f, 0.0f);
 
-	neSimulatorSizeInfo sizeInfo;
+    neSimulatorSizeInfo sizeInfo;
 
-	sizeInfo.rigidBodiesCount = N_BODY;
-	sizeInfo.animatedBodiesCount = WALL_NUMBER;
-	sizeInfo.geometriesCount = N_BODY + WALL_NUMBER;
-	s32 totalBody = N_BODY + WALL_NUMBER;
-	sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
-	{ //dont need any of these
-		sizeInfo.rigidParticleCount = 0;
-		sizeInfo.constraintsCount = 0;
-		sizeInfo.terrainNodesStartCount = 0;
-	}
+    sizeInfo.rigidBodiesCount = N_BODY;
+    sizeInfo.animatedBodiesCount = WALL_NUMBER;
+    sizeInfo.geometriesCount = N_BODY + WALL_NUMBER;
+    s32 totalBody = N_BODY + WALL_NUMBER;
+    sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
+    {
+        // dont need any of these
+        sizeInfo.rigidParticleCount = 0;
+        sizeInfo.constraintsCount = 0;
+        sizeInfo.terrainNodesStartCount = 0;
+    }
 
-	sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
+    sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
 
 #ifdef COLLISION_CALLBACK_ON
 
-	sim->GetCollisionTable()->Set(0, 0, neCollisionTable::RESPONSE_IMPULSE_CALLBACK);
+    sim->GetCollisionTable()->Set(0, 0, neCollisionTable::RESPONSE_IMPULSE_CALLBACK);
 
-	sim->SetCollisionCallback(CollisionCallback);
+    sim->SetCollisionCallback(CollisionCallback);
 
 #endif
 
-	neV3 position;
+    neV3 position;
 
-	position.SetZero();
+    position.SetZero();
 
-	s32 i = 0;
+    s32 i = 0;
 
 #ifdef PYRAMID
 
-	MakeStack(position, i);	
+    MakeStack(position, i);
 
 #else
-	f32 gap = 2.f;
+    f32 gap = 2.f;
 
-	for (s32 j = 0; j < N_STACKS; j++)
-	{
-		//position.Set(3.05f * j, 0.0f, 0.0f);
+    for (s32 j = 0; j < N_STACKS; j++)
+    {
+        // position.Set(3.05f * j, 0.0f, 0.0f);
 
-		for (s32 k = 0; k < N_DEPTH; k++)
-		{
-			position.Set(gap * j, 0.0f, gap * k);
+        for (s32 k = 0; k < N_DEPTH; k++)
+        {
+            position.Set(gap * j, 0.0f, gap * k);
 
-			MakeStack(position, i);	
-		}
-	}
+            MakeStack(position, i);
+        }
+    }
 #endif
 
-	for (s32 jj = 0; jj < N_BULLET; jj++)
-		MakeBullet(jj);
+    for (s32 jj = 0; jj < N_BULLET; jj++)
+    {
+        MakeBullet(jj);
+    }
 
+    // SetUpRoom
 
-	//SetUpRoom
+    ground = sim->CreateAnimatedBody();
 
-	ground = sim->CreateAnimatedBody();
+    neGeometry* geom = ground->AddGeometry();
 
-	neGeometry * geom = ground->AddGeometry();	 
+    geom->SetBoxSize(gFloor.boxSize);
 
-	geom->SetBoxSize(gFloor.boxSize);
+    ground->UpdateBoundingInfo();
 
-	ground->UpdateBoundingInfo();
+    ground->SetPos(gFloor.pos);
 
-	ground->SetPos(gFloor.pos);
-
-	groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
-
-
+    groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
 }
-
 
 void MyAppInit()
 {
-	// TODO: Perform any application-level initialization here
+    neV3 vecEye;
+    vecEye.Set(-10.0f, 5.0f, 40.0f);
+    neV3 vecAt;
+    vecAt.Set(0.0f, 0.0f, 1.0f);
+    g_Camera.SetViewParams(vecEye, vecAt);
 
+    for (s32 i = 0; i < NUM_LIGHT; i++)
+    {
+        vLightWorld[i].Normalize();
+    }
 
-
-	D3DXVECTOR3 vecEye (-10.0f, 5.0f, 40.0f);
-	D3DXVECTOR3 vecAt (0.0f, 0.0f, 1.0f);
-	g_Camera.SetViewParams( &vecEye, &vecAt );
-
-	g_Camera.SetEnableYAxisMovement( true );
-	g_Camera.SetRotateButtons( false, false, true );
-	g_Camera.SetScalers( 0.01f, 50.0f );
-
-
-
-	for (s32 i = 0; i < NUM_LIGHT; i++)
-		D3DXVec4Normalize(&vLightWorld[i], &vLightWorld[i]);
-
-	//OnMyAppDestroyDevice(g_pD3dDevice);
-
-	sample.Initialise();
-
+    sample.Initialise();
 };
 
-void CALLBACK OnMyAppFrameMove( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
+    (void)fTime;
+    (void)fElapsedTime;
+    ////////////////////////////////////////////////////////
+    sample.Process();
 
-
-	DWORD dwResult;    
-
-	XINPUT_STATE state;
-
-	ZeroMemory( &state, sizeof(XINPUT_STATE) );
-
-	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState( 0, &state );
-
-	////////////////////////////////////////////////////////
-	sample.Process(state , fTime);
-
-	if (!sample.paused)
-	{
-		sample.sim->Advance(1.0f / 60.0f,1);
-	}
+    if (!sample.paused)
+    {
+        sample.sim->Advance(1.0f / 60.0f, 1);
+    }
 }
 
-void CALLBACK OnMyAppFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void OnMyAppFrameRender()
 {
+    neT3 t;
+    t = sample.ground->GetTransform();
+    t.MakeD3DCompatibleMatrix();
+    sample.groundRender.Render(&t);
 
-	neT3 t;
-	t = sample.ground->GetTransform();
-	t.MakeD3DCompatibleMatrix();
-	sample.groundRender.Render(pd3dDevice,&t);
+    // Display the boxes
 
-	// Display the boxes
+    for (s32 i = 0; i < sample.N_BODY; i++)
+    {
+        t = sample.box[i]->GetTransform();
+        t.MakeD3DCompatibleMatrix();
+        sample.boxRenderPrimitives[i].Render(&t);
+    }
 
-	for (s32 i = 0; i < sample.N_BODY; i++)
-	{
-		t = sample.box[i]->GetTransform();
-		t.MakeD3DCompatibleMatrix();
-		sample.boxRenderPrimitives[i].Render(pd3dDevice,&t);
-	}
+    const char* str[7];
 
-	WCHAR * str[7];
+    str[0] = "Tokamak demo - stacking of objects - (c) 2010 Tokamak Ltd";
+    str[1] = "Controls:";
+    str[2] = "'P' -> pause/unpause the simulation";
+    str[3] = "'T' -> Fire block";
+    str[4] = "'R' -> Reset";
+    str[5] = "Demonstration of fast and stable stacking.";
+    str[6] = "";
 
-	str[0] = L"Tokamak demo - stacking of objects - (c) 2010 Tokamak Ltd";
-	str[1] = L"Controls:";
-	str[2] = L"'P' -> pause/unpause the simulation";
-	str[3] = L"'T' -> Fire block";	
-	str[4] = L"'R' -> Reset";
-	str[5] = L"Demonstration of fast and stable stacking.";
-	str[6] = L"";
-
-
-
-	MyRenderText(str, 7);
+    MyRenderText(str, 7);
 }
 
-LRESULT CALLBACK MyAppMsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
-							  bool* pbNoFurtherProcessing, void* pUserContext )
+void OnMyAppDestroyDevice()
 {
-	return 0;
+    sample.Shutdown();
 }
 
-void CALLBACK OnMyAppDestroyDevice( void* pUserContext )
+void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
 {
+    (void)bAltDown;
+    if (bKeyDown)
+    {
+        switch (nChar)
+        {
+        case SDLK_r:
+        {
+        } break;
 
-	SAFE_RELEASE( g_pEffect );
+        case SDLK_p:
+        {
+            sample.paused = !sample.paused;
+        }
+        break;
 
-	sample.Shutdown();
-
-
+        default:
+            break;
+        }
+    }
 }
-
-void CALLBACK MyAppKeyboardProc( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
-{
-	if( bKeyDown )
-	{
-		switch( nChar )
-		{
-		case 'R':
-			{
-				//OnMyAppDestroyDevice(g_pD3dDevice);
-			}
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-
