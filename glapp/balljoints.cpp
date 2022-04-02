@@ -281,6 +281,12 @@ void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
         {
         } break;
 
+        case SDLK_p:
+        {
+            sample.paused = !sample.paused;
+        }
+        break;
+
         default:
             break;
         }
