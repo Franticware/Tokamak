@@ -1475,8 +1475,8 @@ if (perfReport)
 				s32 candidateCount;
 				neV3 *verts;
 
-				static neSimpleArray<s32> _candArray;
-				static neArray<neTriangle_> _triArray;
+				neSimpleArray<s32> _candArray;
+				neArray<neTriangle_> _triArray;
 				
 				terrainQueryCallback(bodyA->minBound, bodyA->maxBound, &candidates, &tris, &verts, &candidateCount, &triCount, (neRigidBody*)bodyA);
 
@@ -1505,8 +1505,6 @@ if (perfReport)
 										identity,
 										NULL);
 				}
-				_candArray.MakeFromPointer(NULL, 0);
-				_triArray.MakeFromPointer(NULL, 0);
 			}
 			if (result.penetrate)
 			{
