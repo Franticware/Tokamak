@@ -1407,6 +1407,7 @@ void _neConstraint::ApplyDamping()
 
 void neConstraintHeader::TraverseApplyConstraint(neBool doCheckSleep)
 {
+	(void)doCheckSleep;
 	neBodyHandle * bodyHandle = bodies.GetHead();
 
 	while (bodyHandle)

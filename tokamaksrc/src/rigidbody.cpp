@@ -526,6 +526,8 @@ void neRigidBody_::MidPointIntegration(const neV3 & totalTorque, f32 tStep)
 
 void neRigidBody_::ImprovedEulerIntegration(const neV3 & totalTorque, f32 tStep)
 {
+	(void)totalTorque;
+	(void)tStep;
 /*	neV3 newAngularMom = State().angularMom + totalTorque * tStep;
 
 	neQ tmpQ = State().q + Derive().qDot * tStep;
@@ -548,6 +550,8 @@ void neRigidBody_::ImprovedEulerIntegration(const neV3 & totalTorque, f32 tStep)
 
 void neRigidBody_::RungeKutta4Integration(const neV3 & totalTorque, f32 tStep)
 {
+	(void)totalTorque;
+	(void)tStep;
 /*	neV3 newAngularMom = State().angularMom + totalTorque * tStep;
 
 	neQ q1, q2, q3, q4;

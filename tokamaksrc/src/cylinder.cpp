@@ -372,6 +372,8 @@ neBool CylinderTriTest(TConvex & cylinder, neT3 & trans, ConvexTestResult & resu
 void TestCylinderVertEdge(neCollisionResult & result, neV3 & edgeA1, neV3 & edgeA2, neV3 & vertB, 
 						  TConvex & cA, TConvex & cB, neT3 & transA, neT3 & transB, neBool flip)
 {
+	(void)transA;
+	(void)transB;
 	neV3 project;
 
 	f32 dist = vertB.GetDistanceFromLine2(project, edgeA1, edgeA2);
@@ -413,6 +415,8 @@ void TestCylinderVertEdge(neCollisionResult & result, neV3 & edgeA1, neV3 & edge
 void TestCylinderVertVert(neCollisionResult & result, neV3 & vertA, neV3 & vertB, 
 						  TConvex & cA, TConvex & cB, neT3 & transA, neT3 & transB)
 {
+	(void)transA;
+	(void)transB;
 	neV3 diff = vertA - vertB;
 
 	f32 dist = diff.Length();

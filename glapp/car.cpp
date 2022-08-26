@@ -706,6 +706,7 @@ void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
 
 void CControllerCB::RigidBodyControllerCallback(neRigidBodyController* controller, float timeStep)
 {
+    (void)timeStep;
     neRigidBody* rb = controller->GetRigidBody();
 
     CCar* car = (CCar*)(rb->GetUserData().p);
@@ -861,9 +862,6 @@ void CCar::CarController(neRigidBodyController* controller)
 
 void CCar::Process()
 {
-
-    neV3 vel;
-
     if (sdlGetAsyncKeyState(SDLK_s))
     {
         accel += 0.1f;

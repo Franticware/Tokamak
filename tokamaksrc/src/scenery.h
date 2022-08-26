@@ -80,6 +80,7 @@ public:
 	static s32 numOfChildren;
 
 	void * operator new (size_t t, void * addr){
+		(void)t;
 		return addr;
 	}
 	void operator delete [] (void *, void *){}

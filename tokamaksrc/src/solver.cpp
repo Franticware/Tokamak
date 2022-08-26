@@ -40,6 +40,9 @@ NEINLINE void ApplyCollisionImpulseFast(neRigidBody_ * rb, const neV3 & impulse,
 {
 	neV3 dv, da;
 
+	(void)currentRecord;
+	(void)immediate;
+
 	dv = impulse * rb->oneOnMass;
 
 	da = contactPoint.Cross(impulse);

@@ -1306,6 +1306,7 @@ void ConvexCollisionTest(neCollisionResult & result, TConvex & convexA, neT3 & t
 #if 1
 void Box2BoxTest(neCollisionResult & result, TConvex & convexA, neT3 & transA, TConvex & convexB, neT3 & transB, const neV3 & backupVector)
 {
+	(void)backupVector;
 /*	neCollisionResult dcdresult;
 
 	TestDCD(dcdresult, convexA, transA, convexB, transB, backupVector);
@@ -2501,5 +2502,8 @@ ComputerEdgeContactPoint2_Exit:
 
 neBool BoxTestParam::LineTest(ConvexTestResult & res, neV3 & point1, neV3 & point2)
 {
+	(void)res;
+	(void)point1;
+	(void)point2;
 	return false;	
 }

@@ -30,6 +30,7 @@
 
 void CollisionTestSensor(TConvex * obbA, neSensor_ * sensorsA, neT3 & transA, neCollision & colB, neT3 & transB, neRigidBodyBase * body)
 {
+	(void)obbA;
 	neT3 convex2WorldB;
 
 	convex2WorldB = transB * colB.obb.c2p;

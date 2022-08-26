@@ -402,7 +402,7 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 
 	neBool found = false;
 
-	while (con = originalBody->GetNextGeometry())
+	while ((con = originalBody->GetNextGeometry()))
 	{
 		if (con == convex)
 		{
@@ -609,6 +609,7 @@ neFixedTimeStepSimulator::~neFixedTimeStepSimulator()
 
 void neFixedTimeStepSimulator::Advance(nePerformanceReport * _perfReport)
 {
+	(void)_perfReport;
 	ClearCollisionBodySensors();
 		
 	UpdateAABB();

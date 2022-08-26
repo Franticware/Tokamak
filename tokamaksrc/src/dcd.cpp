@@ -1057,6 +1057,7 @@ neBool SearchResult::SearchEETri(s32 flag, s32 aIndex, s32 bIndex, neBool & assi
 
 bool TestDCD(neCollisionResult & result, TConvex & convexA, neT3 & transA, TConvex & convexB, neT3 & transB, const neV3 & backupVector)
 {
+	(void)backupVector;
 	_num_edge_test = 0;
 
 	_num_face_test = 0;

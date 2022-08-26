@@ -149,6 +149,7 @@ public:
 	}
 	void Remove(neStackInfo * add, s32 flag = 0)
 	{
+		(void)flag;
 /*		if (infoCount == 1 && !isHeaderX && flag == 0)
 			ASSERT(0);
 */

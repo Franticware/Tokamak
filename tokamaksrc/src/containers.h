@@ -22,10 +22,12 @@
 	public:\
 	NEINLINE void * operator new(size_t s,void * addr)\
 	{\
+		(void)s;\
 		return addr;\
 	}\
 	NEINLINE void * operator new[] (size_t s,void * addr)\
 	{\
+		(void)s;\
 		return addr;\
 	}\
 	NEINLINE void operator delete(void *)\
@@ -107,6 +109,7 @@ public:
 
 	NEINLINE T * Alloc(s32 dummy = 0) 
 	{
+		(void)dummy;
 		if (nextFree >= (data + size))
 		{
 			if (growBy == 0)

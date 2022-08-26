@@ -1279,6 +1279,8 @@ void neRigidBody_::ResolveRestingPenetration()
 
 void neRigidBody_::CorrectRotation(f32 massOther, neV3 & pointThis, neV3 & pointDest, neV3 & pointDest2, s32 flag, s32 changeLast)
 {
+	(void)massOther;
+	(void)pointDest2;
 	neV3 dir1 = pointThis - GetPos();
 	
 	neV3 dir2 = pointDest - GetPos();
@@ -1497,6 +1499,8 @@ void neRigidBody_::CorrectPenetrationTranslation()
 */
 void neRigidBody_::CorrectPenetrationRotation2(s32 index, neBool slide)
 {
+	(void)index;
+	(void)slide;
 /*	neRigidBodyBase * rb = GetRestRecord(index).otherBody;
 
 	f32 effectiveMassA, effectiveMassB, mass2;
@@ -1556,6 +1560,8 @@ void neRigidBody_::CorrectPenetrationRotation2(s32 index, neBool slide)
 
 void neRigidBody_::CorrectPenetrationTranslation2(s32 index, neBool slide)
 {
+	(void)index;
+	(void)slide;
 /*
 	neRigidBodyBase * rb = GetRestRecord(index).otherBody;
 
