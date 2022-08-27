@@ -82,11 +82,13 @@ s32</font> <font COLOR="#880000">GetCollisionID</font>();</p>
   See also <font color="#880000">neCollisionTable</font>.</p>
 <p><i><a href="#class neAnimatedBody">&lt;back to top&gt;</a></i></p>
 <hr>
-<p><font COLOR="#0000ff">void</font> <font COLOR="#880000"><a name="SetUserData">SetUserData</a></font>(<font COLOR="#0000ff">u32</font>
-<font COLOR="#808080">userData</font>);<font COLOR="#0000ff"><br>
-u32</font> <font COLOR="#880000">GetUserData</font>();</p>
-<p>Set and retrieve the user data property. This is a u32 value, used to store 
-  game-specific information associated with the animated body.</p>
+<p><font COLOR="#0000ff">void</font> <font COLOR="#880000"><a name="SetUserData">SetUserData</a></font>(<font color="#0000FF">u32</font>
+<font COLOR="#808080">userData</font>);<br>
+<font color="#0000FF">void</font> <font COLOR="#880000">SetUserData</font>(<font COLOR="#0000ff">void</font>
+* <font COLOR="#808080">userData</font>);<br>
+<font color="#0000FF">
+neUserData</font> <font COLOR="#880000">GetUserData</font>();</p>
+<p>Set and retrieve the user data property. It is used to store game-specific information associated with the animated body. Data types u32 and void* are available. Being internally stored and returned as neUserData union, only one type can be used at a time.</p>
 <p><a href="#class neAnimatedBody"><i>&lt;back to top&gt;</i></a></p>
 <hr>
 <p><font COLOR="#0000ff">neV3</font> <font COLOR="#880000"><a name="GetPos">GetPos</a></font>();<font COLOR="#0000ff"><br>

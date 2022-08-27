@@ -21,10 +21,13 @@
   use the GetLineNormal, GetDetectDepth, GetDetectNormal, GetDetectContactPoint, 
   GetDetectRigidBody, GetDetectAnimatedBody, and the GetDetectMaterial functions.</p>
 <hr>
-<p><font COLOR="#0000ff">void</font> <font COLOR="#880000">SetUserData</font>(<font COLOR="#0000ff">u32</font>
-<font COLOR="#808080">userData</font>);<font COLOR="#0000ff"><br>
-u32</font> <font COLOR="#880000">GetUserData</font>();</p>
-<p>Specify and retrieve the user data associate with the sensor object.</p>
+<p><font COLOR="#0000ff">void</font> <font COLOR="#880000"><a name="SetUserData">SetUserData</a></font>(<font color="#0000FF">u32</font>
+<font COLOR="#808080">userData</font>);<br>
+<font color="#0000FF">void</font> <font COLOR="#880000">SetUserData</font>(<font COLOR="#0000ff">void</font>
+* <font COLOR="#808080">userData</font>);<br>
+<font color="#0000FF">
+neUserData</font> <font COLOR="#880000">GetUserData</font>();</p>
+<p>Set and retrieve the user data property. It is used to store game-specific information associated with the sensor. Data types u32 and void* are available. Being internally stored and returned as neUserData union, only one type can be used at a time.</p>
 <hr>
 <p><font COLOR="#0000ff">
 f32</font> <font COLOR="#880000">GetDetectDepth</font>();<font COLOR="#0000ff"><br>
