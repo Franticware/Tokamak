@@ -20,7 +20,7 @@
 #include "rigidbody.h"
 
 #include <assert.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 //extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
@@ -34,7 +34,7 @@ void Cylinder2TerrainTest(neCollisionResult & result, TConvex & cylinderA, neT3 
 
 	ConvexTestResult res[2];
 
-	int32_t finalTriIndex = -1;
+    //int32_t finalTriIndex = -1;
 	int32_t currentRes = 1;
 	int32_t testRes = 0;
 
@@ -46,7 +46,7 @@ void Cylinder2TerrainTest(neCollisionResult & result, TConvex & cylinderA, neT3 
 
 	for (int32_t i = 0; i < triangleCount; i++)
 	{
-		int32_t test = _triIndex[i];
+        //int32_t test = _triIndex[i];
 
 		neTriangle_ * t = &triangleArray[_triIndex[i]];
 
@@ -77,7 +77,7 @@ void Cylinder2TerrainTest(neCollisionResult & result, TConvex & cylinderA, neT3 
 
 					terrainMatID = t->materialID;
 
-					finalTriIndex = _triIndex[i];
+                    //finalTriIndex = _triIndex[i];
 				}
 			}
 		}
@@ -448,9 +448,9 @@ void Cylinder2CylinderTest(neCollisionResult & result, TConvex & cA, neT3 & tran
 
 	f32 len = dir.Length();
 
-	neBool isParallel = neIsConsiderZero(len);
+    /*neBool isParallel =*/ neIsConsiderZero(len);
 
-	int32_t doVertCheck = 0;
+    //int32_t doVertCheck = 0;
 
 	ConvexTestResult cr;
 
@@ -459,7 +459,7 @@ void Cylinder2CylinderTest(neCollisionResult & result, TConvex & cA, neT3 & tran
 	cr.edgeB[0] = transB.pos + transB.rot[1] * cB.CylinderHalfHeight();
 	cr.edgeB[1] = transB.pos - transB.rot[1] * cB.CylinderHalfHeight();
 
-	f32 dot = transA.rot[1].Dot(transB.rot[1]);
+    //f32 dot = transA.rot[1].Dot(transB.rot[1]);
 
 	if (!neIsConsiderZero(len))
 	{
@@ -757,11 +757,11 @@ void Box2CylinderTest(neCollisionResult & result, TConvex & boxA, neT3 & transA,
 {
 	result.penetrate = false;
 
-	ConvexTestResult res;
+    //ConvexTestResult res;
 
-	res.valid = false;
+    //res.valid = false;
 
-	res.depth = 1.0e6f;
+    //res.depth = 1.0e6f;
 
 	neT3 cylinder2box;
 

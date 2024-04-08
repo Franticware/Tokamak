@@ -1432,7 +1432,7 @@ void Convex2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & tr
 
 	ConvexTestResult res[2];
 
-	int32_t finalTriIndex = -1;
+    //int32_t finalTriIndex = -1;
 	int32_t currentRes = 1;
 	int32_t testRes = 0;
 
@@ -1462,7 +1462,7 @@ void Convex2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & tr
 #endif
 	for (int32_t i = 0; i < triangleCount; i++)
 	{
-		int32_t test = _triIndex[i];
+        //int32_t test = _triIndex[i];
 
 		neTriangle_ * t = &triangleArray[_triIndex[i]];
 
@@ -1509,7 +1509,7 @@ void Convex2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & tr
 
 				terrainMatID = t->materialID;
 
-				finalTriIndex = _triIndex[i];
+                //finalTriIndex = _triIndex[i];
 
 				found = true;
 			}

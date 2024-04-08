@@ -14,10 +14,10 @@
 #ifndef NE_DEBUG_H
 #define NE_DEBUG_H
 
-#ifdef WIN32
+/*#ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
-#endif
+#endif*/
 
 #include <assert.h>
 

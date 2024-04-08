@@ -42,7 +42,7 @@
 /* Thanks to David Hunt for finding a ">="-bug!         */
 /********************************************************/
 #include <math.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 #define X 0
 #define Y 1
@@ -486,7 +486,7 @@ int32_t neTreeNode::CountTriangleInSector2(neSimpleArray<int32_t> &tris, const n
 	return ret;
 }
 
-#pragma optimize( "", off )
+//#pragma optimize( "", off )
 
 void neTreeNode::Build(neSimpleArray<int32_t> & triIndex, int32_t level)
 {
@@ -531,7 +531,7 @@ void neTreeNode::Build(neSimpleArray<int32_t> & triIndex, int32_t level)
 
 				f32 yMax = maxBound[1];
 
-				neTreeNode * node = tree->nodes.Alloc();
+                neTreeNode * node = tree->nodes.Alloc();
 
 				ASSERT(node);
 
@@ -559,7 +559,7 @@ void neTreeNode::Build(neSimpleArray<int32_t> & triIndex, int32_t level)
 		}
 	}
 }
-#pragma optimize( "", on )
+//#pragma optimize( "", on )
 void neTreeNode::MakeLeaf(neSimpleArray<int32_t> &tris)
 {
 	triangleIndices.Reserve(tris.GetUsedCount(), tree->alloc);
@@ -728,7 +728,7 @@ neTriangleTree::neTriangleTree()
 
 	sim = NULL;
 }
-#pragma optimize( "", off )
+//#pragma optimize( "", off )
 void TreeBuild(neTriangleTree * tree, int32_t nodeIndex, neSimpleArray<int32_t> & triIndex, int32_t level)
 {
 //	if (nodeIndex == 769)
@@ -800,7 +800,7 @@ void TreeBuild(neTriangleTree * tree, int32_t nodeIndex, neSimpleArray<int32_t> 
 		}
 	}
 }
-#pragma optimize( "", on )
+//#pragma optimize( "", on )
 neTreeNode & neTriangleTree::GetNode(int32_t nodeIndex)
 {
 	if (nodeIndex == -1)
@@ -882,7 +882,7 @@ neBool neTriangleTree::BuildTree(neV3 * _vertices, int32_t _vertexCount, neTrian
 
 	TreeBuild(this, -1, triIndex, 0);
 
-    int32_t nodeUsed = nodes.GetUsedCount();
+    //int32_t nodeUsed = nodes.GetUsedCount();
 
 	triIndex.Free();
 

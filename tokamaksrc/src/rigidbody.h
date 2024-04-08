@@ -14,7 +14,7 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
-#pragma inline_depth( 8 )
+//#pragma inline_depth( 8 )
 
 #define MAX_RB_STATES 1
 #define MAX_RB_IMPULSE_RECORDS 4

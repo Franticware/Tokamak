@@ -20,7 +20,7 @@
 //#include "rigidbody.h"
 
 #include <assert.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 extern int32_t currentMicroStep;
 
@@ -679,7 +679,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 	boxParamA.radii[1] = transA.rot[1] * convexA.as.box.boxSize[1];
 	boxParamA.radii[2] = transA.rot[2] * convexA.as.box.boxSize[2];
 
-	int32_t finalTriIndex = -1;
+    //int32_t finalTriIndex = -1;
 	int32_t currentRes = 1;
 	int32_t testRes = 0;
 
@@ -700,7 +700,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 */
 	for (int32_t i = 0; i < triangleCount; i++)
 	{
-		int32_t test = _triIndex[i];
+        //int32_t test = _triIndex[i];
 
 		neTriangle_ * t = &triangleArray[_triIndex[i]];
 
@@ -731,7 +731,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 
 					terrainMatID = t->materialID;
 
-					finalTriIndex = _triIndex[i];
+                    //finalTriIndex = _triIndex[i];
 
 					userData = t->userData;
 				}
@@ -751,7 +751,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 
 					terrainMatID = t->materialID;
 
-					finalTriIndex = _triIndex[i];
+                    //finalTriIndex = _triIndex[i];
 
 					userData = t->userData;
 				}

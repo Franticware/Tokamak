@@ -11,7 +11,7 @@
  *                                                                       *
  *************************************************************************/
 
-#include "stdio.h"
+//#include "stdio.h"
 /*
 #ifdef _WIN32
 #include <windows.h>
@@ -222,7 +222,7 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 	if (convexB.type == TConvex::BOX)
 	{
 		int nearDim = -1;
-		int farDim = -1;
+        //int farDim = -1;
 
 //	set Tnear = - infinity, Tfar = infinity
 //	For each pair of planes P associated with X, Y, and Z do:
@@ -276,7 +276,7 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 			if (t2 < tFar)
 			{
 				tFar = t2;
-				farDim = i;
+                //farDim = i;
 			}
 
 			if (tNear > tFar)
@@ -317,7 +317,7 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 		
 		for (int32_t i = 0; i < triangleCount; i++)
 		{
-			int32_t test = _triIndex[i];
+            //int32_t test = _triIndex[i];
 
 			neTriangle_ * t = &triangleArray[_triIndex[i]];
 

@@ -14,9 +14,9 @@
 #ifndef CONTAINERS_H
 #define CONTAINERS_H
 
-#define _CRT_SECURE_DEPRECATE_MEMORY
-#include <memory.h>
-#include <string.h>
+//#define _CRT_SECURE_DEPRECATE_MEMORY
+//#include <memory.h>
+//#include <string.h>
 
 #define PLACEMENT_MAGIC \
 	public:\
@@ -129,7 +129,8 @@ public:
 				return nullptr;
 			}
 
-			memcpy(data, oldData, size * sizeof(T));
+            //memcpy(data, oldData, size * sizeof(T));
+            std::copy(oldData, oldData + size, data);
 
 			if (oldData)
 				alloc->Free((neByte*)oldData);
@@ -288,7 +289,7 @@ public:
 				return nullptr;
 			}
 
-			memcpy(data, oldData, size * sizeof(T));
+            std::copy(oldData, oldData + size, data);
 
 			if (oldData)
 				alloc->Free((neByte*)oldData);

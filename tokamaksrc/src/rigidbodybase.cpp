@@ -11,10 +11,10 @@
  *                                                                       *
  *************************************************************************/
 
-#pragma inline_recursion( on )
-#pragma inline_depth( 250 )
+//#pragma inline_recursion( on )
+//#pragma inline_depth( 250 )
 
-#include "stdio.h"
+//#include "stdio.h"
 
 /*
 #ifdef _WIN32
@@ -32,6 +32,8 @@
 #include "stack.h"
 #include "simulator.h"
 #include "message.h"
+
+#include <cstdio>
 
 /****************************************************************************
 *
@@ -138,7 +140,7 @@ neSensor_ * neRigidBodyBase::AddSensor()
 	
 	if (!newSensor)
 	{
-		sprintf(sim->logBuffer,	MSG_RUN_OUT_SENSOR);
+        snprintf(sim->logBuffer, 255, MSG_RUN_OUT_SENSOR);
 
 		sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -202,7 +204,7 @@ TConvex * neRigidBodyBase::AddGeometry()
 
 	if (!newConvex)
 	{
-		sprintf(sim->logBuffer,	MSG_RUN_OUT_GEOMETRY);
+        snprintf(sim->logBuffer, 255, MSG_RUN_OUT_GEOMETRY);
 
 		sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 

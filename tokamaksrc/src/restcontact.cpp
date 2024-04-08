@@ -11,10 +11,10 @@
  *                                                                       *
  *************************************************************************/
 
-#pragma inline_recursion( on )
-#pragma inline_depth( 250 )
+//#pragma inline_recursion( on )
+//#pragma inline_depth( 250 )
 
-#include "stdio.h"
+//#include "stdio.h"
 
 /*
 #ifdef _WIN32
@@ -32,6 +32,8 @@
 #include "stack.h"
 #include "simulator.h"
 #include "message.h"
+
+#include <cstdio>
 
 #define ne_Default_Mass 1.0f
 
@@ -100,7 +102,7 @@ void neRigidBody_::CheckForIdle()
 	}
 */
 }
-#pragma optimize( "", off )		
+//#pragma optimize( "", off )
 void neRigidBody_::CheckForIdleNonJoint()
 {
 	//return;
@@ -177,7 +179,7 @@ void neRigidBody_::CheckForIdleNonJoint()
 		}
 	}
 }
-#pragma optimize( "", on )
+//#pragma optimize( "", on )
 void neRigidBody_::CheckForIdleJoint()
 {
 	f32 e = Derive().linearVel.Length();
@@ -308,7 +310,7 @@ int32_t neRigidBody_::CheckRestHull()
 	}
 	else if (GetRestHull().htype == neRestHull::POINT)
 	{
-		neBool allIdle = true;
+        //neBool allIdle = true;
 
 		int32_t i = GetRestHull().indices[0];
 
@@ -659,7 +661,7 @@ int32_t neRigidBody_::AddContactImpulseRecord(neBool withConstraint)
 	}
 	int32_t actualValidCount = 0;
 	//f32 limit = 0.05f;
-	f32 limit = 0.01f;
+    //f32 limit = 0.01f;
 
 	for (i = 0; i < validCount; i++)
 	{
@@ -1038,7 +1040,7 @@ neBool neRigidBody_::NewStackInfo(neRestRecord & rc)
 	{
 		if (sim->logLevel >= neSimulator::LOG_OUTPUT_LEVEL_ONE)
 		{
-			sprintf(sim->logBuffer,	MSG_STACK_BUFFER_FULL);
+            snprintf(sim->logBuffer, 255, MSG_STACK_BUFFER_FULL);
 			sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 		}
 		return false;
@@ -1119,7 +1121,7 @@ neBool neRigidBody_::NewStackInfoTerminator(neStackHeader * header)
 	{
 		if (sim->logLevel >= neSimulator::LOG_OUTPUT_LEVEL_ONE)
 		{
-			sprintf(sim->logBuffer,	MSG_STACK_BUFFER_FULL);
+            snprintf(sim->logBuffer, 255, MSG_STACK_BUFFER_FULL);
 			sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 		}
 		return false;
@@ -1843,7 +1845,7 @@ f32 neRigidBody_::TestImpulse(neV3 & dir, neV3 & pt, f32 & linear, f32 & angular
 
 void neRigidBody_::ShiftPosition(const neV3 & delta)
 {
-	neConstraintHeader * header = GetConstraintHeader();
+    //neConstraintHeader * header = GetConstraintHeader();
 
 	SetPos(GetPos() + delta);
 }

@@ -20,7 +20,7 @@
 #include "rigidbody.h"
 
 #include <assert.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 neBool BoxTestParam::CylinderFaceTest(ConvexTestResult & res, TConvex & cylinderB, neT3 & transB, int32_t whichFace)
 {

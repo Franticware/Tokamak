@@ -20,15 +20,17 @@
 #include "constraint.h"
 #include "rigidbody.h"
 
-#ifdef _WIN32
+/*#ifdef _WIN32
 #include <windows.h>
-#endif
+#endif*/
 
 #include "stack.h"
 #include "simulator.h"
 #include "message.h"
 
-#include "stdio.h"
+//#include "stdio.h"
+
+#include <cstdio>
 
 #define CAST_THIS(a, b) a& b = reinterpret_cast<a&>(*this);
 
@@ -2199,7 +2201,7 @@ neJoint * neSimulator::CreateJoint(neRigidBody * bodyA)
 
 	if (!constr)
 	{
-		sprintf(sim.logBuffer,	MSG_CONSTRAINT_FULL);
+        snprintf(sim.logBuffer,	255, MSG_CONSTRAINT_FULL);
 
 		sim.LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -2239,7 +2241,7 @@ neJoint * neSimulator::CreateJoint(neRigidBody * bodyA, neRigidBody * bodyB)
 
 	if (!constr)
 	{
-		sprintf(sim.logBuffer,	MSG_CONSTRAINT_FULL);
+        snprintf(sim.logBuffer,	255, MSG_CONSTRAINT_FULL);
 
 		sim.LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -2285,7 +2287,7 @@ neJoint * neSimulator::CreateJoint(neRigidBody * bodyA, neAnimatedBody * bodyB)
 
 	if (!constr)
 	{
-		sprintf(sim.logBuffer,	MSG_CONSTRAINT_FULL);
+        snprintf(sim.logBuffer,	255, MSG_CONSTRAINT_FULL);
 
 		sim.LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 

@@ -11,7 +11,7 @@
  *                                                                       *
  *************************************************************************/
 
-#include "stdio.h"
+//#include "stdio.h"
 
 #include "tokamak.h"
 #include "containers.h"
@@ -24,10 +24,12 @@
 #include "simulator.h"
 #include "message.h"
 
+#include <cstdio>
+
 //extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
-#pragma inline_recursion( on )
-#pragma inline_depth( 50 )
+//#pragma inline_recursion( on )
+//#pragma inline_depth( 50 )
 
 f32 AngleBetweenVector(const neV3 & va, const neV3 & vb, const neV3 & normal)
 {
@@ -232,7 +234,7 @@ void _neConstraint::AddToRigidBody()
 				if (bodyA->sim->logLevel >= neSimulator::LOG_OUTPUT_LEVEL_ONE)
 				{
 
-					sprintf(bodyA->sim->logBuffer, MSG_CONSTRAINT_HEADER_FULL);
+                    snprintf(bodyA->sim->logBuffer, 255, MSG_CONSTRAINT_HEADER_FULL);
 					bodyA->sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 				}
 				return;
@@ -324,7 +326,7 @@ void _neConstraint::AddToRigidBody()
 				{
 					if (bodyA->sim->logLevel >= neSimulator::LOG_OUTPUT_LEVEL_ONE)
 					{
-						sprintf(bodyA->sim->logBuffer, MSG_CONSTRAINT_HEADER_FULL);
+                        snprintf(bodyA->sim->logBuffer, 255, MSG_CONSTRAINT_HEADER_FULL);
 						bodyA->sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 					}
 					return;
@@ -429,7 +431,7 @@ neController * _neConstraint::AddController(neJointControllerCallback * jc, int3
 
 	if (!c)
 	{
-		sprintf(sim->logBuffer, MSG_CONTROLLER_FULL);
+        snprintf(sim->logBuffer, 255, MSG_CONTROLLER_FULL);
 		
 		sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -583,13 +585,13 @@ void _neConstraint::FindGreatest()
 {
 	neRigidBody_ * rbodyB = nullptr;
 	
-	neCollisionBody_ * cbodyB = nullptr;
+    //neCollisionBody_ * cbodyB = nullptr;
 
 	if (bodyB)
 	{
 		rbodyB = bodyB->AsRigidBody();
 
-		cbodyB = bodyB->AsCollisionBody();
+        /*cbodyB =*/ bodyB->AsCollisionBody();
 	}
 	switch (type)
 	{
@@ -824,11 +826,11 @@ void _neConstraint::CheckLimit()
 
 void _neConstraint::UpdateCurrentPosition()
 {
-	neRigidBody_ * rb = nullptr;
+    //neRigidBody_ * rb = nullptr;
 
 	if (bodyB && bodyB->AsRigidBody())
 	{
-		rb = bodyB->AsRigidBody();
+        /*rb =*/ bodyB->AsRigidBody();
 	}
 	frameAWorld = bodyA->State().b2w * frameA;
 

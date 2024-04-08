@@ -28,7 +28,9 @@
 #include "stack.h"
 #include "simulator.h"
 
-#include <stdio.h>
+#include <cstdio>
+
+//#include <stdio.h>
 #include <assert.h>
 
 /****************************************************************************
@@ -75,7 +77,7 @@ void neRegion::Initialise(neFixedTimeStepSimulator * s, neByte sortD)
 	{
 		if (sortD & (1 << i ) )
 		{
-			bool b = coordLists[i].Reserve((totalBodies + maxParticle) * 2, sim->allocator);
+            /*bool b =*/ coordLists[i].Reserve((totalBodies + maxParticle) * 2, sim->allocator);
 			
 			coordLists[i].dim = i;
 
@@ -388,7 +390,7 @@ void neRegion::ToggleOverlapStatus(neRigidBodyBase * a, neRigidBodyBase * b, neB
 		{
 			if (overlappedPairs.usedCount >= sim->sizeInfo.overlappedPairsCount)
 			{
-				sprintf(sim->logBuffer, "Overlap Pair buffer full. Increase buffer size.\n");
+                snprintf(sim->logBuffer, 255, "Overlap Pair buffer full. Increase buffer size.\n");
 				sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 				return;
 			}
@@ -746,7 +748,7 @@ void neCoordList::Sort(bool sortOnly)
 
 	neDLinkList<CCoordListEntry>::listItem * usedStart = sortStart;
 
-	neDLinkList<CCoordListEntry>::listItem * usedTail = nullptr;
+    //neDLinkList<CCoordListEntry>::listItem * usedTail = nullptr;
 
 	while (coordList.used)
 	{

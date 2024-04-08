@@ -11,10 +11,10 @@
  *                                                                       *
  *************************************************************************/
 
-#pragma inline_recursion( on )
-#pragma inline_depth( 250 )
+//#pragma inline_recursion( on )
+//#pragma inline_depth( 250 )
 
-#include "stdio.h"
+//#include "stdio.h"
 
 /*
 #ifdef _WIN32

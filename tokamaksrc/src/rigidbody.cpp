@@ -11,10 +11,10 @@
  *                                                                       *
  *************************************************************************/
 
-#pragma inline_recursion( on )
-#pragma inline_depth( 250 )
+//#pragma inline_recursion( on )
+//#pragma inline_depth( 250 )
 
-#include "stdio.h"
+//#include "stdio.h"
 
 /*
 #ifdef _WIN32
@@ -32,6 +32,8 @@
 #include "stack.h"
 #include "simulator.h"
 #include "message.h"
+
+#include <cstdio>
 
 #define ne_Default_Mass 1.0f
 
@@ -283,7 +285,7 @@ neController * neRigidBody_::AddController(neRigidBodyControllerCallback * rbc, 
 
 	if (!c)
 	{
-		sprintf(sim->logBuffer, MSG_CONTROLLER_FULL);
+        snprintf(sim->logBuffer, 255, MSG_CONTROLLER_FULL);
 		
 		sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -462,11 +464,11 @@ void neRigidBody_::AdvanceDynamic(f32 tStep)
 	dvRecord[sim->stepSoFar % NE_RB_MAX_PAST_RECORDS].SetZero();
 	davRecord[sim->stepSoFar % NE_RB_MAX_PAST_RECORDS].SetZero();
 
-	neRigidBodyState & state = State();
+    /*neRigidBodyState & state =*/ State();
 
-	int newStateId = (curState + 1) % MAX_RB_STATES;
+    //int newStateId = (curState + 1) % MAX_RB_STATES;
 
-	neRigidBodyState & newState = stateBuffer[newStateId];
+    //neRigidBodyState & newState = stateBuffer[newStateId];
 
 	totalForce += (force + gforce + cforce);
 
@@ -867,7 +869,7 @@ neBool neRigidBody_::ApplyCollisionImpulse(const neV3 & impulse, const neV3 & co
 
 		SetAngMom(newAM);
 
-		f32 l = dv.Length();
+        //f32 l = dv.Length();
 /*
 		if (id == 1 && l > sim->magicNumber)
 		{

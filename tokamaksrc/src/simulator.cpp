@@ -24,13 +24,16 @@
 #include "scenery.h"
 #include "message.h"
 
-//#include <assert.h>
-#include <stdio.h>
-#ifdef _WIN32
-#include <windows.h>
-#endif
+#include <cstring>
+#include <cstdio>
 
-char neFixedTimeStepSimulator::logBuffer[256];
+//#include <assert.h>
+//#include <stdio.h>
+/*#ifdef _WIN32
+#include <windows.h>
+#endif*/
+
+char neFixedTimeStepSimulator::logBuffer[256] = {0};
 
 //extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
@@ -188,7 +191,7 @@ void neFixedTimeStepSimulator::Initialise(const neV3& _gravity)
 
 	if (!rigidBodyHeap.Reserve(maxRigidBodies, allocator))
 	{
-		sprintf(logBuffer, MSG_MEMORY_ALLOC_FAILED);
+        snprintf(logBuffer, 255, MSG_MEMORY_ALLOC_FAILED);
 
 		LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -197,7 +200,7 @@ void neFixedTimeStepSimulator::Initialise(const neV3& _gravity)
 
 	if (!collisionBodyHeap.Reserve(maxAnimBodies, allocator))
 	{
-		sprintf(logBuffer, MSG_MEMORY_ALLOC_FAILED);
+        snprintf(logBuffer, 255, MSG_MEMORY_ALLOC_FAILED);
 
 		LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -206,7 +209,7 @@ void neFixedTimeStepSimulator::Initialise(const neV3& _gravity)
 
 	if (!rigidParticleHeap.Reserve(maxParticles, allocator))
 	{
-		sprintf(logBuffer, MSG_MEMORY_ALLOC_FAILED);
+        snprintf(logBuffer, 255, MSG_MEMORY_ALLOC_FAILED);
 
 		LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -340,7 +343,7 @@ neRigidBody_* neFixedTimeStepSimulator::CreateRigidBody(neBool isParticle)
 
 		if (!ret)
 		{
-			sprintf(logBuffer, MSG_RUN_OUT_RIDIGBODY);
+            snprintf(logBuffer, 255, MSG_RUN_OUT_RIDIGBODY);
 
 			LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -363,7 +366,7 @@ neRigidBody_* neFixedTimeStepSimulator::CreateRigidBody(neBool isParticle)
 
 		if (!ret)
 		{
-			sprintf(logBuffer, MSG_RUN_OUT_RIDIGPARTICLE);
+            snprintf(logBuffer, 255, MSG_RUN_OUT_RIDIGPARTICLE);
 
 			LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
@@ -415,13 +418,13 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 	{
 		return nullptr;
 	}
-	neBool isParticle = false;
+    //neBool isParticle = false;
 
 	if (convex->breakInfo.flag == neGeometry::NE_BREAK_ALL_PARTICLE ||
 		convex->breakInfo.flag == neGeometry::NE_BREAK_NORMAL_PARTICLE ||
 		convex->breakInfo.flag == neGeometry::NE_BREAK_NEIGHBOUR_PARTICLE)
 	{
-		isParticle = true;
+        //isParticle = true;
 	}
 
 	neRigidBody_ * newBody = CreateRigidBody(false);
@@ -533,7 +536,7 @@ void neFixedTimeStepSimulator::Free(neRigidBodyBase * bb)
 		}
 		else
 		{
-			sprintf(logBuffer, MSG_TRYING_TO_FREE_INVALID_CB);
+            snprintf(logBuffer, 255, MSG_TRYING_TO_FREE_INVALID_CB);
 
 			LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 		}
@@ -557,7 +560,7 @@ void neFixedTimeStepSimulator::Free(neRigidBodyBase * bb)
 			}
 			else
 			{
-				sprintf(logBuffer, MSG_TRYING_TO_FREE_INVALID_RP);
+                snprintf(logBuffer, 255, MSG_TRYING_TO_FREE_INVALID_RP);
 
 				LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 			}
@@ -575,7 +578,7 @@ void neFixedTimeStepSimulator::Free(neRigidBodyBase * bb)
 			}
 			else
 			{
-				sprintf(logBuffer, MSG_TRYING_TO_FREE_INVALID_RB);
+                snprintf(logBuffer, 255, MSG_TRYING_TO_FREE_INVALID_RB);
 
 				LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 			}
@@ -706,6 +709,7 @@ void neFixedTimeStepSimulator::Advance(f32 time, uint32_t nStep, nePerformanceRe
 		if (perfReport->reportType == nePerformanceReport::NE_PERF_SAMPLE)
 		{
 			f32 totalTime = perfReport->time[nePerformanceReport::NE_PERF_TOTAL_TIME] = perf->GetTotalTime();
+            (void)totalTime;
 
 #ifdef DETAIL_PERF_REPORTING
 
@@ -833,6 +837,7 @@ void neFixedTimeStepSimulator::Advance(f32 sec, f32 minTimeStep, f32 maxTimeStep
 		if (perfReport->reportType == nePerformanceReport::NE_PERF_SAMPLE)
 		{
 			f32 totalTime = perfReport->time[nePerformanceReport::NE_PERF_TOTAL_TIME] = perf->GetTotalTime();
+            (void)totalTime;
 
 #ifdef DETAIL_PERF_REPORTING
 
@@ -1702,7 +1707,7 @@ void neFixedTimeStepSimulator::RegisterPenetration(neRigidBodyBase * bodyA, neRi
 	f32 alignWithGravity = cresult.collisionFrame[2].Dot(gravityVector);
 
 	//f32 angle = 0.3f;
-	f32 angle = 0.3f;
+    //f32 angle = 0.3f;
 
 	if (1)//neAbs(alignWithGravity) > angle)
 	{
@@ -1959,6 +1964,8 @@ neBool neFixedTimeStepSimulator::CheckBreakage(neRigidBodyBase * originalBody, T
 	case neGeometry::NE_BREAK_NEIGHBOUR_PARTICLE:
 
 		break;
+    default:
+        break;
 	}
 	if (originalBodyType == NE_ANIMATED_BODY)
 	{
@@ -2038,7 +2045,7 @@ void neFixedTimeStepSimulator::CheckStackHeader()
 
 	while (item)
 	{
-		neStackHeader * h = (neStackHeader *)item;
+        //neStackHeader * h = (neStackHeader *)item;
 
 		//ASSERT(h->infoCount > 0);
 		//assert(h->infoCount > 0);

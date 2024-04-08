@@ -21,7 +21,7 @@
  *                                                                       *
  *************************************************************************/
 
-#include "stdio.h"
+//#include "stdio.h"
 /*
 #ifdef _WIN32
 #include <windows.h>
@@ -376,6 +376,8 @@ void neCollisionResult::PrepareForSolver(neBool aIdle, neBool bIdle)
 			kInv[0][0] = 1.0f / (oneOnMassA + oneOnMassB);
 		}	
 		break;
+    default:
+        break;
 	}
 }
 
@@ -2192,13 +2194,13 @@ bool BoxTestParam::MeasureVertexFacePeneration(ConvexTestResult & result, BoxTes
 
 	f32 penetrated;
 
-	bool reverse = false;
+    //bool reverse = false;
 	
 	if ((penetrated = me2otherBox.Dot(direction)) < 0.0f)
 	{
 		direction = direction * -1.0f;
 
-		reverse = true;
+        //reverse = true;
 	}
 	else
 	{
@@ -2283,13 +2285,13 @@ neBool BoxTestParam::MeasureEdgePeneration(ConvexTestResult & result, BoxTestPar
 
 	f32 penetrated = me2OtherBox.Dot(contactNormal);
 
-	bool reverse = false;
+    //bool reverse = false;
 
 	if (penetrated < 0.0f)
 	{
 		contactNormal = contactNormal * -1.0f;
 
-		reverse = true;
+        //reverse = true;
 	}
 	else
 		penetrated = penetrated * -1.0f;

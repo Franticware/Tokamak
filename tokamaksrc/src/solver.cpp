@@ -21,8 +21,8 @@
 #include "rigidbody.h"
 #include "stack.h"
 #include "simulator.h"
-#include "scenery.h"
-#include "message.h"
+//#include "scenery.h"
+//#include "message.h"
 
 f32 CONSTRAINT_THESHOLD_JOINT = 0.000f;
 
@@ -475,7 +475,7 @@ f32 neCollisionResult::SolveAngular3(f32 pdepth, const neV3 & axis, f32 relAV, n
 {
 	neV3 deltaL;
 
-	f32 threshold = 0.00f;
+    //f32 threshold = 0.00f;
 
 	//f32 angularDisplacementNeeded = -pdepth;
 /*	
@@ -603,7 +603,7 @@ f32 neCollisionResult::SolveAngularPrimary(neFixedTimeStepSimulator * sim)
 
     neRigidBody_ * bb = nullptr;
 
-	f32 ava = 0.0f, avb = 0.0f;
+    //f32 ava = 0.0f, avb = 0.0f;
 
 	if (bodyA)
 	{
@@ -695,15 +695,23 @@ f32 neCollisionResult::SolveRelativeLinear(neFixedTimeStepSimulator * sim)
 {
 	f32 velA = 0.0f, velB = 0.0f;
 
-	neRigidBody_ * ba, * bb;
+    neRigidBody_ * ba = nullptr, * bb = nullptr;
 
-	if (bodyA && (ba = bodyA->AsRigidBody()))
+    if (bodyA)
 	{
-		velA = ba->Derive().linearVel.Dot(contactABody);
+        ba = bodyA->AsRigidBody();
+        if (ba)
+        {
+            velA = ba->Derive().linearVel.Dot(contactABody);
+        }
 	}
-	if (bodyB && (bb = bodyB->AsRigidBody()))
+    if (bodyB)
 	{
-		velB = bb->Derive().linearVel.Dot(contactABody);
+        bb = bodyB->AsRigidBody();
+        if (bb)
+        {
+            velB = bb->Derive().linearVel.Dot(contactABody);
+        }
 	}
 	if (!ba && !bb)
 		return 0.0f;
@@ -988,6 +996,8 @@ f32 neFixedTimeStepSimulator::SolveLocal(neCollisionResult * cr)
 		}
 
 		break;
+    default:
+        break;
 	}
 	switch (cr->impulseType)
 	{
@@ -1046,6 +1056,8 @@ f32 neFixedTimeStepSimulator::SolveLocal(neCollisionResult * cr)
 		ret = cr->SolveRelativeLinear(this);
 
 		break;
+    default:
+        break;
 	}
 
 	return ret;
@@ -1108,7 +1120,7 @@ void neFixedTimeStepSimulator::ResolvePenetration()
 {
 	//CheckStackHeader();
 
-	neStackInfoItem * sitem = (neStackInfoItem * )stackHeaderX.head;
+    //neStackInfoItem * sitem = (neStackInfoItem * )stackHeaderX.head;
 /*
 	while (sitem)
 	{
@@ -1481,9 +1493,9 @@ f32 neFixedTimeStepSimulator::HandleCollision(neRigidBodyBase * bodyA,
 
 	cresult.initRelVel = w2c * relVel;
 
-	f32 initSpeed = cresult.relativeSpeed = cresult.initRelVel.Length();
+    /*f32 initSpeed =*/ cresult.relativeSpeed = cresult.initRelVel.Length();
 
-	f32 theshold = -1.0f;
+    //f32 theshold = -1.0f;
 
 //	neM3 k, kInv;
 
@@ -1665,8 +1677,8 @@ void neFixedTimeStepSimulator::SolveAllConstrain()
 		neBodyHandle * bodyHandle = (*chiter)->bodies.GetHead();
 
 		int32_t allIdle = 0;
-		int32_t nbody = 0;
-        neRigidBody_ * lastrb = nullptr;
+        //int32_t nbody = 0;
+        //neRigidBody_ * lastrb = nullptr;
 
 		while (bodyHandle)
 		{
@@ -1676,14 +1688,14 @@ void neFixedTimeStepSimulator::SolveAllConstrain()
 			{
                 rb->maxErrCResult = nullptr;
 
-				nbody++;
+                //nbody++;
 			}
 		
 			if (rb && rb->status != neRigidBody_::NE_RBSTATUS_IDLE)
 			{
 				allIdle++;
 			}
-			lastrb = rb;
+            //lastrb = rb;
 			bodyHandle = bodyHandle->next;
 		}
 		if (allIdle == 0)
@@ -1766,9 +1778,9 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, int32_t itera
 			}
 			f32 maxError = 0.0f;
 
-			int32_t nConstraint = 0;
+            //int32_t nConstraint = 0;
 
-			neCollisionResult * cresult = &cresultHeap[0]; //*cresultHeap.BeginUsed();
+            //neCollisionResult * cresult = &cresultHeap[0]; //*cresultHeap.BeginUsed();
 
 			int32_t tt;
 
