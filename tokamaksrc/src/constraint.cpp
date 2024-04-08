@@ -63,11 +63,11 @@ f32 AngleBetweenVector(const neV3 & va, const neV3 & vb, const neV3 & normal)
 
 	if (dot2 > 0.0f)
 	{
-		return acosf(dot);
+		return neAcos(dot);
 	}
 	else
 	{
-		return 2.0f * NE_PI - acosf(dot);
+		return 2.0f * NE_PI - neAcos(dot);
 	}
 }
 
@@ -93,7 +93,7 @@ neQ GetQuatRotateTo(const neV3 & fromV, const neV3 & toV, const neV3 & axis)
 
 		f32 angle;
 
-		angle = acosf(dot);
+		angle = neAcos(dot);
 
 		ret.Set(angle, cross);
 	}
@@ -870,13 +870,13 @@ void _neConstraint::UpdateCurrentPosition()
 
 			if (dot2 > 0.0f)
 			{
-				pos = acosf(dot);
+				pos = neAcos(dot);
 
 				pos2 = pos;
 			}
 			else
 			{
-				f32 t = acosf(dot);
+				f32 t = neAcos(dot);
 
 				pos = 2.0f * NE_PI - t;
 
@@ -910,7 +910,7 @@ void _neConstraint::UpdateCurrentPosition()
 	
 			limitStates[0].limitAxis *= (1.0f / len);
 
-			pos = acosf(dot);
+			pos = neAcos(dot);
 		}
 	}
 	else if (type == neJoint::NE_JOINT_SLIDE)
@@ -973,11 +973,11 @@ void neLimitState::CheckLimitSecondary()
 
 		if (dot2 >= 0.0f)
 		{
-			angle = acosf(dot);
+			angle = neAcos(dot);
 		}
 		else
 		{
-			f32 t = acosf(dot);
+			f32 t = neAcos(dot);
 
 			angle = - t;
 		}
@@ -1085,11 +1085,11 @@ void neLimitState::CheckLimitSecondary()
 
 		if (dot2 >= 0.0f)
 		{
-			angle = acosf(dot);
+			angle = neAcos(dot);
 		}
 		else
 		{
-			f32 t = acosf(dot);
+			f32 t = neAcos(dot);
 
 			angle = - t;
 		}

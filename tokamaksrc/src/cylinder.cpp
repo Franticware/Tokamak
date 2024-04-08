@@ -327,7 +327,7 @@ neBool CylinderTriTest_Line(TConvex & cylinder, neT3 & trans, ConvexTestResult &
 				if (depth >= cylinder.CylinderRadiusSq())
 					return false;
 
-				depth = sqrtf(depth);
+				depth = neSqrt(depth);
 
 				depth = cylinder.CylinderRadius() - depth;
 
@@ -574,7 +574,7 @@ void Cylinder2SphereTest(neCollisionResult & result, TConvex & cylinderA, neT3 &
 
 	f32 dist = diff1.Dot(diff1);
 	
-	dist = sqrtf(dist);
+	dist = neSqrt(dist);
 
 	if (dist >= (cylinderA.CylinderRadius() + sphereB.Radius()))
 		return;

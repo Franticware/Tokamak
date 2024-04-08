@@ -163,9 +163,9 @@ void neFixedTimeStepSimulator::SetGravity(const neV3 & g)
 
 	gravityVector.Normalize();
 
-	restingSpeed = sqrtf(gravity.Dot(gravity));
+	restingSpeed = neSqrt(gravity.Dot(gravity));
 
-	//restingSpeed = sqrtf(restingSpeed * 2.0e-2f) * 4.0f;
+	//restingSpeed = neSqrt(restingSpeed * 2.0e-2f) * 4.0f;
 
 	restingSpeed = restingSpeed * 0.3f;
 

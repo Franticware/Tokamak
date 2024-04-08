@@ -578,7 +578,7 @@ f32 TConvex::GetBoundRadius()
 		break;
 
 	case TConvex::CYLINDER:
-		//extend = c2p.pos.Length() + sqrtf(CylinderRadiusSq() + CylinderHalfHeight() * CylinderHalfHeight());
+		//extend = c2p.pos.Length() + neSqrt(CylinderRadiusSq() + CylinderHalfHeight() * CylinderHalfHeight());
 		{
 			f32 r = CylinderRadiusSq() + CylinderHalfHeight();
 			
@@ -1423,7 +1423,7 @@ void Box2BoxTest(neCollisionResult & result, TConvex & convexA, neT3 & transA, T
 
 	if (dist > 0)
 	{
-		dist = sqrtf(dist);
+		dist = neSqrt(dist);
 
 		ASSERT(dist > 0.0f);
 
@@ -1644,7 +1644,7 @@ void Convex2ConvexTest(neCollisionResult & result, TConvex & convexA, neT3 & tra
 
 	if (dist > 0)
 	{
-		dist = sqrtf(dist);
+		dist = neSqrt(dist);
 
 		ASSERT(dist > 0.0f);
 
@@ -1927,7 +1927,7 @@ void Box2ConvexTest(neCollisionResult & result, TConvex & convexA, neT3 & transA
 
 	if (dist > 0)
 	{
-		dist = sqrtf(dist);
+		dist = neSqrt(dist);
 
 		ASSERT(dist > 0.0f);
 
@@ -2411,7 +2411,7 @@ neBool ConvexTestResult::ComputerEdgeContactPoint(ConvexTestResult & res)
 	}
 
 //	diff = (res.contactA) - (res.contactB);
-	res.depth = depth;//sqrtf(diff.Dot(diff));
+	res.depth = depth;//neSqrt(diff.Dot(diff));
 
 	return true;
 
@@ -2419,7 +2419,7 @@ ComputerEdgeContactPoint_Exit:
 	//res.contactA = contactA;
 	//res.contactB = contactB;
 	//diff = (res.contactA) - (res.contactB);
-	res.depth = depth;//sqrtf(diff.Dot(diff));
+	res.depth = depth;//neSqrt(diff.Dot(diff));
 	return false;
 }
 
@@ -2493,7 +2493,7 @@ neBool ConvexTestResult::ComputerEdgeContactPoint2(f32 & au, f32 & bu)
 
 	diff = contactA - contactB;
 	
-	depth = sqrtf(diff.Dot(diff));
+	depth = neSqrt(diff.Dot(diff));
 
 	return true;
 

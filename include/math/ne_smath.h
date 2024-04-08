@@ -14,15 +14,16 @@
 #ifndef NE_SMATH_H
 #define NE_SMATH_H
 
-#include <math.h>
-#include "ne_type.h"
+//#include <math.h>
+//#include "ne_type.h"
+#include "ne_f32.h"
 
-#define NE_PI	(3.141592653589793238462643f)
-
-#define NE_RAD_TO_DEG(A) ((f32)(((A) * (180.0f / NE_PI))))
-#define NE_DEG_TO_RAD(A) ((f32)(((A) * (NE_PI / 180.0f))))
-#define NE_RI			  NE_DEG_TO_RAD(1) 	
-#define NE_ZERO (1.0e-6f)
+//#define NE_PI	(3.141592653589793238462643f)
+//
+//#define NE_RAD_TO_DEG(A) ((f32)(((A) * (180.0f / NE_PI))))
+//#define NE_DEG_TO_RAD(A) ((f32)(((A) * (NE_PI / 180.0f))))
+//#define NE_RI			  NE_DEG_TO_RAD(1)
+//#define NE_ZERO (1.0e-6f)
 
 typedef f32 neRadian;
 
@@ -32,7 +33,7 @@ typedef f32 neRadian;
 //
 ///////////////////////////////////////////////////////////////////////////
 
-f32			neFRand      ( f32 Min, f32 Max );
+/*f32			neFRand      ( f32 Min, f32 Max );
 f32			neSin        ( neRadian S );
 neRadian    neASin       ( f32 S );
 f32         neCos        ( neRadian C );
@@ -42,14 +43,14 @@ neRadian    neATan       ( f32 T );
 neRadian    neATan2      ( f32 y, f32 x );
 neBool		neRealsEqual	( f32 s1, f32 s2);
 neBool		neIsConsiderZero(f32 f);
-neBool		neIsFinite	(f32);
+neBool		neIsFinite	(f32);*/
 
 //template< class ta >                     NEINLINE ta      neAbs     ( const ta&  A )                               { return ( A < 0 ) ? -A : A;   }
 
-NEINLINE f32 neAbs(f32 f)
+/*NEINLINE f32 neAbs(f32 f)
 {
-	return (f32)fabs(f);
-}
+    return (f32)neAbs(f);
+}*/
 
 template< class ta, class tb, class tc > NEINLINE neBool  neInRange ( const ta&  X, const tb& Min, const tc& Max ) { return (Min <= X) && (X <= Max);}
 template< class ta, class tb, class tc > NEINLINE ta      neRange   ( const ta&  X, const tb& Min, const tc& Max ) { if( X < Min ) return Min; return(X > Max) ? Max : X; }

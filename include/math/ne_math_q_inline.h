@@ -148,7 +148,7 @@ NEINLINE void neQ::SetupFromMatrix( const neM4& Matrix )
     {
         case 0:
             {
-                W = (f32)sqrt(qs2);
+                W = (f32)neSqrt(qs2);
                 const f32 tmp = 0.25f / W;
                 X = (Matrix.M[1][2] - Matrix.M[2][1]) * tmp;
                 Y = (Matrix.M[2][0] - Matrix.M[0][2]) * tmp;
@@ -157,7 +157,7 @@ NEINLINE void neQ::SetupFromMatrix( const neM4& Matrix )
             }
         case 1:
             {
-                X = (f32)sqrt(qx2);
+                X = (f32)neSqrt(qx2);
                 const f32 tmp = 0.25f / X;
                 W = (Matrix.M[1][2] - Matrix.M[2][1]) * tmp;
                 Y = (Matrix.M[1][0] + Matrix.M[0][1]) * tmp;
@@ -166,7 +166,7 @@ NEINLINE void neQ::SetupFromMatrix( const neM4& Matrix )
             }
         case 2:
             {
-                Y = (f32)sqrt(qy2);
+                Y = (f32)neSqrt(qy2);
                 const f32 tmp = 0.25f / Y;
                 W = (Matrix.M[2][0] - Matrix.M[0][2]) * tmp;
                 Z = (Matrix.M[2][1] + Matrix.M[1][2]) * tmp;
@@ -175,7 +175,7 @@ NEINLINE void neQ::SetupFromMatrix( const neM4& Matrix )
             }
         case 3:
             {
-                Z = (f32)sqrt(qz2);
+                Z = (f32)neSqrt(qz2);
                 const f32 tmp = 0.25f / Z;
                 W = (Matrix.M[0][1] - Matrix.M[1][0]) * tmp;
                 X = (Matrix.M[0][2] + Matrix.M[2][0]) * tmp;
@@ -225,7 +225,7 @@ NEINLINE neQ& neQ::Normalize( void )
 
 	ASSERT(norm >= 0.0f);
 
-	t = 1.0f / (float)sqrt(norm);
+	t = 1.0f / (float)neSqrt(norm);
 
     X *= t;        
     Y *= t;        
@@ -326,7 +326,7 @@ NEINLINE void neQ::GetAxisAngle( neV3& Axis, neRadian& Angle ) const
 
 		return;
 	}
-    f32 OneOver = 1.0f/(f32)sqrtf( sum );
+    f32 OneOver = 1.0f/(f32)neSqrt( sum );
 
     Axis.Set( OneOver * X, OneOver * Y, OneOver * Z );
 
@@ -338,7 +338,7 @@ NEINLINE void neQ::GetAxisAngle( neV3& Axis, neRadian& Angle ) const
 	}
 	else
 	{
-		Angle = 2.0f * (f32)acosf( w );
+        Angle = 2.0f * (f32)neAcos( w );
 	}
 }
 
@@ -397,9 +397,9 @@ NEINLINE neQ& neQ::Set(f32 angle, const neV3 & axis)
 {
 	f32 halfAngle = angle * 0.5f;
 
-	f32 sinHalfAngle = sinf(halfAngle);
+	f32 sinHalfAngle = neSin(halfAngle);
 
-	f32 cosHalfAngle = cosf(halfAngle);
+	f32 cosHalfAngle = neCos(halfAngle);
 
 	neV3 tmp = axis * sinHalfAngle;
 

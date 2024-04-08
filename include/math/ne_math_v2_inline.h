@@ -37,8 +37,8 @@ NEINLINE neV2::neV2( const neV2& V )
 
 NEINLINE neV2::neV2( const f32& K )
 {
-    X = K;//(f32)cos( R );
-    Y = K;//(f32)sin( R );
+    X = K;//(f32)neCos( R );
+    Y = K;//(f32)neSin( R );
 }
 
 //=========================================================================
@@ -100,7 +100,7 @@ NEINLINE void neV2::Set( f32 x, f32 y )
 
 NEINLINE f32 neV2::Length( void ) const
 {
-    return (f32)sqrt( this->Dot( *this ) );
+    return (f32)neSqrt( this->Dot( *this ) );
 }
 
 //=========================================================================
@@ -129,15 +129,15 @@ NEINLINE neV2 neV2::Cross( const neV2& V ) const
 
 NEINLINE f32 neV2::GetAngle( void ) const
 {
-    return (f32)atan2( Y, X );
+    return (f32)neAtan2( Y, X );
 }
 
 //==============================================================================
 
 NEINLINE neV2& neV2::Rotate( neRadian R )
 {
-    f32 s = (f32)sin( R );
-    f32 c = (f32)cos( R );
+    f32 s = (f32)neSin( R );
+    f32 c = (f32)neCos( R );
     f32 x = X;
     f32 y = Y;
 

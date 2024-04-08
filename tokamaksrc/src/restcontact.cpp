@@ -328,7 +328,7 @@ int32_t neRigidBody_::CheckRestHull()
 
 		p[0][1] = 0.0f;
 		
-		f32 d = sqrtf(p[0][0] * p[0][0] + p[0][2] * p[0][2]);
+		f32 d = neSqrt(p[0][0] * p[0][0] + p[0][2] * p[0][2]);
 
 		if (d < 0.005f)
 			return 1;
@@ -1310,7 +1310,7 @@ void neRigidBody_::CorrectRotation(f32 massOther, neV3 & pointThis, neV3 & point
 
 	axis.Normalize();
 
-	f32 angle = acosf(dot);
+	f32 angle = neAcos(dot);
 
 	neQ quat; quat.Set(angle, axis);
 

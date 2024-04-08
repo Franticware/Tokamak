@@ -3,10 +3,10 @@
 HEADERS += \
     glapp/tok_sample_glapp.h \
     include/math/ne_debug.h \
+    include/math/ne_f32.h \
     include/math/ne_math.h \
     include/math/ne_math_m3_inline.h \
     include/math/ne_math_m4_inline.h \
-    include/math/ne_math_misc_inline.h \
     include/math/ne_math_q_inline.h \
     include/math/ne_math_t3_inline.h \
     include/math/ne_math_v2_inline.h \

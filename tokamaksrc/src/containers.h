@@ -18,6 +18,8 @@
 //#include <memory.h>
 //#include <string.h>
 
+#include <algorithm>
+
 #define PLACEMENT_MAGIC \
 	public:\
 	NEINLINE void * operator new(size_t s,void * addr)\

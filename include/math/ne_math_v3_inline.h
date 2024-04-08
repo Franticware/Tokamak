@@ -90,7 +90,7 @@ NEINLINE f32 neV3::Length( void ) const
 	if (neIsConsiderZero(dot))
 		return 0.0f;
 
-    return (f32)sqrtf( dot );
+    return (f32)neSqrt( dot );
 }
 
 //=========================================================================
@@ -113,8 +113,8 @@ NEINLINE void neV3::Normalize( void )
 
 NEINLINE void neV3::RotateX( neRadian Rx )
 {
-    f32 s = (f32)sinf( Rx );
-    f32 c = (f32)cosf( Rx );
+    f32 s = (f32)neSin( Rx );
+    f32 c = (f32)neCos( Rx );
     f32 y = v[1];
     f32 z = v[2];
 
@@ -126,8 +126,8 @@ NEINLINE void neV3::RotateX( neRadian Rx )
 
 NEINLINE void neV3::RotateY( neRadian Ry )
 {
-    f32 s = (f32)sinf( Ry );
-    f32 c = (f32)cosf( Ry );
+    f32 s = (f32)neSin( Ry );
+    f32 c = (f32)neCos( Ry );
     f32 x = X();
     f32 z = Z();
 
@@ -139,8 +139,8 @@ NEINLINE void neV3::RotateY( neRadian Ry )
 
 NEINLINE void neV3::RotateZ( neRadian Rz )
 {
-    f32 s = (f32)sinf( Rz );
-    f32 c = (f32)cosf( Rz );
+    f32 s = (f32)neSin( Rz );
+    f32 c = (f32)neCos( Rz );
     f32 x = X();
     f32 y = Y();
 
@@ -233,14 +233,14 @@ NEINLINE neV3& neV3::operator *= ( f32 S )
 
 NEINLINE neRadian neV3::GetPitch( void ) const
 {
-    return(f32) -atan2( Y(), (f32)sqrt( X()*X() + Z()*Z() ) );
+    return(f32) -neAtan2( Y(), (f32)neSqrt( X()*X() + Z()*Z() ) );
 }
 
 //=========================================================================
 
 NEINLINE neRadian neV3::GetYaw( void ) const
 {
-    return (f32)atan2( X(), Z() );
+    return (f32)neAtan2( X(), Z() );
 }
 
 ///////////////////////////////////////////////////////////////////////////

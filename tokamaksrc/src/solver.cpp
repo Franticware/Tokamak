@@ -1410,7 +1410,7 @@ neV3 neFixedTimeStepSimulator::CalcNormalImpulse(neCollisionResult & cresult, ne
 
 		neV3 tempv; tempv.Set( pII[0], pII[1], 0.0f );
 
-		temp = sqrtf(tempv.Dot(tempv ));
+		temp = neSqrt(tempv.Dot(tempv ));
 
 		temp -= u * pDiff[2];
 

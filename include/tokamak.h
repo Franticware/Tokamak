@@ -18,7 +18,7 @@
 #define TOKAMAK_VERSION_MINOR 0  
 #define TOKAMAK_VERSION_BUGFIX 5 
 #define TOKAMAK_VERSION  (( TOKAMAK_VERSION_MAJOR <<24)+(TOKAMAK_VERSION_MINOR <<16)+(TOKAMAK_VERSION_BUGFIX <<8) + 0)
-//#include <malloc.h>
+#include <malloc.h>
 
 #include "math/ne_math.h"
 

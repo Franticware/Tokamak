@@ -20,9 +20,10 @@
 
 #endif //USE_OPCODE
 
-#include <math.h>
-#include <float.h>
-#include "ne_type.h"
+//#include <math.h>
+//#include <float.h>
+//#include "ne_type.h"
+#include "ne_f32.h"
 #include "ne_debug.h"
 #include "ne_smath.h"
 //#include <xmmintrin.h>
@@ -349,7 +350,8 @@ public:
 // INCLUDE INLINE HEADERS
 ///////////////////////////////////////////////////////////////////////////
 
-#include "ne_math_misc_inline.h"
+//#include "ne_math_misc_inline.h"
+#include "ne_f32.h"
 #include "ne_math_v3_inline.h"
 #include "ne_math_v4_inline.h"
 #include "ne_math_m4_inline.h"

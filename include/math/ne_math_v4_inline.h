@@ -55,7 +55,7 @@ NEINLINE neV4::neV4( const neV3& V, f32 w )
 
 NEINLINE f32 neV4::Length( void ) const
 {
-    return (f32)sqrt( this->Dot( *this ) );
+    return (f32)neSqrt( this->Dot( *this ) );
 }
 
 //=========================================================================

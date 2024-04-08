@@ -41,7 +41,7 @@
 /* suggestions and discussions on how to optimize code. */
 /* Thanks to David Hunt for finding a ">="-bug!         */
 /********************************************************/
-#include <math.h>
+//#include <math.h>
 //#include <stdio.h>
 
 #define X 0
@@ -164,23 +164,23 @@ int _triBoxOverlap_(float boxcenter[3],float boxhalfsize[3],float triverts[3][3]
 
    /* Bullet 3:  */
    /*  test the 9 tests first (this was faster) */
-   fex = fabs(e0[X]);
-   fey = fabs(e0[Y]);
-   fez = fabs(e0[Z]);
+   fex = neAbs(e0[X]);
+   fey = neAbs(e0[Y]);
+   fez = neAbs(e0[Z]);
    AXISTEST_X01(e0[Z], e0[Y], fez, fey);
    AXISTEST_Y02(e0[Z], e0[X], fez, fex);
    AXISTEST_Z12(e0[Y], e0[X], fey, fex);
 
-   fex = fabs(e1[X]);
-   fey = fabs(e1[Y]);
-   fez = fabs(e1[Z]);
+   fex = neAbs(e1[X]);
+   fey = neAbs(e1[Y]);
+   fez = neAbs(e1[Z]);
    AXISTEST_X01(e1[Z], e1[Y], fez, fey);
    AXISTEST_Y02(e1[Z], e1[X], fez, fex);
    AXISTEST_Z0(e1[Y], e1[X], fey, fex);
 
-   fex = fabs(e2[X]);
-   fey = fabs(e2[Y]);
-   fez = fabs(e2[Z]);
+   fex = neAbs(e2[X]);
+   fey = neAbs(e2[Y]);
+   fez = neAbs(e2[Z]);
    AXISTEST_X2(e2[Z], e2[Y], fez, fey);
    AXISTEST_Y1(e2[Z], e2[X], fez, fex);
    AXISTEST_Z12(e2[Y], e2[X], fey, fex);

@@ -156,7 +156,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 		if (lenSq > sphereB.RadiusSq())
 			return;
 		
-		f32 len = sqrtf(lenSq);
+		f32 len = neSqrt(lenSq);
 
 		sub *= 1.0f / len;
 
@@ -188,7 +188,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 		if (lenSq > sphereB.RadiusSq())
 			return;
 		
-		f32 len = sqrtf(lenSq);
+		f32 len = neSqrt(lenSq);
 
 		penetration = sphereB.Radius() - len;
 

@@ -349,22 +349,22 @@ NEINLINE void neM3::RotateXYZ(const neV3 & rotate)
 
 	f32 sintheta, costheta;
 
-	sintheta = sinf(rotate[0]);
-	costheta = cosf(rotate[0]);
+	sintheta = neSin(rotate[0]);
+	costheta = neCos(rotate[0]);
 	
 	rx[0].Set(1.0f, 0.0f, 0.0f);
 	rx[1].Set(0.0f, costheta, sintheta);
 	rx[2].Set(0.0f,-sintheta, costheta);
 
-	sintheta = sinf(rotate[1]);
-	costheta = cosf(rotate[1]);
+	sintheta = neSin(rotate[1]);
+	costheta = neCos(rotate[1]);
 
 	ry[0].Set(costheta, 0.0f, -sintheta);
 	ry[1].Set(0.0f, 1.0f, 0.0f);
 	ry[2].Set(sintheta, 0.0f, costheta);
 
-	sintheta = sinf(rotate[2]);
-	costheta = cosf(rotate[2]);
+	sintheta = neSin(rotate[2]);
+	costheta = neCos(rotate[2]);
 
 	rz[0].Set(costheta, sintheta, 0.0f);
 	rz[1].Set(-sintheta, costheta, 0.0f);

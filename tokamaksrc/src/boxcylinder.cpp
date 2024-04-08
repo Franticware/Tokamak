@@ -282,7 +282,7 @@ neBool BoxTestParam::CylinderEdgeTest(ConvexTestResult & res, TConvex & cylinder
 				if (depth >= cylinderB.CylinderRadiusSq())
 					return true;
 
-				depth = sqrtf(depth);
+                depth = neSqrt(depth);
 
 				depth = cylinderB.CylinderRadius() - depth;
 

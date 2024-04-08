@@ -200,7 +200,7 @@ NEINLINE void neM4::SetFastInvert( const neM4& Src )
                     Src.M[0][1] * ( Src.M[1][0] * Src.M[2][2] - Src.M[1][2] * Src.M[2][0] ) +
                     Src.M[0][2] * ( Src.M[1][0] * Src.M[2][1] - Src.M[1][1] * Src.M[2][0] ) );
 
-    if( fabs( Determinant ) < 0.0001f ) 
+    if( neAbs( Determinant ) < 0.0001f )
     {
         Matrix.SetIdentity();
         //return Matrix; 
@@ -238,8 +238,8 @@ NEINLINE void neM4::SetFastInvert( const neM4& Src )
 
 NEINLINE neM4 neM4_BuildRotX( neRadian Rx )
 {
-    f32 s = (f32)sin( Rx );
-    f32 c = (f32)cos( Rx );
+    f32 s = (f32)neSin( Rx );
+    f32 c = (f32)neCos( Rx );
     neM4 Temp;
 
     Temp.SetIdentity();
@@ -255,8 +255,8 @@ NEINLINE neM4 neM4_BuildRotX( neRadian Rx )
 
 NEINLINE neM4 neM4_BuildRotY( neRadian Ry )
 {
-    f32 s = (f32)sin( Ry );
-    f32 c = (f32)cos( Ry );
+    f32 s = (f32)neSin( Ry );
+    f32 c = (f32)neCos( Ry );
     neM4 Temp;
 
     Temp.SetIdentity();
@@ -271,8 +271,8 @@ NEINLINE neM4 neM4_BuildRotY( neRadian Ry )
 
 NEINLINE neM4 neM4_BuildRotZ( neRadian Rz )
 {
-    f32 s = (f32)sin( Rz );
-    f32 c = (f32)cos( Rz );
+    f32 s = (f32)neSin( Rz );
+    f32 c = (f32)neCos( Rz );
     neM4 Temp;
 
     Temp.SetIdentity();
