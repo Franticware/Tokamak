@@ -195,7 +195,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
 
     // SetUpTerrain
 
-    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(float) / 3, terNorm, sizeof(terNorm) / sizeof(float) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
+    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(f32) / 3, terNorm, sizeof(terNorm) / sizeof(f32) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
     terrainRender.SetDiffuseColor(0.1f, 0.5f, 0.1f, 1.0f);
 
     neTriangleMesh triMesh;
@@ -269,7 +269,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, float fElapsedTime)
+void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

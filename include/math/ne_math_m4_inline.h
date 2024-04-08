@@ -17,10 +17,10 @@
 *
 ****************************************************************************/ 
 
-NEINLINE void	neM4::Set(float row00, float row01, float row02, float row03
-					, float row10, float row11, float row12, float row13
-					, float row20, float row21, float row22, float row23
-					, float row30, float row31, float row32, float row33)
+NEINLINE void	neM4::Set(f32 row00, f32 row01, f32 row02, f32 row03
+					, f32 row10, f32 row11, f32 row12, f32 row13
+					, f32 row20, f32 row21, f32 row22, f32 row23
+					, f32 row30, f32 row31, f32 row32, f32 row33)
 {
     M[0][0] = row00; M[1][0] = row01; M[2][0] = row02; M[3][0] = row03;
     M[0][1] = row10; M[1][1] = row11; M[2][1] = row12; M[3][1] = row13;

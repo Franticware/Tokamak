@@ -20,41 +20,41 @@ bool sdlGetAsyncKeyState(SDL_Keycode k);
 bool sdlGetAsyncKeyStateOnce(SDL_Keycode k);
 
 void MyAppInit();
-void OnMyAppFrameMove(double fTime, float fElapsedTime);
+void OnMyAppFrameMove(double fTime, f32 fElapsedTime);
 void OnMyAppFrameRender();
 void OnMyAppDestroyDevice();
 void MyAppKeyboardProc(SDL_Keycode k, bool bKeyDown, bool bAltDown);
 
 void MyRenderText(const char** str, int count);
 
-inline void toGlMatrix(float m[16], const neT3& t)
+inline void toGlMatrix(f32 m[16], const neT3& t)
 {
-    const float matrix[16] =
+    const f32 matrix[16] =
     {
         t.rot[0].X(),t.rot[0].Y(),t.rot[0].Z(),0,
         t.rot[1].X(),t.rot[1].Y(),t.rot[1].Z(),0,
         t.rot[2].X(),t.rot[2].Y(),t.rot[2].Z(),0,
         t.pos.X(),t.pos.Y(),t.pos.Z(),1,
     };
-    memcpy(m, matrix, 16 * sizeof(float));
+    memcpy(m, matrix, 16 * sizeof(f32));
 }
 
 class CRenderPrimitive
 {
 public:
-    float mColor[4];
+    f32 mColor[4];
 
-    std::vector<float> mVerts;
-    std::vector<float> mNormals;
+    std::vector<f32> mVerts;
+    std::vector<f32> mNormals;
     std::vector<uint16_t> mTris;
 
     CRenderPrimitive();
-    void SetDiffuseColor(float r, float g, float b, float a);
-    void SetGraphicBox(float Width, float Height, float Depth);
-    void SetGraphicSphere(float radius);
-    void SetGraphicCylinder(float radius, float length);
+    void SetDiffuseColor(f32 r, f32 g, f32 b, f32 a);
+    void SetGraphicBox(f32 Width, f32 Height, f32 Depth);
+    void SetGraphicSphere(f32 radius);
+    void SetGraphicCylinder(f32 radius, f32 length);
     void SetGraphicMesh(const char* strFilename);
-    void SetGraphicMesh(const float* vert, int vertCount, const float* norm, int normCount, const uint16_t* ind, int indCount, int prim);
+    void SetGraphicMesh(const f32* vert, int vertCount, const f32* norm, int normCount, const uint16_t* ind, int indCount, int prim);
     void Render(const neT3 * matrix);
 };
 

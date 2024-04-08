@@ -241,8 +241,8 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 //	If Tfar < 0 box is behind ray return false end
 
 
-		float tNear = -1.0e6;
-		float tFar = 1.0e6;
+		f32 tNear = -1.0e6;
+		f32 tFar = 1.0e6;
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -254,11 +254,11 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 					return;
 				}
 			}
-			float t1 = (-convexB.as.box.boxSize[i] - sensorA.pos[i]) / sensorA.dir[i];
+			f32 t1 = (-convexB.as.box.boxSize[i] - sensorA.pos[i]) / sensorA.dir[i];
 			
-			float t2 = (convexB.as.box.boxSize[i] - sensorA.pos[i]) / sensorA.dir[i];
+			f32 t2 = (convexB.as.box.boxSize[i] - sensorA.pos[i]) / sensorA.dir[i];
 
-			float tt;
+			f32 tt;
 
 			if (t1 > t2)
 			{

@@ -225,7 +225,7 @@ NEINLINE neQ& neQ::Normalize( void )
 
 	ASSERT(norm >= 0.0f);
 
-	t = 1.0f / (float)neSqrt(norm);
+	t = 1.0f / (f32)neSqrt(norm);
 
     X *= t;        
     Y *= t;        

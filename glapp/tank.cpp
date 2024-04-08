@@ -371,7 +371,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, float fElapsedTime)
+void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

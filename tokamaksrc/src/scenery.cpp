@@ -31,8 +31,8 @@
 /********************************************************/
 /* AABB-triangle overlap test code                      */
 /* by Tomas Akenine-Moller                              */
-/* Function: int triBoxOverlap(float boxcenter[3],      */
-/*          float boxhalfsize[3],float triverts[3][3]); */
+/* Function: int triBoxOverlap(f32 boxcenter[3],      */
+/*          f32 boxhalfsize[3],f32 triverts[3][3]); */
 /* History:                                             */
 /*   2001-03-05: released the code in its first version */
 /*   2001-06-18: changed the order of the tests, faster */
@@ -67,10 +67,10 @@
   if(x2<min) min=x2;\
   if(x2>max) max=x2;
 
-int planeBoxOverlap(float normal[3],float d, float maxbox[3])
+int planeBoxOverlap(f32 normal[3],f32 d, f32 maxbox[3])
 {
   int q;
-  float vmin[3],vmax[3];
+  f32 vmin[3],vmax[3];
   for(q=X;q<=Z;q++)
   {
     if(normal[q]>0.0f)
@@ -137,7 +137,7 @@ int planeBoxOverlap(float normal[3],float d, float maxbox[3])
     rad = fa * boxhalfsize[X] + fb * boxhalfsize[Y];   \
     if(min>rad || max<-rad) return 0;
 
-int _triBoxOverlap_(float boxcenter[3],float boxhalfsize[3],float triverts[3][3])
+int _triBoxOverlap_(f32 boxcenter[3],f32 boxhalfsize[3],f32 triverts[3][3])
 {
 
   /*    use separating axis theorem to test overlap between triangle and box */
@@ -147,9 +147,9 @@ int _triBoxOverlap_(float boxcenter[3],float boxhalfsize[3],float triverts[3][3]
   /*    2) normal of the triangle */
   /*    3) crossproduct(edge from tri, {x,y,z}-directin) */
   /*       this gives 3x3=9 more tests */
-   float v0[3],v1[3],v2[3];
-   float min,max,d,p0,p1,p2,rad,fex,fey,fez;
-   float normal[3],e0[3],e1[3],e2[3];
+   f32 v0[3],v1[3],v2[3];
+   f32 min,max,d,p0,p1,p2,rad,fex,fey,fez;
+   f32 normal[3],e0[3],e1[3],e2[3];
 
    /* This is the fastest branch on Sun */
    /* move everything so that the boxcenter is in (0,0,0) */
@@ -310,9 +310,9 @@ neBool IntersectAABBTriangle(neTriangleTree * tree, const neV3 & minBound, const
 		zfactor = 0.01f;
 	}
 
-	float boxpos[3];
-	float boxhalfsize[3];
-	float triverts[3][3];
+    f32 boxpos[3];
+    f32 boxhalfsize[3];
+    f32 triverts[3][3];
 	int i;
 
 	boxhalfsize[0] = ((maxBound[0] - minBound[0]) * 0.5f) + xfactor;

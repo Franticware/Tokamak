@@ -80,7 +80,7 @@ SensorData sensorData[4] =
 class CControllerCB : public neRigidBodyControllerCallback
 {
 public:
-    void RigidBodyControllerCallback(neRigidBodyController* controller, float timeStep);
+    void RigidBodyControllerCallback(neRigidBodyController* controller, f32 timeStep);
 };
 
 CControllerCB cb;
@@ -535,7 +535,7 @@ void MyAppInit()
     sample.Reset();
 };
 
-void OnMyAppFrameMove(double fTime, float fElapsedTime)
+void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;
@@ -704,7 +704,7 @@ void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
     }
 }
 
-void CControllerCB::RigidBodyControllerCallback(neRigidBodyController* controller, float timeStep)
+void CControllerCB::RigidBodyControllerCallback(neRigidBodyController* controller, f32 timeStep)
 {
     (void)timeStep;
     neRigidBody* rb = controller->GetRigidBody();

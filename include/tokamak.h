@@ -458,13 +458,13 @@ class TOKAMAK_API neJointController;
 class neRigidBodyControllerCallback
 {
 public:
-	virtual void RigidBodyControllerCallback(neRigidBodyController * controller, float timeStep) = 0;
+	virtual void RigidBodyControllerCallback(neRigidBodyController * controller, f32 timeStep) = 0;
 };
 
 class neJointControllerCallback
 {
 public:
-	virtual void ConstraintControllerCallback(neJointController * controller, float timeStep) = 0;
+	virtual void ConstraintControllerCallback(neJointController * controller, f32 timeStep) = 0;
 };
 
 class TOKAMAK_API neRigidBody
