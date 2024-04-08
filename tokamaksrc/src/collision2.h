@@ -31,7 +31,7 @@ public:
 
 	NEINLINE bool PointInYProjection(neV3 & point);
 
-	s32 IsPointInside(const neV3 & point);
+	int32_t IsPointInside(const neV3 & point);
 };
 
 typedef struct ConvexTestResult ConvexTestResult;
@@ -74,25 +74,25 @@ public:
 
 	void CalcVertInWorld();
 	bool BoxTest(ConvexTestResult & result, BoxTestParam & otherBox);
-	bool MeasureVertexFacePeneration(ConvexTestResult & result, BoxTestParam & otherBox, s32 whichFace);
-	neBool MeasureEdgePeneration(ConvexTestResult & result, BoxTestParam & otherBox, s32 dim1, s32 dim2);
+	bool MeasureVertexFacePeneration(ConvexTestResult & result, BoxTestParam & otherBox, int32_t whichFace);
+	neBool MeasureEdgePeneration(ConvexTestResult & result, BoxTestParam & otherBox, int32_t dim1, int32_t dim2);
 	bool TriTest(ConvexTestResult & result, TriangleParam & tri);
 	bool TriHeightTest(ConvexTestResult & result, TriangleParam & tri);
 	NEINLINE bool MeasurePlanePenetration(ConvexTestResult & result, const neV3 & normal, f32 d);
-	bool MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, TriangleParam & tri, s32 whichFace);
-	bool MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & result, TriangleParam & tri, s32 dim1, s32 dim2);
+	bool MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, TriangleParam & tri, int32_t whichFace);
+	bool MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & result, TriangleParam & tri, int32_t dim1, int32_t dim2);
 
 	//cylinder functions
 
 	//neBool CylinderEndVertexTest(ConvexTestResult & res, TConvex & cylinder);
 
-	//neBool CylinderRimFaceTest(ConvexTestResult & res, TConvex & cylinder, s32 whichFace);
+	//neBool CylinderRimFaceTest(ConvexTestResult & res, TConvex & cylinder, int32_t whichFace);
 
-	neBool CylinderFaceTest(ConvexTestResult & res, TConvex & cylinderB, neT3 & transB, s32 whichFace);
+	neBool CylinderFaceTest(ConvexTestResult & res, TConvex & cylinderB, neT3 & transB, int32_t whichFace);
 
-	//neBool CylinderEdgeTest(ConvexTestResult & res, TConvex & cylinder, s32 whichEdge);
+	//neBool CylinderEdgeTest(ConvexTestResult & res, TConvex & cylinder, int32_t whichEdge);
 
-	neBool CylinderEdgeTest(ConvexTestResult & res, TConvex & cylinder, neT3 & transB, s32 whichEdge);
+	neBool CylinderEdgeTest(ConvexTestResult & res, TConvex & cylinder, neT3 & transB, int32_t whichEdge);
 
 	neBool LineTest(ConvexTestResult & res, neV3 & point1, neV3 & point2);
 };

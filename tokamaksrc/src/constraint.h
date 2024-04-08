@@ -56,7 +56,7 @@ typedef struct neLimitState neLimitState;
 
 struct neLimitState
 {
-	s32 limitType;
+	int32_t limitType;
 
 	neBool applyLimitImpulse;
 
@@ -80,7 +80,7 @@ struct neLimitState
 
 	_neConstraint * constr;
 
-	void Reset(_neConstraint * c, s32 ltype = 0)
+	void Reset(_neConstraint * c, int32_t ltype = 0)
 	{
 		constr = c;
 		
@@ -158,7 +158,7 @@ public:
 	neConstraintHandle bodyAHandle;
 	neConstraintHandle bodyBHandle;
 
-	s32 pointCount;
+	int32_t pointCount;
 	
 	neJointPoint cpointsA[2];
 	neJointPoint cpointsB[2];
@@ -174,7 +174,7 @@ public:
 
 	f32 accuracy;
 
-	s32 iteration;
+	int32_t iteration;
 
 	f32 jointLength;
 
@@ -204,7 +204,7 @@ public:
 
 	void SetType(neJoint::ConstraintType t);
 
-//	neV3 * GetPoint(neRigidBodyBase * body, s32 index, s32 ptType);
+//	neV3 * GetPoint(neRigidBodyBase * body, int32_t index, int32_t ptType);
 
 //	void ChooseRigidConstraints();
 
@@ -216,7 +216,7 @@ public:
 
 	void AddToRigidBody();
 
-	neController * AddController(neJointControllerCallback * jc, s32 period);
+	neController * AddController(neJointControllerCallback * jc, int32_t period);
 
 	void BeginIterateController();
 
@@ -272,13 +272,13 @@ public:
 	
 	neBool solved;
 
-	s32 flag;
+	int32_t flag;
 
 	neCollection<neRigidBodyBase> bodies;
 
 	neConstraintHeader() { Reset();}
 
-	void AddToSolver(f32 & epsilon, s32 & iteration);
+	void AddToSolver(f32 & epsilon, int32_t & iteration);
 
 	void Reset() 
 	{

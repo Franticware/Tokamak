@@ -35,7 +35,7 @@
 
 #define ne_Default_Mass 1.0f
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
 
 /****************************************************************************
@@ -112,7 +112,7 @@ neRigidBody_::neRigidBody_()
 	
 	SetConstraintHeader(nullptr);
 
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
@@ -198,7 +198,7 @@ void neRigidBody_::Free()
 		//sim->stackInfoHeap.Dealloc(stackInfo, 1);
 		FreeStackInfo();
 	}
-	for (s32 i = 0; i < NE_MAX_REST_ON; i++)
+	for (int32_t i = 0; i < NE_MAX_REST_ON; i++)
 	{
 		GetRestRecord(i).SetInvalid();
 	}
@@ -241,7 +241,7 @@ void neRigidBody_::RecalcInertiaTensor()
 	}
 	else
 	{
-		s32 i;
+		int32_t i;
 		f32 m;
 		neM3 _tensor;
 
@@ -277,7 +277,7 @@ void neRigidBody_::RecalcInertiaTensor()
 *
 ****************************************************************************/ 
 
-neController * neRigidBody_::AddController(neRigidBodyControllerCallback * rbc, s32 period)
+neController * neRigidBody_::AddController(neRigidBodyControllerCallback * rbc, int32_t period)
 {
 	neController * c = sim->controllerHeap.Alloc(1);
 
@@ -699,7 +699,7 @@ void neRigidBody_::UpdateAABB()
 	if (col.convexCount == 0 && !isCustomCD)
 		return;
 
-//	for (s32 i = 0; i < 3; i++)
+//	for (int32_t i = 0; i < 3; i++)
 	{
 #if 0
 		if (minCoord[0])
@@ -723,7 +723,7 @@ void neRigidBody_::UpdateAABB()
 /*
 		neM3 c2w2 = rot * dobb;
 
-		for (s32 i = 0; i < 3; i++)
+		for (int32_t i = 0; i < 3; i++)
 		{
 			f32 a = neAbs(c2w2[0][i]) + neAbs(c2w2[1][i]) + neAbs(c2w2[2][i]);
 
@@ -816,7 +816,7 @@ void neRigidBody_::ZeroMotion()
 	Derive().speed = 0.0f;
 	State().angularMom.SetZero();
 
-	for (s32 i = 0; i < NE_RB_MAX_PAST_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_PAST_RECORDS; i++)
 	{
 		GetVelRecord(i).SetZero();
 		GetAngVelRecord(i).SetZero();
@@ -890,13 +890,13 @@ void neRigidBody_::AddRestContact(neRestRecord & rc)
 {
 	//search existing matching records
 
-	s32 oldest = -1;
+	int32_t oldest = -1;
 
-	s32 freeOne = -1;
+	int32_t freeOne = -1;
 
 	f32 shallowest = 0.0f;
 
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
@@ -1166,7 +1166,7 @@ void neRestRecord::Set(neRigidBody_* thisBody, const neRestRecord & rc)
 	otherBody->rbRestingOnMe.Add(&restOnHandle);
 }
 
-void neRestRecord::SetTmp(neRigidBodyBase * _otherBody, const neV3 & contactA, const neV3 & contactB, const neV3 & _normalBody, s32 matA, s32 matB)
+void neRestRecord::SetTmp(neRigidBodyBase * _otherBody, const neV3 & contactA, const neV3 & contactB, const neV3 & _normalBody, int32_t matA, int32_t matB)
 {
 	otherBody = _otherBody;
 	bodyPoint = contactA;

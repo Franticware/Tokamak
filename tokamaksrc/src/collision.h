@@ -64,12 +64,12 @@ typedef struct _neBox
 
 struct neTri
 {
-	s32 indices[3];
+	int32_t indices[3];
 };
 
 struct neTriangleTerrain
 {
-	neSimpleArray<s32> * triIndex;
+	neSimpleArray<int32_t> * triIndex;
 	neArray<neTriangle_> * triangles;
 };
 
@@ -89,15 +89,15 @@ struct neCylinder
 struct neConvexMesh
 {
 	neV3 * vertices;
-	s32 * neighbours;
-	s32 vertexCount;
+	int32_t * neighbours;
+	int32_t vertexCount;
 };
 
 struct neConvexDCD
 {
 	neByte * convexData;
 	neV3 * vertices;
-	s32 numVerts;
+	int32_t numVerts;
 };
 
 #ifdef USE_OPCODE
@@ -106,9 +106,9 @@ struct neOPCMesh
 {
 	Opcode::OPCODE_Model * opmodel;
 	IceMaths::Point * vertices;
-	u32 vertCount;
+	uint32_t vertCount;
 	IndexedTriangle * triIndices;
-	u32 triCount;
+	uint32_t triCount;
 };
 
 #endif
@@ -161,27 +161,27 @@ struct TConvex
 	neT3	c2p;	// convex to physics object
 	f32		boundingRadius;
 	f32		envelope;
-	u32		type;
-	s32		matIndex;
+	uint32_t		type;
+	int32_t		matIndex;
     neUserData userData;
 	neBreakInfo breakInfo;
 	neV3 *	vertices;
 
 	void	SetBoxSize(f32 width, f32 height, f32 depth);
 	void	SetSphere(f32 radius);
-	void	SetTriangle(s32 a, s32 b, s32 c, neV3 * vertices);
-	void	SetTerrain(neSimpleArray<s32> & triangleIndex, neArray<neTriangle_> & triangles, neV3 * vertices);
+	void	SetTriangle(int32_t a, int32_t b, int32_t c, neV3 * vertices);
+	void	SetTerrain(neSimpleArray<int32_t> & triangleIndex, neArray<neTriangle_> & triangles, neV3 * vertices);
 	void	SetConvexMesh(neByte * convexData);
 
 #ifdef USE_OPCODE
 
-	void	SetOpcodeMesh(IndexedTriangle * triIndex, u32 triCount, IceMaths::Point * vertArray, u32 vertCount);
+	void	SetOpcodeMesh(IndexedTriangle * triIndex, uint32_t triCount, IceMaths::Point * vertArray, uint32_t vertCount);
 
 #endif
 
 	void	SetTransform(neT3 & t3);
 	neT3	GetTransform();
-	void	SetUserData(u32 ud)
+	void	SetUserData(uint32_t ud)
 	{
 			userData.u = ud;
 	}
@@ -193,16 +193,16 @@ struct TConvex
 	{
 			return userData;
 	}
-	void	SetMaterialId(s32 id);
-	s32		GetMaterialId();
+	void	SetMaterialId(int32_t id);
+	int32_t		GetMaterialId();
 	f32		GetBoundRadius();
-	u32		GetType();
+	uint32_t		GetType();
 	void	Initialise();
 	neM3	CalcInertiaTensor(f32 density, f32 & mass);
 	void	GetExtend(neV3 & minExt, neV3 & maxEnt);
 
 	//quick access functions
-	NEINLINE f32 BoxSize(s32 dir)
+	NEINLINE f32 BoxSize(int32_t dir)
 	{
 		ASSERT(type == BOX);
 		
@@ -261,7 +261,7 @@ public:
 
 	f32 depth;
 
-	s32 materialID;
+	int32_t materialID;
 
 	neRigidBodyBase * body;
 
@@ -302,7 +302,7 @@ public:
 		obb.SetBoxSize(1.0f, 1.0f, 1.0f);
 	}
 
-//	void		SeTConvex(TConvex * con, s32 count)
+//	void		SeTConvex(TConvex * con, int32_t count)
 //	{
 //		convex = con;
 //		convexCount = count+1;
@@ -313,7 +313,7 @@ public:
 public:
 	TConvex		obb;
 	TConvex *	convex;
-	s32			convexCount;
+	int32_t			convexCount;
 	f32			boundingRadius;
 };
 
@@ -345,8 +345,8 @@ public:
 	neV3 initRelVel;
 	neV3 finaltRelVel;
 	
-	s32	 materialIdA;
-	s32	 materialIdB;
+	int32_t	 materialIdA;
+	int32_t	 materialIdB;
 	f32	 depth; //+ve
 	neBool penetrate;
 

@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <assert.h>
 */
-s32 neStackHeader::golbalTime = 0;
+int32_t neStackHeader::golbalTime = 0;
 
 void neRestRecord::Update()
 {
@@ -73,7 +73,7 @@ void neStackInfo::Resolve()
 
 	ASSERT(body);
 
-	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
 		if (body->GetRestRecord(i).IsValid())
 		{
@@ -98,7 +98,7 @@ void neStackInfo::CheckHeader(neStackHeader * sh)
 	if (!b)
 		return;
 
-	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
 		if (b->GetRestRecord(i).GetOtherRigidBody())
 		{
@@ -138,7 +138,7 @@ void neStackInfo::Break()
 
 	neStackHeader * newHeader = body->sim->NewStackHeader(nullptr);
 
-	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
 		if (body->GetRestRecord(i).otherBody)
 		{
@@ -211,7 +211,7 @@ void neStackHeader::Resolve()
 //	if (head == nullptr)
 //		return;
 
-	s32 c = 0;
+	int32_t c = 0;
 
 	neStackInfoItem * item = (neStackInfoItem *) head;
 
@@ -267,7 +267,7 @@ void neStackHeader::ChangeHeader(neStackHeader * newHeader)
 	}
 	neStackInfoItem * item = (neStackInfoItem *) head;
 
-	s32 c = 0;
+	int32_t c = 0;
 
 	while (item)
 	{
@@ -293,7 +293,7 @@ void neStackHeader::ChangeHeader(neStackHeader * newHeader)
 	newHeader->infoCount += c;
 }
 /*
-s32 pop = 0;
+int32_t pop = 0;
 
 neStackHeader * hell[256];
 */
@@ -324,7 +324,7 @@ neBool neStackHeader::CheckStackDisconnected()
 		*stackInfoBuffer.Alloc() = (neByte *)sinfo;
 	}
 
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < stackInfoBuffer.GetUsedCount(); i++)
 	{
@@ -335,7 +335,7 @@ neBool neStackHeader::CheckStackDisconnected()
 
 		neRigidBody_ * rb = sinfo->body;
 
-		for (s32 j = 0; j < NE_RB_MAX_RESTON_RECORDS; j++)
+		for (int32_t j = 0; j < NE_RB_MAX_RESTON_RECORDS; j++)
 		{
 			if (rb->GetRestRecord(j).IsValid())
 			{
@@ -393,7 +393,7 @@ neBool neStackHeader::CheckStackDisconnected()
 
 			sim->stackInfoHeap.Dealloc(sinfo, 1);
 
-			for (s32 i = 0; i < NE_MAX_REST_ON; i++)
+			for (int32_t i = 0; i < NE_MAX_REST_ON; i++)
 			{
 				rb->GetRestRecord(i).SetInvalid();
 			}
@@ -407,7 +407,7 @@ neBool neStackHeader::CheckStackDisconnected()
 
 	//pop = 0;
 
-	for (s32 i = 0; i < stackInfoBuffer.GetUsedCount(); i++)
+	for (int32_t i = 0; i < stackInfoBuffer.GetUsedCount(); i++)
 	{
 //		char ss[256];
 
@@ -425,7 +425,7 @@ neBool neStackHeader::CheckStackDisconnected()
 
 		if (anotherHeader && (anotherHeader != newStackHeader))
 		{
-			for (s32 j = 0; j < i ; j++)
+			for (int32_t j = 0; j < i ; j++)
 			{
 				((neStackInfo *)stackInfoBuffer[j])->ForceAcceptNewHeader(anotherHeader);
 			}
@@ -572,7 +572,7 @@ void neStackInfo::AddToSolver(neBool addCHeader)
 
 //	body->AddContactImpulseRecord(addCHeader);
 
-	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
 		if (!body->GetRestRecord(i).IsValid())
 		{
@@ -656,7 +656,7 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 
 	neRigidBody_ * foundBody;
 
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
@@ -742,7 +742,7 @@ void neStackInfo::ForceAcceptNewHeader(neStackHeader * newHeader)
 	}
 	newHeader->Add(this);
 
-	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
+	for (int32_t i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
 		neRigidBody_* otherBody = (neRigidBody_*)body->GetRestRecord(i).GetOtherRigidBody();
 

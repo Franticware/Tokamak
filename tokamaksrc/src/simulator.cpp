@@ -32,9 +32,9 @@
 
 char neFixedTimeStepSimulator::logBuffer[256];
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
-extern s32 currentMicroStep;
+extern int32_t currentMicroStep;
 
 #define NE_HIGH_ENERGY 1.0f
 
@@ -288,7 +288,7 @@ void neFixedTimeStepSimulator::LogOutput(neSimulator::LOG_OUTPUT_LEVEL lvl)
 *
 ****************************************************************************/ 
 
-bool neFixedTimeStepSimulator::SetMaterial(s32 index, f32 friction, f32 restitution, f32 density)
+bool neFixedTimeStepSimulator::SetMaterial(int32_t index, f32 friction, f32 restitution, f32 density)
 {
 	if (index < 0)
 		return false;
@@ -309,7 +309,7 @@ bool neFixedTimeStepSimulator::SetMaterial(s32 index, f32 friction, f32 restitut
 *
 ****************************************************************************/ 
 
-bool neFixedTimeStepSimulator::GetMaterial(s32 index, f32& friction, f32& restitution, f32& density)
+bool neFixedTimeStepSimulator::GetMaterial(int32_t index, f32& friction, f32& restitution, f32& density)
 {
 	if (index < 0)
 		return false;
@@ -398,7 +398,7 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 
 	TConvex * con;
 
-	s32 ccount = 0;
+	int32_t ccount = 0;
 
 	neBool found = false;
 
@@ -437,7 +437,7 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 
 	newBody->Ibody.SetIdentity();
 
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 		newBody->Ibody[i][i] = convex->breakInfo.inertiaTensor[i];
 
 	newBody->IbodyInv.SetInvert(newBody->Ibody);
@@ -663,7 +663,7 @@ UPDATE_PERF_REPORT(UpdatePosition);
 UPDATE_PERF_REPORT(UpdateControllerCallback);
 }
 
-void neFixedTimeStepSimulator::Advance(f32 time, u32 nStep, nePerformanceReport * _perfReport)
+void neFixedTimeStepSimulator::Advance(f32 time, uint32_t nStep, nePerformanceReport * _perfReport)
 {
 	_currentTimeStep = time / (f32)nStep;
 
@@ -676,7 +676,7 @@ void neFixedTimeStepSimulator::Advance(f32 time, u32 nStep, nePerformanceReport 
 #ifdef _WIN32
 	if (perfReport)
 	{
-		for (s32 j = 0; j < nePerformanceReport::NE_PERF_LAST; j++)
+		for (int32_t j = 0; j < nePerformanceReport::NE_PERF_LAST; j++)
 		{
 			perfReport->time[j] = 0.0f;
 		}
@@ -686,7 +686,7 @@ void neFixedTimeStepSimulator::Advance(f32 time, u32 nStep, nePerformanceReport 
 
 	int i;
 
-	for (i = 0; i < (s32)nStep; i++)
+	for (i = 0; i < (int32_t)nStep; i++)
 	{
 		magicNumber = 0;
 
@@ -767,7 +767,7 @@ void neFixedTimeStepSimulator::Advance(f32 sec, f32 minTimeStep, f32 maxTimeStep
 #ifdef _WIN32
 	if (perfReport)
 	{
-		for (s32 j = 0; j < nePerformanceReport::NE_PERF_LAST; j++)
+		for (int32_t j = 0; j < nePerformanceReport::NE_PERF_LAST; j++)
 		{
 			perfReport->time[j] = 0.0f;
 		}
@@ -1380,7 +1380,7 @@ void neFixedTimeStepSimulator::CheckTerrainCollision()
 
 	neV3 backupVector;
 
-	for (s32 mop = 0; mop < 2; mop++)
+	for (int32_t mop = 0; mop < 2; mop++)
 	{
 		neList<neRigidBody_> * activeList = &activeRB; 
 		
@@ -1422,13 +1422,13 @@ void neFixedTimeStepSimulator::CheckTerrainCollision()
 
 				//printf("node count %d\n", treeNodes.GetUsedCount());
 				
-				for (s32 i = 0; i < treeNodes.GetUsedCount(); i++)
+				for (int32_t i = 0; i < treeNodes.GetUsedCount(); i++)
 				{
 					neTreeNode * t = treeNodes[i];
 
-					for (s32 j = 0; j < t->triangleIndices.GetUsedCount(); j++)
+					for (int32_t j = 0; j < t->triangleIndices.GetUsedCount(); j++)
 					{
-						s32 k;
+						int32_t k;
 
 						for (k = 0; k < triangleIndex.GetUsedCount(); k++)
 						{
@@ -1437,7 +1437,7 @@ void neFixedTimeStepSimulator::CheckTerrainCollision()
 						}
 						if (k == triangleIndex.GetUsedCount())
 						{
-							s32 * triIndex = triangleIndex.Alloc();
+							int32_t * triIndex = triangleIndex.Alloc();
 
 							//ASSERT(triIndex);
 			
@@ -1471,12 +1471,12 @@ if (perfReport)
 			else
 			{
 				neTriangle * tris;
-				s32 triCount;
-				s32 * candidates;
-				s32 candidateCount;
+				int32_t triCount;
+				int32_t * candidates;
+				int32_t candidateCount;
 				neV3 *verts;
 
-				neSimpleArray<s32> _candArray;
+				neSimpleArray<int32_t> _candArray;
 				neArray<neTriangle_> _triArray;
 				
 				terrainQueryCallback(bodyA->minBound, bodyA->maxBound, &candidates, &tris, &verts, &candidateCount, &triCount, (neRigidBody*)bodyA);
@@ -1548,7 +1548,7 @@ if (perfReport)
 		}
 	}//mop
 
-	for (s32 mop2 = 0; mop2 < 2; mop2++)
+	for (int32_t mop2 = 0; mop2 < 2; mop2++)
 	{
 		neList<neRigidBody_> * activeList = &activeRB; 
 		
@@ -2209,7 +2209,7 @@ void neFixedTimeStepSimulator::FreeAllBodies()
 *
 ****************************************************************************/ 
 
-void neFixedTimeStepSimulator::GetMemoryAllocated(s32 & memoryAllocated)
+void neFixedTimeStepSimulator::GetMemoryAllocated(int32_t & memoryAllocated)
 {
 	memoryAllocated = 0;
 
@@ -2221,7 +2221,7 @@ void neFixedTimeStepSimulator::GetMemoryAllocated(s32 & memoryAllocated)
 
 	memoryAllocated += treeNodes.GetTotalSize() * sizeof(neTreeNode *);
 
-	memoryAllocated += triangleIndex.GetTotalSize() * sizeof(s32);
+	memoryAllocated += triangleIndex.GetTotalSize() * sizeof(int32_t);
 
 	memoryAllocated += constraintHeaders.Size() * sizeof(neFreeListItem<neConstraintHeader>);
 
@@ -2276,9 +2276,9 @@ void neFixedTimeStepSimulator::GetMemoryAllocated(s32 & memoryAllocated)
 
 neCollisionTable_::neCollisionTable_()
 {
-	for (s32 i = 0 ; i < NE_COLLISION_TABLE_MAX; i++)
+	for (int32_t i = 0 ; i < NE_COLLISION_TABLE_MAX; i++)
 	{
-		for (s32 j = 0 ; j < NE_COLLISION_TABLE_MAX; j++)
+		for (int32_t j = 0 ; j < NE_COLLISION_TABLE_MAX; j++)
 			table[i][j] = table[j][i] = neCollisionTable::RESPONSE_IMPULSE;
 
 		terrainTable[i] = neCollisionTable::RESPONSE_IMPULSE;
@@ -2301,7 +2301,7 @@ neCollisionTable_::~neCollisionTable_()
 *
 ****************************************************************************/ 
 
-void neCollisionTable_::Set(s32 collisionID1, s32 collisionID2, neCollisionTable::neReponseBitFlag value)
+void neCollisionTable_::Set(int32_t collisionID1, int32_t collisionID2, neCollisionTable::neReponseBitFlag value)
 {
 	//ASSERT(collisionID1 >= -1 && collisionID1 < neCollisionTable::NE_COLLISION_TABLE_MAX);
 	//ASSERT(collisionID2 >= -1 && collisionID2 < neCollisionTable::NE_COLLISION_TABLE_MAX);
@@ -2332,7 +2332,7 @@ void neCollisionTable_::Set(s32 collisionID1, s32 collisionID2, neCollisionTable
 *
 ****************************************************************************/ 
 
-neCollisionTable::neReponseBitFlag neCollisionTable_::Get(s32 collisionID1, s32 collisionID2)
+neCollisionTable::neReponseBitFlag neCollisionTable_::Get(int32_t collisionID1, int32_t collisionID2)
 {
 	//ASSERT(collisionID1 >= -1 && collisionID1 < neCollisionTable::NE_COLLISION_TABLE_MAX);
 	//ASSERT(collisionID2 >= -1 && collisionID2 < neCollisionTable::NE_COLLISION_TABLE_MAX);

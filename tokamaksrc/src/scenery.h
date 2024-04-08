@@ -56,28 +56,28 @@ public:
 class neTreeNode
 {
 public:
-	void Initialise(neTriangleTree * _tree, s32 _parent, const neV3 & minBound, const neV3 & maxBound);
+	void Initialise(neTriangleTree * _tree, int32_t _parent, const neV3 & minBound, const neV3 & maxBound);
 
-	void Build(neSimpleArray<s32> & triIndex, s32 level);
+	void Build(neSimpleArray<int32_t> & triIndex, int32_t level);
 
-	void CountTriangleInSector(neSimpleArray<s32> &tris, neSimpleArray<s32> &sectorTris, const neV3 & com, s32 i);
+	void CountTriangleInSector(neSimpleArray<int32_t> &tris, neSimpleArray<int32_t> &sectorTris, const neV3 & com, int32_t i);
 
-	s32 CountTriangleInSector2(neSimpleArray<s32> &tris, const neV3 & com, s32 sector);
+	int32_t CountTriangleInSector2(neSimpleArray<int32_t> &tris, const neV3 & com, int32_t sector);
 
-	void MakeLeaf(neSimpleArray<s32> &tris);
+	void MakeLeaf(neSimpleArray<int32_t> &tris);
 
 	bool IsOverlapped(const neV3 & minBound, const neV3 & maxBound);
 
-	void GetCandidateNodes(neSimpleArray<neTreeNode*> & nodes, const neV3 & minBound, const neV3 & maxBound, s32 level);
+	void GetCandidateNodes(neSimpleArray<neTreeNode*> & nodes, const neV3 & minBound, const neV3 & maxBound, int32_t level);
 
-	void SelectBound(const neV3 & com, neV3 & minBound, neV3 & maxBound, s32 sector);
+	void SelectBound(const neV3 & com, neV3 & minBound, neV3 & maxBound, int32_t sector);
 
 	void DrawTriangles();
 
 	void DrawBounds();
 
 public:
-	static s32 numOfChildren;
+	static int32_t numOfChildren;
 
 	void * operator new (size_t t, void * addr){
 		(void)t;
@@ -91,13 +91,13 @@ public:
 
 	neTriangleTree * tree;
 
-	s32 parent;
+	int32_t parent;
 
-	s32 children[4];
+	int32_t children[4];
 	
 	neV3 bounds[3];//min/max x,y,z
 
-	neSimpleArray<s32> triangleIndices; //leaf only
+	neSimpleArray<int32_t> triangleIndices; //leaf only
 };
 
 /****************************************************************************
@@ -117,7 +117,7 @@ public:
 
 	~neTriangleTree();
 
-	neBool BuildTree(neV3 * vertices, s32 vertexCount, neTriangle * tris, s32 triCount, neAllocatorAbstract * _alloc);
+	neBool BuildTree(neV3 * vertices, int32_t vertexCount, neTriangle * tris, int32_t triCount, neAllocatorAbstract * _alloc);
 
 	void FreeTree();
 
@@ -125,12 +125,12 @@ public:
 
 	bool HasTerrain() {return nodes.GetUsedCount() > 0;};
 
-	neTreeNode & GetNode(s32 nodeIndex);
+	neTreeNode & GetNode(int32_t nodeIndex);
 
 public:
 	neV3 * vertices;
 
-	s32 vertexCount;
+	int32_t vertexCount;
 
 	neArray<neTriangle_> triangles;
 

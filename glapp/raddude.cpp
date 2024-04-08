@@ -3,7 +3,7 @@
 #define TOKAMAK_SAMPLE_NAME "rad dude"
 const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
-const s32 WALL_NUMBER = 1;
+const int32_t WALL_NUMBER = 1;
 
 neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f },
     { -1.f, 1.f, 1.f, 0.f }
@@ -31,7 +31,7 @@ DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.
 
 struct BoneData
 {
-    s32 geometryType;
+    int32_t geometryType;
     f32 zRotation;
     neV3 pos;
     neV3 size;
@@ -72,10 +72,10 @@ enum
 
 struct JointData
 {
-    s32 bodyA;
-    s32 bodyB;
+    int32_t bodyA;
+    int32_t bodyB;
     neV3 pos;
-    s32 type; // 0 = ball joint, 1 = hinge joint
+    int32_t type; // 0 = ball joint, 1 = hinge joint
     f32 xAxisAngle;
     f32 lowerLimit;
     f32 upperLimit;
@@ -101,11 +101,11 @@ JointData joints[] =
     { BONE_LEFT_LEG, BONE_LEFT_THIGH, { 0.20f, -0.95f, 0.0f }, 1, -NE_PI * 0.5f, -NE_PI / 2.0f, 0.0f, true, false, 0.f },
 };
 
-const s32 N_DUDE = 20;
-const s32 BONES_PER_DUDE = 10;
-const s32 JOINTS_PER_DUDE = 9;
-const s32 N_BODY = BONES_PER_DUDE * N_DUDE;
-const s32 N_STEP = 40;
+const int32_t N_DUDE = 20;
+const int32_t BONES_PER_DUDE = 10;
+const int32_t JOINTS_PER_DUDE = 9;
+const int32_t N_BODY = BONES_PER_DUDE * N_DUDE;
+const int32_t N_STEP = 40;
 
 class CSampleRadDude
 {
@@ -132,7 +132,7 @@ public:
 
     void CreateSteps();
 
-    void CreateRadDude(neV3 position, s32& index);
+    void CreateRadDude(neV3 position, int32_t& index);
 
     void Reset();
 
@@ -157,7 +157,7 @@ void CSampleRadDude::CreateSimulator()
     sizeInfo.animatedBodiesCount = WALL_NUMBER + N_STEP;
     sizeInfo.geometriesCount = N_BODY + WALL_NUMBER + N_STEP;
     sizeInfo.constraintsCount = N_BODY * JOINTS_PER_DUDE;
-    s32 totalBody = N_BODY + WALL_NUMBER;
+    int32_t totalBody = N_BODY + WALL_NUMBER;
     sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
     neV3 gravity;
     gravity.Set(0.0f, -9.0f, 0.0f);
@@ -187,7 +187,7 @@ void CSampleRadDude::CreateGround()
 
 void CSampleRadDude::CreateSteps()
 {
-    for (s32 i = 0; i < N_STEP; i++)
+    for (int32_t i = 0; i < N_STEP; i++)
     {
         steps[i] = sim->CreateAnimatedBody();
 
@@ -214,15 +214,15 @@ void CSampleRadDude::CreateSteps()
     }
 }
 
-void CSampleRadDude::CreateRadDude(neV3 position, s32& index)
+void CSampleRadDude::CreateRadDude(neV3 position, int32_t& index)
 {
     //		const f32 groundLevel = -10.0f;
 
-    s32 cur = 0;
+    int32_t cur = 0;
 
     f32 scale = 1.0f;
 
-    for (s32 i = 0; i < BONES_PER_DUDE; i++)
+    for (int32_t i = 0; i < BONES_PER_DUDE; i++)
     {
         cur = index + i;
 
@@ -313,7 +313,7 @@ void CSampleRadDude::CreateRadDude(neV3 position, s32& index)
 
     neT3 jointFrame;
 
-    for (s32 i = 0; i < JOINTS_PER_DUDE; i++)
+    for (int32_t i = 0; i < JOINTS_PER_DUDE; i++)
     {
         joint = sim->CreateJoint(rigidBodies[joints[i].bodyA + index], rigidBodies[joints[i].bodyB + index]);
 
@@ -439,9 +439,9 @@ void CSampleRadDude::Reset()
 
     position.SetZero();
 
-    s32 i = 0;
+    int32_t i = 0;
 
-    for (s32 j = 0; j < N_DUDE; j++)
+    for (int32_t j = 0; j < N_DUDE; j++)
     {
         position.Set(-5 + (j % 5) * 2.0f, 11.0f + 4.0f * (j / 5), 0.0f);
 
@@ -464,7 +464,7 @@ void MyAppInit()
     vecAt.Set(0.0f, 0.0f, 1.0f); //(0.0f, -GROUND_Y + 1.7f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -491,7 +491,7 @@ void OnMyAppFrameRender()
 
     sample.groundRender.Render(&t);
 
-    for (s32 i = 0; i < N_STEP; i++)
+    for (int32_t i = 0; i < N_STEP; i++)
     {
         t = sample.steps[i]->GetTransform();
 
@@ -500,7 +500,7 @@ void OnMyAppFrameRender()
         sample.stepsRender[i].Render(&t);
     }
 
-    for (s32 i = 0; i < N_BODY; i++)
+    for (int32_t i = 0; i < N_BODY; i++)
     {
         t = sample.rigidBodies[i]->GetTransform();
 

@@ -89,7 +89,7 @@ NEINLINE f32 neV4::Dot( const neV4& V ) const
 
 //=========================================================================
 
-NEINLINE f32& neV4::operator[]( s32 I )
+NEINLINE f32& neV4::operator[]( int32_t I )
 {
     ASSERT( I >= 0 );
     ASSERT( I <= 3 );

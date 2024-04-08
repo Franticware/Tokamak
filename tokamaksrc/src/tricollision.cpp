@@ -22,9 +22,9 @@
 #include <assert.h>
 #include <stdio.h>
 
-extern s32 currentMicroStep;
+extern int32_t currentMicroStep;
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
 /****************************************************************************
 *
@@ -123,10 +123,10 @@ NEINLINE bool TriangleParam::PointInYProjection(neV3 & point)
 */
 }
 
-s32 TriangleParam::IsPointInside(const neV3 & point)
+int32_t TriangleParam::IsPointInside(const neV3 & point)
 {
 	//select coordinate
-	s32 dim0, dim1, plane;
+	int32_t dim0, dim1, plane;
 	f32 clockness; // 1.0 counter clockwise, -1.0 clockwise
 
 	if (neAbs(normal[1]) > neAbs(normal[2]))
@@ -174,7 +174,7 @@ s32 TriangleParam::IsPointInside(const neV3 & point)
 	det2 = (point[dim0] - pointC[dim0]) * (pointC[dim1] - pointA[dim1]) + 
 			(pointC[dim1] - point[dim1]) * (pointC[dim0] - pointA[dim0]);
 
-	s32 ret;
+	int32_t ret;
 
 	if (det0 > 0.0f)
 	{
@@ -250,7 +250,7 @@ s32 TriangleParam::IsPointInside(const neV3 & point)
 
 void TriangleParam::ConputeExtraInfo()
 {
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < 3; i++)
 	{
@@ -275,7 +275,7 @@ void TriangleParam::ConputeExtraInfo()
 
 void TriangleParam::Transform(const TriangleParam & from, neT3 & trans)
 {
-	s32 i;
+	int32_t i;
 
 	for (i = 0; i < 3; i++)
 	{
@@ -299,7 +299,7 @@ bool BoxTestParam::TriHeightTest(ConvexTestResult & result, TriangleParam & tri)
 
 	bool found = false;
 
-	for (s32 i = 0; i < 8; i++)
+	for (int32_t i = 0; i < 8; i++)
 	{
 		if (!tri.PointInYProjection(verts[i])) // vert in tri projection
 			continue;
@@ -466,14 +466,14 @@ NEINLINE bool BoxTestParam::MeasurePlanePenetration(ConvexTestResult & result, c
 	return true;
 }
 
-bool BoxTestParam::MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, TriangleParam & tri, s32 whichFace)
+bool BoxTestParam::MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, TriangleParam & tri, int32_t whichFace)
 {
 	neV3 contactNormal = trans->rot[whichFace];
 
 	f32 triMin;
 	f32 triMax;
-	s32 minVert = 0;
-	s32 maxVert = 0;
+	int32_t minVert = 0;
+	int32_t maxVert = 0;
 
 	triMin = triMax = contactNormal.Dot(tri.vert[0]);
 
@@ -532,9 +532,9 @@ bool BoxTestParam::MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, 
 	}
 	if (penetrated < result.depth)
 	{
-		s32 otherAxis1 = (whichFace + 1) % 3;
+		int32_t otherAxis1 = (whichFace + 1) % 3;
 		
-		s32 otherAxis2 = (whichFace + 2) % 3;
+		int32_t otherAxis2 = (whichFace + 2) % 3;
 
 		result.depth = penetrated;
 		result.contactA = contactPoint;
@@ -551,7 +551,7 @@ bool BoxTestParam::MeasureBoxFaceTrianglePenetration(ConvexTestResult & result, 
 	return true;
 }
 
-bool BoxTestParam::MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & result, TriangleParam & tri, s32 dim1, s32 dim2)
+bool BoxTestParam::MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & result, TriangleParam & tri, int32_t dim1, int32_t dim2)
 {
 	neV3 edgeNormal = tri.edges[dim2];
 
@@ -572,8 +572,8 @@ bool BoxTestParam::MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & resu
 
 	neV3 contactPoint = trans->pos;
 
-	s32 otherAxis1 = (dim1 + 1) % 3;
-	s32 otherAxis2 = (dim1 + 2) % 3;
+	int32_t otherAxis1 = (dim1 + 1) % 3;
+	int32_t otherAxis2 = (dim1 + 2) % 3;
 
 	f32 p = contactNormal.Dot(contactPoint);
 
@@ -655,7 +655,7 @@ bool BoxTestParam::MeasureBoxEdgeTriangleEdgePenetration(ConvexTestResult & resu
 *
 ****************************************************************************/ 
 
-//static s32 callCnt = 0;
+//static int32_t callCnt = 0;
 
 void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & transA, TConvex & convexB)
 {
@@ -663,9 +663,9 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 
 //	return;
 
-	neSimpleArray<s32> & _triIndex = *convexB.as.terrain.triIndex;
+	neSimpleArray<int32_t> & _triIndex = *convexB.as.terrain.triIndex;
 
-	s32 triangleCount = _triIndex.GetUsedCount();
+	int32_t triangleCount = _triIndex.GetUsedCount();
 
 	neArray<neTriangle_> & triangleArray = *convexB.as.terrain.triangles;
 
@@ -679,15 +679,15 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 	boxParamA.radii[1] = transA.rot[1] * convexA.as.box.boxSize[1];
 	boxParamA.radii[2] = transA.rot[2] * convexA.as.box.boxSize[2];
 
-	s32 finalTriIndex = -1;
-	s32 currentRes = 1;
-	s32 testRes = 0;
+	int32_t finalTriIndex = -1;
+	int32_t currentRes = 1;
+	int32_t testRes = 0;
 
 	res[currentRes].depth = -1.0e6f;
 	res[currentRes].valid = false;
 	res[testRes].depth = 1.0e6f;
 	
-	s32 terrainMatID = 0;
+	int32_t terrainMatID = 0;
 
     neUserData userData;
     userData.u = 0;
@@ -698,9 +698,9 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 	if (callCnt == 21)
 		ASSERT(0);
 */
-	for (s32 i = 0; i < triangleCount; i++)
+	for (int32_t i = 0; i < triangleCount; i++)
 	{
-		s32 test = _triIndex[i];
+		int32_t test = _triIndex[i];
 
 		neTriangle_ * t = &triangleArray[_triIndex[i]];
 
@@ -723,7 +723,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 			{
 				if (res[testRes].depth > res[currentRes].depth)
 				{
-					s32 tmp = testRes;	
+					int32_t tmp = testRes;	
 
 					testRes = currentRes;
 
@@ -743,7 +743,7 @@ void Box2TerrainTest(neCollisionResult & result, TConvex & convexA, neT3 & trans
 			{
 				if (res[testRes].depth > res[currentRes].depth)
 				{
-					s32 tmp = testRes;	
+					int32_t tmp = testRes;	
 
 					testRes = currentRes;
 

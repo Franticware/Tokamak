@@ -78,7 +78,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr, s32 _growBy = 0) 
+	NEINLINE bool Reserve(int32_t n, neAllocatorAbstract * al = nullptr, int32_t _growBy = 0) 
 	{
 		if (IsFixedSize())
 		{
@@ -107,7 +107,7 @@ public:
 		return false;
 	};
 
-	NEINLINE T * Alloc(s32 dummy = 0) 
+	NEINLINE T * Alloc(int32_t dummy = 0) 
 	{
 		(void)dummy;
 		if (nextFree >= (data + size))
@@ -150,17 +150,17 @@ public:
 			return nextFree++;
 		}
 	}
-	NEINLINE s32 GetIndex(T * c)
+	NEINLINE int32_t GetIndex(T * c)
 	{
 		ASSERT(c >= data);
 		ASSERT(c < nextFree);
 
-		return (s32)(c - data);
+		return (int32_t)(c - data);
 	}
-	NEINLINE s32 GetUsedCount(){
+	NEINLINE int32_t GetUsedCount(){
 		return (nextFree - data);
 	}
-	NEINLINE s32 GetTotalSize(){
+	NEINLINE int32_t GetTotalSize(){
 		return size;
 	}
 	NEINLINE void Free()
@@ -183,12 +183,12 @@ public:
 		nextFree = data;
 		usedSize = 0;
 	}
-	NEINLINE T & operator [] (s32 index) {
+	NEINLINE T & operator [] (int32_t index) {
 		ASSERT(index >= 0);
 		ASSERT(index < size);
 		return data[index];
 	}
-	NEINLINE void MakeFromPointer(T * pdata, s32 makeSize)
+	NEINLINE void MakeFromPointer(T * pdata, int32_t makeSize)
 	{
 		data = pdata;
 		size = makeSize;
@@ -200,11 +200,11 @@ public:
 protected:
 	T * data;
 	T * nextFree;
-	s32 size;
-	s32 usedSize;
+	int32_t size;
+	int32_t usedSize;
 	neAllocatorAbstract * alloc;
 	neAllocatorDefault allocDef;
-	s32 growBy;
+	int32_t growBy;
 	T initArray[initFixedSize];
 };
 
@@ -238,7 +238,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr, s32 _growBy = 0) 
+	NEINLINE bool Reserve(int32_t n, neAllocatorAbstract * al = nullptr, int32_t _growBy = 0) 
 	{
 		if (IsFixedSize())
 		{
@@ -305,17 +305,17 @@ public:
 		
 		return ret;
 	}
-	NEINLINE s32 GetIndex(T * c)
+	NEINLINE int32_t GetIndex(T * c)
 	{
 		ASSERT(c >= data);
 		ASSERT(c < nextFree);
 
-		return (s32)(c - data);
+		return (int32_t)(c - data);
 	}
-	NEINLINE s32 GetUsedCount(){
+	NEINLINE int32_t GetUsedCount(){
 		return (nextFree - data);
 	}
-	NEINLINE s32 GetTotalSize(){
+	NEINLINE int32_t GetTotalSize(){
 		return size;
 	}
 	NEINLINE void Free()
@@ -338,12 +338,12 @@ public:
 	{
 		nextFree = data;
 	}
-	NEINLINE T & operator [] (s32 index) {
+	NEINLINE T & operator [] (int32_t index) {
 		ASSERT(index >= 0);
 		ASSERT(index < size);
 		return data[index];
 	}
-	NEINLINE void MakeFromPointer(T * pdata, s32 makeSize)
+	NEINLINE void MakeFromPointer(T * pdata, int32_t makeSize)
 	{
 		data = pdata;
 		size = makeSize;
@@ -354,10 +354,10 @@ public:
 protected:
 	T * data;
 	T * nextFree;
-	s32 size;
+	int32_t size;
 	neAllocatorAbstract * alloc;
 	neAllocatorDefault allocDef;
-	s32 growBy;
+	int32_t growBy;
 
 	T initArray[initFixedSize];
 };
@@ -518,7 +518,7 @@ public:
 
 		Init();
 	}
-	NEINLINE s32 Size()
+	NEINLINE int32_t Size()
 	{
 		return size;
 	}
@@ -526,7 +526,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE T * Alloc(s32 flag = 0)
+	NEINLINE T * Alloc(int32_t flag = 0)
 	{
 		if (!unused)
 			return nullptr;
@@ -575,7 +575,7 @@ public:
 		usedCount++;
 		return ret;
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr)
+	NEINLINE bool Reserve(int32_t n, neAllocatorAbstract * al = nullptr)
 	{
 		if (IsFixedSize())
 		{
@@ -617,7 +617,7 @@ public:
 
 		return true;
 	}
-	NEINLINE void Dealloc(T * thing, s32 flag = 0)
+	NEINLINE void Dealloc(T * thing, int32_t flag = 0)
 	{
 		if (!flag && !used)
 		{
@@ -625,7 +625,7 @@ public:
 			return;
 		}
 
-		s32 n = GetID(thing);
+		int32_t n = GetID(thing);
 
 		ASSERT(n >= 0);
 		ASSERT(n < size);
@@ -664,11 +664,11 @@ public:
 		unusedCount++;
 		usedCount--;
 	}
-	NEINLINE s32 GetID(T * t)
+	NEINLINE int32_t GetID(T * t)
 	{
 		return ((listItem*)t - data);
 	}
-	NEINLINE s32 GetUsedCount()
+	NEINLINE int32_t GetUsedCount()
 	{
 		return usedCount;
 	}
@@ -752,12 +752,12 @@ public:
 	listItem * used;
 	listItem * unusedTail;
 	listItem * usedTail;
-	s32 size;
-	s32 unusedCount;
-	s32 usedCount;
+	int32_t size;
+	int32_t unusedCount;
+	int32_t usedCount;
 	neAllocatorAbstract * alloc;
 	neAllocatorDefault allocDef;
-	s32 mallocNewDiff;
+	int32_t mallocNewDiff;
 	listItem initArray[initFixedSize];
 };
 /*
@@ -793,7 +793,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr)
+	NEINLINE bool Reserve(int32_t n, neAllocatorAbstract * al = nullptr)
 	{
 		if (IsFixedSize())
 		{
@@ -829,7 +829,7 @@ public:
 		}
 		return true;
 	}
-	NEINLINE T * Alloc(s32 flag = 0)
+	NEINLINE T * Alloc(int32_t flag = 0)
 	{
 		T ** pt =  freeList.Alloc(flag);
 
@@ -840,21 +840,21 @@ public:
 		else
 			return *pt;
 	}
-	NEINLINE void Dealloc(T * t, s32 flag = 0)
+	NEINLINE void Dealloc(T * t, int32_t flag = 0)
 	{
-		s32 offset = GetID(t);
+		int32_t offset = GetID(t);
 
 		FreeList::listItem * li = freeList.data + offset;
 
 		freeList.Dealloc((T**)li, flag);
 	}
-	NEINLINE s32 GetID(T * t)
+	NEINLINE int32_t GetID(T * t)
 	{
 		return (t - buffer);
 	}
 	NEINLINE neBool IsInUse(T * t)
 	{
-		s32 i = GetID(t);
+		int32_t i = GetID(t);
 
 		ASSERT(i >= 0 && i <freeList.size);
 
@@ -874,15 +874,15 @@ public:
 
 		Init();
 	}
-	NEINLINE s32 GetUsedCount()
+	NEINLINE int32_t GetUsedCount()
 	{
 		return freeList.usedCount;
 	}
-	NEINLINE s32 GetUnusedCount()
+	NEINLINE int32_t GetUnusedCount()
 	{
 		return freeList.unusedCount;
 	}
-	NEINLINE s32 Size()
+	NEINLINE int32_t Size()
 	{
 		return freeList.size;
 	}
@@ -940,7 +940,7 @@ protected:
 	FreeList freeList;
 	neAllocatorAbstract * alloc;
 	neAllocatorDefault allocDef;
-	s32 mallocNewDiff;
+	int32_t mallocNewDiff;
 
 	T initArray[initFixedSize];
 };
@@ -1011,7 +1011,7 @@ public:
 public:
 	neFreeListItem<T*> * headItem;
 	neFreeListItem<T*> * tailItem;
-	s32 count;
+	int32_t count;
 };
 
 template <class T> class neList
@@ -1268,7 +1268,7 @@ public:
 public:
 	itemType * headItem;
 	itemType * tailItem;
-	s32 count;
+	int32_t count;
 };
 
 #endif //CONTAINERS_H

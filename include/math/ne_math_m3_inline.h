@@ -11,7 +11,7 @@
  *                                                                       *
  *************************************************************************/
 
-NEINLINE neV3&   neM3::operator   []       ( s32 I )
+NEINLINE neV3&   neM3::operator   []       ( int32_t I )
 {
 	ASSERT(I >= 0);
 	ASSERT(I < 3);
@@ -19,7 +19,7 @@ NEINLINE neV3&   neM3::operator   []       ( s32 I )
 	return M[I];
 }
 
-NEINLINE neV3	neM3::operator   []		( s32 I ) const
+NEINLINE neV3	neM3::operator   []		( int32_t I ) const
 {
 	ASSERT(I >= 0);
 	ASSERT(I < 3);

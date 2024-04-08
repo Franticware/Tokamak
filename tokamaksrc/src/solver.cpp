@@ -36,7 +36,7 @@ f32 CONSTRAINT_CONVERGE_FACTOR_CONTACT = .5f;
 
 f32 CONSTRAINT_CONVERGE_FACTOR_LIMIT = 0.5f;
 
-NEINLINE void ApplyCollisionImpulseFast(neRigidBody_ * rb, const neV3 & impulse, const neV3 & contactPoint, s32 currentRecord, neBool immediate = true)
+NEINLINE void ApplyCollisionImpulseFast(neRigidBody_ * rb, const neV3 & impulse, const neV3 & contactPoint, int32_t currentRecord, neBool immediate = true)
 {
 	neV3 dv, da;
 
@@ -776,7 +776,7 @@ void neFixedTimeStepSimulator::SolveContactConstrain()
         neRigidBody_* rb = nullptr;
 		
 
-		for (s32 tt = 0; tt < cresultHeap2.GetUsedCount(); tt++)
+		for (int32_t tt = 0; tt < cresultHeap2.GetUsedCount(); tt++)
 		{
 			//neCollisionResult * cr = (neCollisionResult *)ci;
 			neCollisionResult * cr = &cresultHeap2[tt];//(neCollisionResult *)ci;
@@ -1054,7 +1054,7 @@ f32 neFixedTimeStepSimulator::SolveLocal(neCollisionResult * cr)
 void neFixedTimeStepSimulator::CheckIfStationary()
 {
 	neBool allStationary = true;
-	s32 jj;
+	int32_t jj;
 	
 	for (jj = 0; jj < pointerBuffer1.GetUsedCount(); jj++) // in this loop we apply the total impulse from the 
 															// solving stage to the rigid bodies
@@ -1179,7 +1179,7 @@ void neFixedTimeStepSimulator::ResolvePenetration()
 
 	neList<neRigidBody_> * activeList;
 	
-	for (s32 j = 0; j < 2; j++)
+	for (int32_t j = 0; j < 2; j++)
 	{
 		if (j == 0)
 			activeList = &activeRB;
@@ -1190,7 +1190,7 @@ void neFixedTimeStepSimulator::ResolvePenetration()
 
 		while (rb)
 		{
-			//if (((s32)rb->id % 3) != cc)
+			//if (((int32_t)rb->id % 3) != cc)
 			//{
 			//	rb = activeRB.GetNext(rb);
 			//	continue;
@@ -1205,7 +1205,7 @@ void neFixedTimeStepSimulator::ResolvePenetration()
 				rb = activeList->GetNext(rb);
 				continue;
 			}
-			s32 v;
+			int32_t v;
 			
 			v = rb->CheckContactValidity();
 
@@ -1262,11 +1262,11 @@ void neFixedTimeStepSimulator::ResolvePenetration()
 
 	// check if the stack set is disconnected
 
-	s32 thisFrame = stepSoFar % 5; //check stack disconnection once every 3 frames
+	int32_t thisFrame = stepSoFar % 5; //check stack disconnection once every 3 frames
 
-	for (s32 i = 0; i < activeHeaderBuffer.GetUsedCount(); i++)
+	for (int32_t i = 0; i < activeHeaderBuffer.GetUsedCount(); i++)
 	{
-		s32 g = i % 5;
+		int32_t g = i % 5;
 
 		if (g == thisFrame)
 		{
@@ -1664,8 +1664,8 @@ void neFixedTimeStepSimulator::SolveAllConstrain()
 		
 		neBodyHandle * bodyHandle = (*chiter)->bodies.GetHead();
 
-		s32 allIdle = 0;
-		s32 nbody = 0;
+		int32_t allIdle = 0;
+		int32_t nbody = 0;
         neRigidBody_ * lastrb = nullptr;
 
 		while (bodyHandle)
@@ -1693,7 +1693,7 @@ void neFixedTimeStepSimulator::SolveAllConstrain()
 		
 		f32 epsilon = -1.0f;//DEFAULT_CONSTRAINT_EPSILON;
 
-		s32 iteration = -1;
+		int32_t iteration = -1;
 
 		(*chiter)->AddToSolver(epsilon, iteration); // pointerBuffer2 will be filled after this call
 
@@ -1706,7 +1706,7 @@ void neFixedTimeStepSimulator::SolveAllConstrain()
 	contactConstraintHeader.RemoveAll();
 }
 
-void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration)
+void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, int32_t iteration)
 {
 	solverStage = 0;
 
@@ -1720,7 +1720,7 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 
 	if (iteration == -1)
 	{
-		iteration = (s32) (DEFAULT_CONSTRAINT_ITERATION);// * cresultHeap.GetUsedCount());
+		iteration = (int32_t) (DEFAULT_CONSTRAINT_ITERATION);// * cresultHeap.GetUsedCount());
 
 		if (iteration == 0)
 			iteration = 1;
@@ -1729,17 +1729,17 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 	// pp == 1 is penetration stage
 
 
-	s32 checkSleep = iteration >> 1;
+	int32_t checkSleep = iteration >> 1;
 
 	solverLastIteration = false;
 	
-	for (s32 pp = 0; pp < 2; pp++)
+	for (int32_t pp = 0; pp < 2; pp++)
 	{
 		if (pp == 1)
 		{
 			solverStage = 1;
 /*
-			for (s32 tt = 0; tt < cresultHeap2.GetUsedCount(); tt++)
+			for (int32_t tt = 0; tt < cresultHeap2.GetUsedCount(); tt++)
 			{
 				neCollisionResult * cr = &cresultHeap2[tt];
 				
@@ -1748,11 +1748,11 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 				cr->StartStage2();
 			}
 */		}
-		s32 it;
+		int32_t it;
 
 		it = iteration;
 
-		for (s32 i = 0; i < it; i++)
+		for (int32_t i = 0; i < it; i++)
 		{
 			neBool doCheckSleep = false;
 
@@ -1766,11 +1766,11 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 			}
 			f32 maxError = 0.0f;
 
-			s32 nConstraint = 0;
+			int32_t nConstraint = 0;
 
 			neCollisionResult * cresult = &cresultHeap[0]; //*cresultHeap.BeginUsed();
 
-			s32 tt;
+			int32_t tt;
 
 			for (tt = 0; tt < cresultHeap.GetUsedCount(); tt++)
 			{
@@ -1797,7 +1797,7 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 			}
 			//maxError = 0.0f;
 
-			s32 jj;
+			int32_t jj;
 			
 			for (jj = 0; jj < pointerBuffer1.GetUsedCount(); jj++) // in this loop we apply the total impulse from the 
 																	// solving stage to the rigid bodies
@@ -1836,9 +1836,9 @@ void neFixedTimeStepSimulator::SolveOneConstrainChain(f32 epsilon, s32 iteration
 
 	ASSERT(cresultHeap.GetUsedCount() == 0);
 }
-void neFixedTimeStepSimulator::AddContactConstraint(f32 & epsilon, s32 & iteration)
+void neFixedTimeStepSimulator::AddContactConstraint(f32 & epsilon, int32_t & iteration)
 {
-	for (s32 i = 0; i < pointerBuffer2.GetUsedCount(); i++)
+	for (int32_t i = 0; i < pointerBuffer2.GetUsedCount(); i++)
 	{
 		neStackHeader * sheader = (neStackHeader *) pointerBuffer2[i];
 

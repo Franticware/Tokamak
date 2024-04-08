@@ -40,7 +40,7 @@
 #include "message.h"
 #include "dcd.h"
 
-s32 currentMicroStep = 0;
+int32_t currentMicroStep = 0;
 
 extern f32 CONSTRAINT_THESHOLD_JOINT;
 
@@ -54,9 +54,9 @@ extern f32 CONSTRAINT_CONVERGE_FACTOR_CONTACT;
 
 extern f32 CONSTRAINT_CONVERGE_FACTOR_LIMIT;
 
-s32 magicN;
+int32_t magicN;
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
 //#pragma inline_recursion( on )
 //#pragma inline_depth( 50 )
@@ -154,7 +154,7 @@ void neCollisionResult::UpdateConstraintRelativeSpeed()
 
 	relVel.SetZero();
 
-	s32 solverStage;
+	int32_t solverStage;
 
 	if (bodyA)
 	{
@@ -381,7 +381,7 @@ void neCollisionResult::PrepareForSolver(neBool aIdle, neBool bIdle)
 
 void neCollision::CalcBB()
 {
-	s32 i;
+	int32_t i;
 	
 	boundingRadius = 0.0f;	
 
@@ -426,7 +426,7 @@ void neCollision::CalcBB()
 
 			g->GetExtend(_minExt, _maxExt);
 
-			for (s32 j = 0; j < 3; j++)
+			for (int32_t j = 0; j < 3; j++)
 			{
 				maxExt[j] = neMax(maxExt[j], _maxExt[j]);
 				minExt[j] = neMin(minExt[j], _minExt[j]);
@@ -445,7 +445,7 @@ void neCollision::CalcBB()
 
 void TConvex::GetExtend(neV3 & minExt, neV3 & maxExt)
 {
-	s32 i;
+	int32_t i;
 
 	switch (GetType())
 	{
@@ -499,7 +499,7 @@ void TConvex::GetExtend(neV3 & minExt, neV3 & maxExt)
 
 		maxex.Set(-1.0e6f);
 
-		for (u32 kk = 0; kk < as.opcodeMesh.vertCount; kk++)
+		for (uint32_t kk = 0; kk < as.opcodeMesh.vertCount; kk++)
 		{
 			minex = minex.Min(as.opcodeMesh.vertices[kk]);
 
@@ -519,7 +519,7 @@ void TConvex::GetExtend(neV3 & minExt, neV3 & maxExt)
 
 		neV3 maxex; maxex.Set(-1.0e6f);
 
-		for (s32 kk = 0; kk < as.convexMesh.vertexCount; kk++)
+		for (int32_t kk = 0; kk < as.convexMesh.vertexCount; kk++)
 		{
 			minex.SetMin(minex, as.convexMesh.vertices[kk]);
 
@@ -537,7 +537,7 @@ void TConvex::GetExtend(neV3 & minExt, neV3 & maxExt)
 
 		neV3 maxex; maxex.Set(-1.0e6f);
 
-		for (s32 kk = 0; kk < as.convexDCD.numVerts; kk++)
+		for (int32_t kk = 0; kk < as.convexDCD.numVerts; kk++)
 		{
 			minex.SetMin(minex, as.convexDCD.vertices[kk]);
 
@@ -586,7 +586,7 @@ f32 TConvex::GetBoundRadius()
 
 	case TConvex::CONVEXITY:
 		{
-			for (s32 i = 0; i < as.convexMesh.vertexCount; i++)
+			for (int32_t i = 0; i < as.convexMesh.vertexCount; i++)
 			{
 				f32 l = as.convexMesh.vertices[i].Length();
 
@@ -601,7 +601,7 @@ f32 TConvex::GetBoundRadius()
 
 	case TConvex::CONVEXDCD:
 		{
-			for (s32 i = 0; i < as.convexMesh.vertexCount; i++)
+			for (int32_t i = 0; i < as.convexMesh.vertexCount; i++)
 			{
 				f32 l = as.convexMesh.vertices[i].Length();
 
@@ -617,7 +617,7 @@ f32 TConvex::GetBoundRadius()
 		
 	case TConvex::OPCODE_MESH:
 	{		
-		for (u32 kk = 0; kk < as.opcodeMesh.vertCount; kk++)
+		for (uint32_t kk = 0; kk < as.opcodeMesh.vertCount; kk++)
 		{
 			f32 tmp = as.opcodeMesh.vertices[kk].Magnitude();
 
@@ -668,14 +668,14 @@ void TConvex::SetConvexMesh(neByte * convexData)
 	
 	as.convexDCD.convexData = convexData;
 
-	s32 numFace = *((s32*)convexData);
+	int32_t numFace = *((int32_t*)convexData);
 
-	as.convexDCD.numVerts =  *((s32*)convexData + 1);
+	as.convexDCD.numVerts =  *((int32_t*)convexData + 1);
 
 	as.convexDCD.vertices = (neV3 *)(convexData + numFace * sizeof(f32) * 4);
 }
 
-void TConvex::SetTriangle(s32 a, s32 b, s32 c, neV3 * _vertices)
+void TConvex::SetTriangle(int32_t a, int32_t b, int32_t c, neV3 * _vertices)
 {
 	type = TConvex::TRIANGLE;
 
@@ -685,7 +685,7 @@ void TConvex::SetTriangle(s32 a, s32 b, s32 c, neV3 * _vertices)
 	vertices = _vertices;
 }
 
-void TConvex::SetTerrain(neSimpleArray<s32> & triangleIndex, neArray<neTriangle_> & triangles, neV3 * _vertices)
+void TConvex::SetTerrain(neSimpleArray<int32_t> & triangleIndex, neArray<neTriangle_> & triangles, neV3 * _vertices)
 {
 	type = TConvex::TERRAIN;
 
@@ -697,7 +697,7 @@ void TConvex::SetTerrain(neSimpleArray<s32> & triangleIndex, neArray<neTriangle_
 
 #ifdef USE_OPCODE
 
-void TConvex::SetOpcodeMesh(IndexedTriangle * triIndex, u32 triCount, IceMaths::Point * vertArray, u32 vertCount)
+void TConvex::SetOpcodeMesh(IndexedTriangle * triIndex, uint32_t triCount, IceMaths::Point * vertArray, uint32_t vertCount)
 {
 	type = TConvex::OPCODE_MESH;
 	
@@ -709,27 +709,27 @@ void TConvex::SetOpcodeMesh(IndexedTriangle * triIndex, u32 triCount, IceMaths::
 
 #endif //USE_OPCODE
 
-void TConvex::SetMaterialId(s32 index)
+void TConvex::SetMaterialId(int32_t index)
 {
 	matIndex = index;
 }
 /*
-void TConvex::SetId(s32 _id)
+void TConvex::SetId(int32_t _id)
 {
 	id = _id;
 }
 
-s32	 TConvex::GetId()
+int32_t	 TConvex::GetId()
 {
 	return id;
 }
 */
-s32	 TConvex::GetMaterialId()
+int32_t	 TConvex::GetMaterialId()
 {
 	return matIndex;
 }
 
-u32	TConvex::GetType()
+uint32_t	TConvex::GetType()
 {
 	return type;
 }
@@ -793,7 +793,7 @@ void TConvex::Initialise()
 ****************************************************************************/ 
 void TranslateCOM(neM3 & I, neV3 &translate, f32 mass, f32 factor)
 {
-	s32	i,j,k;
+	int32_t	i,j,k;
 	f32	change;
 
 	for(i=0;i<3;i++)
@@ -891,9 +891,9 @@ void CollisionTest(neCollisionResult & result, neCollision & colA, neT3 & transA
 
 	neCollisionResult candidate[2];
 
-	s32 cur = 0;
-	s32 res = 1;
-	s32 tmp;
+	int32_t cur = 0;
+	int32_t res = 1;
+	int32_t tmp;
 
 	candidate[res].depth = 0.0f;
 
@@ -989,13 +989,13 @@ void CollisionTest(neCollisionResult & result, neCollision & colA, neT3 & transA
 	}
 	else //colA.convexCount > 1 && colB.convexCount > 1
 	{
-		const s32 totalPotentials = 100;
+		const int32_t totalPotentials = 100;
 
 		static TConvex * potentialsA[totalPotentials];
 		static TConvex * potentialsB[totalPotentials];
 
-		s32 potentialsACount = 0;
-		s32 potentialsBCount = 0;
+		int32_t potentialsACount = 0;
+		int32_t potentialsBCount = 0;
 
 		TConvexItem * giA = (TConvexItem *)colA.convex;
 
@@ -1046,11 +1046,11 @@ void CollisionTest(neCollisionResult & result, neCollision & colA, neT3 & transA
 
 		candidate[res].penetrate = false;
 
-		for (s32 i = 0; i < potentialsACount; i++)
+		for (int32_t i = 0; i < potentialsACount; i++)
 		{
 			convex2WorldA = transA * potentialsA[i]->c2p;
 
-			for (s32 j = 0; j < potentialsBCount; j++)
+			for (int32_t j = 0; j < potentialsBCount; j++)
 			{
 				convex2WorldB = transB * potentialsB[j]->c2p;
 
@@ -1510,7 +1510,7 @@ void Box2BoxTest(neCollisionResult & result, TConvex & convexA, neT3 & transA, T
 
 			simplex.cache_valid = false;
 
-			for (s32 i = 0; i < 5; i++)
+			for (int32_t i = 0; i < 5; i++)
 			{
 				simplex.cache_valid = false;
 
@@ -1737,7 +1737,7 @@ void Convex2ConvexTest(neCollisionResult & result, TConvex & convexA, neT3 & tra
 
 			simplex.cache_valid = false;
 
-			for (s32 i = 0; i < 5; i++)
+			for (int32_t i = 0; i < 5; i++)
 			{
 				simplex.cache_valid = false;
 
@@ -2014,7 +2014,7 @@ void Box2ConvexTest(neCollisionResult & result, TConvex & convexA, neT3 & transA
 
 			simplex.cache_valid = false;
 
-			for (s32 i = 0; i < 5; i++)
+			for (int32_t i = 0; i < 5; i++)
 			{
 				simplex.cache_valid = false;
 
@@ -2176,7 +2176,7 @@ bool BoxTestParam::BoxTest(ConvexTestResult & result, BoxTestParam & otherBox)
 	return result.valid;
 }
 
-bool BoxTestParam::MeasureVertexFacePeneration(ConvexTestResult & result, BoxTestParam & otherBox, s32 whichFace)
+bool BoxTestParam::MeasureVertexFacePeneration(ConvexTestResult & result, BoxTestParam & otherBox, int32_t whichFace)
 {
 	neV3 me2otherBox;
 
@@ -2238,9 +2238,9 @@ bool BoxTestParam::MeasureVertexFacePeneration(ConvexTestResult & result, BoxTes
 	}
 	else if (neIsConsiderZero(penetrated - result.depth))
 	{
-		s32 otherAxis1 = neNextDim1[whichFace];
+		int32_t otherAxis1 = neNextDim1[whichFace];
 		
-		s32 otherAxis2 = neNextDim2[whichFace];
+		int32_t otherAxis2 = neNextDim2[whichFace];
 
 		//check to see if this one fall into the faces
 		neV3 sub = contactPoint - trans->pos;
@@ -2264,7 +2264,7 @@ bool BoxTestParam::MeasureVertexFacePeneration(ConvexTestResult & result, BoxTes
 	return true;
 }
 
-neBool BoxTestParam::MeasureEdgePeneration(ConvexTestResult & result, BoxTestParam & otherBox, s32 dim1, s32 dim2)
+neBool BoxTestParam::MeasureEdgePeneration(ConvexTestResult & result, BoxTestParam & otherBox, int32_t dim1, int32_t dim2)
 {
 	neV3 contactA = trans->pos;
 
@@ -2296,10 +2296,10 @@ neBool BoxTestParam::MeasureEdgePeneration(ConvexTestResult & result, BoxTestPar
 
 	f32 progression[4];
 
-	s32 otherAxisA1 = (dim1 + 1) % 3;
-	s32 otherAxisA2 = (dim1 + 2) % 3;
-	s32 otherAxisB1 = (dim2 + 1) % 3;
-	s32 otherAxisB2 = (dim2 + 2) % 3;
+	int32_t otherAxisA1 = (dim1 + 1) % 3;
+	int32_t otherAxisA2 = (dim1 + 2) % 3;
+	int32_t otherAxisB1 = (dim2 + 1) % 3;
+	int32_t otherAxisB2 = (dim2 + 2) % 3;
 
 	progression[0] = radii[otherAxisA1].Dot(contactNormal);
 	progression[1] = radii[otherAxisA2].Dot(contactNormal);

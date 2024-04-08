@@ -45,8 +45,8 @@ public:
 	neBool isBroken;
 	neStackHeader * stackHeader;
 	neRigidBody_ * body;
-	s32 startTime;
-	s32 endTime;
+	int32_t startTime;
+	int32_t endTime;
 
 	//neRestRecord restRecords[neRigidBody_::NE_RB_MAX_RESTON_RECORDS];
 };
@@ -62,10 +62,10 @@ public:
 
 	neStackInfo * head;
 	neStackInfo * tail;
-	s32 infoCount;
+	int32_t infoCount;
 	neBool isHeaderX;
 	neBool isAllIdle;
-	static s32 golbalTime;
+	static int32_t golbalTime;
 	neBool dynamicSolved;
 	
 	void Null()
@@ -89,7 +89,7 @@ public:
 
 	void CheckLength()
 	{
-		s32 c = 0;
+		int32_t c = 0;
 
 		neStackInfoItem * item = (neStackInfoItem *) head;
 
@@ -106,7 +106,7 @@ public:
 	{
 		ASSERT(infoCount != 0);
 		
-		s32 c = 0;
+		int32_t c = 0;
 
 		neStackInfoItem * item = (neStackInfoItem *) head;
 
@@ -147,7 +147,7 @@ public:
 
 		add->stackHeader = this;
 	}
-	void Remove(neStackInfo * add, s32 flag = 0)
+	void Remove(neStackInfo * add, int32_t flag = 0)
 	{
 		(void)flag;
 /*		if (infoCount == 1 && !isHeaderX && flag == 0)
@@ -169,7 +169,7 @@ public:
 	}
 	neBool Check(neStackInfo * st)
 	{
-		s32 c = 0;
+		int32_t c = 0;
 
 		neStackInfoItem * item = (neStackInfoItem *) head;
 
@@ -209,7 +209,7 @@ public:
 
 			neStackInfo * nextSinfo = nullptr;
 
-			for (s32 i = 0; i < sinfo->restOnCount; i++)
+			for (int32_t i = 0; i < sinfo->restOnCount; i++)
 			{
 				ASSERT (sinfo->restOn[i].body);
 

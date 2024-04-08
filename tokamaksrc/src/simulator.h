@@ -89,9 +89,9 @@ class neCoordList
 public:
 	neDLinkList<CCoordListEntry> coordList;
 
-	void Add(neRigidBodyBase * bb, neRigidBodyBase * hint, s32 hintCoord);
+	void Add(neRigidBodyBase * bb, neRigidBodyBase * hint, int32_t hintCoord);
 
-	bool Reserve(s32 size, neAllocatorAbstract * all = nullptr)
+	bool Reserve(int32_t size, neAllocatorAbstract * all = nullptr)
 	{
 		return coordList.Reserve(size, all);
 	}
@@ -104,7 +104,7 @@ public:
 
 #endif
 
-	s32 dim;
+	int32_t dim;
 
 	neByte dimPower2;
 
@@ -179,13 +179,13 @@ public:
 		
 	neFixedTimeStepSimulator * sim;
 
-	s32 maxRigidBodies;
+	int32_t maxRigidBodies;
 
-	s32 maxAnimBodies;
+	int32_t maxAnimBodies;
 
-	s32 totalBodies;
+	int32_t totalBodies;
 
-	s32 maxParticle;
+	int32_t maxParticle;
 
 //	neArray<neOverlapped> rb2rb;
 
@@ -233,11 +233,11 @@ public:
 
 	~neCollisionTable_();
 
-	void Set(s32 collisionID1, s32 collisionID2, neCollisionTable::neReponseBitFlag flag);
+	void Set(int32_t collisionID1, int32_t collisionID2, neCollisionTable::neReponseBitFlag flag);
 
-	neCollisionTable::neReponseBitFlag Get(s32 collisionID1, s32 collisionID2);
+	neCollisionTable::neReponseBitFlag Get(int32_t collisionID1, int32_t collisionID2);
 
-	s32 GetMaxCollisionID() {
+	int32_t GetMaxCollisionID() {
 		return NE_COLLISION_TABLE_MAX;
 	};
 
@@ -312,9 +312,9 @@ public:
 
 	f32 terrainCulling;
 
-	s32 perfFreqAdjust; // in case Freq is too big
+	int32_t perfFreqAdjust; // in case Freq is too big
 
-	s32 overheadTicks;   // overhead  in calling timer
+	int32_t overheadTicks;   // overhead  in calling timer
 };
 
 class neFixedTimeStepSimulator
@@ -338,15 +338,15 @@ public:
 
 	void Free(neRigidBodyBase * bb);
 	
-	void Advance(f32 time, u32 nStep, nePerformanceReport * _perfReport = nullptr);
+	void Advance(f32 time, uint32_t nStep, nePerformanceReport * _perfReport = nullptr);
 
 	void Advance(f32 time, f32 minTimeStep, f32 maxTimeStep, nePerformanceReport * _perfReport = nullptr);
 
 	void Advance(nePerformanceReport * _perfReport = nullptr);
 
-	bool SetMaterial(s32 index, f32 friction, f32 restitution, f32 density);
+	bool SetMaterial(int32_t index, f32 friction, f32 restitution, f32 density);
 
-	bool GetMaterial(s32 index, f32& friction, f32& restitution, f32& density);
+	bool GetMaterial(int32_t index, f32& friction, f32& restitution, f32& density);
 
 	f32 HandleCollision(neRigidBodyBase * bodyA, neRigidBodyBase * bodyB, neCollisionResult & cresult, neImpulseType impulseType, f32 scale = 0.0f);
 
@@ -380,7 +380,7 @@ public:
 
 	void FreeAllBodies();
 
-	void GetMemoryAllocated(s32 & memoryAllocated);
+	void GetMemoryAllocated(int32_t & memoryAllocated);
 
 	neBool CheckBreakage(neRigidBodyBase * originalBody, TConvex * convex, const neV3 & contactPoint, neV3 & impulse);
 
@@ -404,7 +404,7 @@ public:
 
 	f32 SolveLocal(neCollisionResult * cr);
 
-	void AddContactConstraint(f32 & epsilon, s32 & iteration);
+	void AddContactConstraint(f32 & epsilon, int32_t & iteration);
 
 	void SetGravity(const neV3 & g);
 
@@ -434,7 +434,7 @@ public:
 
 	f32 restingSpeed;
 
-	s32 stepSoFar;
+	int32_t stepSoFar;
 
 	f32 _currentTimeStep;
 
@@ -468,7 +468,7 @@ public:
 
 	neSimulator::LOG_OUTPUT_LEVEL logLevel;
 
-	s32 solverStage;
+	int32_t solverStage;
 
 	bool solverLastIteration;
 
@@ -482,7 +482,7 @@ public:
 
 	f32 magicNumber;
 
-	s32 currentRecord;
+	int32_t currentRecord;
 
 	f32 timeFromLastFrame;
 
@@ -495,7 +495,7 @@ protected:
 
 	void SolveAllConstrain();
 
-	void SolveOneConstrainChain(f32 epsilon, s32 iteration);
+	void SolveOneConstrainChain(f32 epsilon, int32_t iteration);
 
 	void ResolvePenetration();
 
@@ -513,11 +513,11 @@ public:
 
 //data
 
-	u32 maxRigidBodies;
+	uint32_t maxRigidBodies;
 
-	u32 maxAnimBodies;
+	uint32_t maxAnimBodies;
 
-	u32 maxParticles;
+	uint32_t maxParticles;
 
 	neDLinkList<neRigidBody_> rigidBodyHeap;
 
@@ -545,7 +545,7 @@ public:
 
 	neSimpleArray<neTreeNode*> treeNodes;
 
-	neSimpleArray<s32> triangleIndex;
+	neSimpleArray<int32_t> triangleIndex;
 
 	neCollisionBody_ fakeCollisionBody;
 
@@ -565,7 +565,7 @@ public:
 
 	neCustomCDRB2ABCallback * customCDRB2ABCallback;
 
-	s32 idleBodyCount;
+	int32_t idleBodyCount;
 };
 
 #endif

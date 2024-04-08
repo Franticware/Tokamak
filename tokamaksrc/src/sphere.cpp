@@ -38,7 +38,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 
 	neV3 flag1, flag2;
 
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 		flag1[i] = sphereCenter[i] < 0.0f ? -1.0f: 1.0f;
 
 	neV3 sphereCenterAbs;
@@ -47,7 +47,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 
 	flag2 = sphereCenterAbs - boxA.as.box.boxSize;
 
-	s32 configuration, dir;
+	int32_t configuration, dir;
 
 	if (INSIDE_BOX_BOUNDARY(1))
 	{
@@ -84,7 +84,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 	{
 		//find the shallowest penetration
 		neV3 depth; depth = boxA.as.box.boxSize - flag2;
-		s32 k;
+		int32_t k;
 
 		if (depth[0] < depth[1])
 		{
@@ -136,7 +136,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 	}
 	else if (configuration == 1)
 	{
-		s32 dir1, dir2;
+		int32_t dir1, dir2;
 
 		dir1 = neNextDim1[dir];
 
@@ -178,7 +178,7 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 	{
 		contactA.SetZero();
 
-		for (s32 i = 0; i < 3; i++)
+		for (int32_t i = 0; i < 3; i++)
 			contactA[i] += flag1[i] * boxA.BoxSize(i);
 
 		neV3 sub = contactA - sphereCenter;
@@ -211,27 +211,27 @@ void Box2SphereTest(neCollisionResult & result, TConvex & boxA, neT3 & transA, T
 
 void Sphere2TerrainTest(neCollisionResult & result, TConvex & sphereA, neT3 & transA, TConvex & terrainB)
 {
-	neSimpleArray<s32> & _triIndex = *terrainB.as.terrain.triIndex;
+	neSimpleArray<int32_t> & _triIndex = *terrainB.as.terrain.triIndex;
 
-	s32 triangleCount = _triIndex.GetUsedCount();
+	int32_t triangleCount = _triIndex.GetUsedCount();
 
 	neArray<neTriangle_> & triangleArray = *terrainB.as.terrain.triangles;
 
 	ConvexTestResult res[2];
 
-	s32 finalTriIndex = -1;
-	s32 currentRes = 1;
-	s32 testRes = 0;
+	int32_t finalTriIndex = -1;
+	int32_t currentRes = 1;
+	int32_t testRes = 0;
 
 	res[currentRes].depth = -1.0e6f;
 	res[currentRes].valid = false;
 	res[testRes].depth = 1.0e6f;
 	
-	s32 terrainMatID = 0;
+	int32_t terrainMatID = 0;
 
-	for (s32 i = 0; i < triangleCount; i++)
+	for (int32_t i = 0; i < triangleCount; i++)
 	{
-		s32 test = _triIndex[i];
+		int32_t test = _triIndex[i];
 
 		neTriangle_ * t = &triangleArray[_triIndex[i]];
 
@@ -254,7 +254,7 @@ void Sphere2TerrainTest(neCollisionResult & result, TConvex & sphereA, neT3 & tr
 			{
 				if (res[testRes].depth > res[currentRes].depth)
 				{
-					s32 tmp = testRes;	
+					int32_t tmp = testRes;	
 
 					testRes = currentRes;
 
@@ -294,9 +294,9 @@ void Sphere2TerrainTest(neCollisionResult & result, TConvex & sphereA, neT3 & tr
 	}
 }
 
-void MeasureSphereAndTriEdge(const neV3 & center, f32 radius, ConvexTestResult & result, TriangleParam & tri, s32 whichEdge)
+void MeasureSphereAndTriEdge(const neV3 & center, f32 radius, ConvexTestResult & result, TriangleParam & tri, int32_t whichEdge)
 {
-	s32 whichVert0, whichVert1;
+	int32_t whichVert0, whichVert1;
 
 	whichVert0 = whichEdge;
 
@@ -345,7 +345,7 @@ void MeasureSphereAndTriEdge(const neV3 & center, f32 radius, ConvexTestResult &
 	}
 }
 
-void MeasureSphereAndTriVert(const neV3 & center, f32 radius, ConvexTestResult & result, TriangleParam & tri, s32 whichVert)
+void MeasureSphereAndTriVert(const neV3 & center, f32 radius, ConvexTestResult & result, TriangleParam & tri, int32_t whichVert)
 {
 	neV3 diff = center - tri.vert[whichVert];
 		
@@ -387,7 +387,7 @@ neBool SphereTriTest(const neV3 & center, f32 radius, ConvexTestResult & result,
 
 	neV3 contactB = center - tri.normal * distFromPlane;
 
-	s32 pointInside = tri.IsPointInside(contactB);
+	int32_t pointInside = tri.IsPointInside(contactB);
 
 	if (pointInside == -1) // inside the triangle
 	{

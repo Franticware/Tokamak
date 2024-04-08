@@ -167,7 +167,7 @@ void neGeometry::SetTransform(neT3 & t)
 *
 ****************************************************************************/ 
 
-void neGeometry::SetMaterialIndex(s32 index)
+void neGeometry::SetMaterialIndex(int32_t index)
 {
 	CAST_THIS(TConvex, con);
 
@@ -180,7 +180,7 @@ void neGeometry::SetMaterialIndex(s32 index)
 *
 ****************************************************************************/ 
 
-s32	neGeometry::GetMaterialIndex()
+int32_t	neGeometry::GetMaterialIndex()
 {
 	CAST_THIS(TConvex, con);
 
@@ -206,7 +206,7 @@ neT3 neGeometry::GetTransform()
 *
 ****************************************************************************/ 
 
-void neGeometry::SetUserData(u32 userData)
+void neGeometry::SetUserData(uint32_t userData)
 {
 	CAST_THIS(TConvex, con);
 
@@ -565,7 +565,7 @@ neT3 neAnimatedBody::GetTransform()
 *
 ****************************************************************************/ 
 
-void neAnimatedBody::SetCollisionID(s32 cid)
+void neAnimatedBody::SetCollisionID(int32_t cid)
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -578,7 +578,7 @@ void neAnimatedBody::SetCollisionID(s32 cid)
 *
 ****************************************************************************/ 
 
-s32	neAnimatedBody::GetCollisionID()
+int32_t	neAnimatedBody::GetCollisionID()
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -591,7 +591,7 @@ s32	neAnimatedBody::GetCollisionID()
 *
 ****************************************************************************/ 
 
-void neAnimatedBody::SetUserData(u32 cookies)
+void neAnimatedBody::SetUserData(uint32_t cookies)
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -624,7 +624,7 @@ neUserData	neAnimatedBody::GetUserData()
 *
 ****************************************************************************/ 
 
-s32	neAnimatedBody::GetGeometryCount()
+int32_t	neAnimatedBody::GetGeometryCount()
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -637,7 +637,7 @@ s32	neAnimatedBody::GetGeometryCount()
 *
 ****************************************************************************/ 
 /*
-neGeometry * neAnimatedBody::GetGeometry(s32 index)
+neGeometry * neAnimatedBody::GetGeometry(int32_t index)
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -650,7 +650,7 @@ neGeometry * neAnimatedBody::GetGeometry(s32 index)
 *
 ****************************************************************************/ 
 /*
-void neAnimatedBody::SetGeometry(s32 geometryCount, neGeometry * geometryArray)
+void neAnimatedBody::SetGeometry(int32_t geometryCount, neGeometry * geometryArray)
 {
 	CAST_THIS(neCollisionBody_, cb);
 
@@ -1062,7 +1062,7 @@ void neRigidBody::SetInertiaTensor(const neV3 & tensor)
 *
 ****************************************************************************/ 
 
-void neRigidBody::SetCollisionID(s32 cid)
+void neRigidBody::SetCollisionID(int32_t cid)
 {
 	CAST_THIS(neRigidBodyBase, rb);
 
@@ -1075,7 +1075,7 @@ void neRigidBody::SetCollisionID(s32 cid)
 *
 ****************************************************************************/ 
 
-s32	neRigidBody::GetCollisionID()
+int32_t	neRigidBody::GetCollisionID()
 {
 	CAST_THIS(neRigidBodyBase, rb);
 
@@ -1088,7 +1088,7 @@ s32	neRigidBody::GetCollisionID()
 *
 ****************************************************************************/ 
 
-void neRigidBody::SetUserData(u32 cookies)
+void neRigidBody::SetUserData(uint32_t cookies)
 {
 	CAST_THIS(neRigidBodyBase, rb);
 
@@ -1121,7 +1121,7 @@ neUserData neRigidBody::GetUserData()
 *
 ****************************************************************************/ 
 
-s32 neRigidBody::GetGeometryCount()
+int32_t neRigidBody::GetGeometryCount()
 {
 	CAST_THIS(neRigidBodyBase, rb);
 
@@ -1177,7 +1177,7 @@ f32 neRigidBody::GetSleepingParameter()
 *
 ****************************************************************************/ 
 /*
-neGeometry * neRigidBody::GetGeometry(s32 index)
+neGeometry * neRigidBody::GetGeometry(int32_t index)
 {
 	CAST_THIS(neRigidBodyBase, rb);
 
@@ -1190,7 +1190,7 @@ neGeometry * neRigidBody::GetGeometry(s32 index)
 *
 ****************************************************************************/ 
 /*
-void neRigidBody::SetGeometry(s32 geometryCount, neGeometry * geometryArray)
+void neRigidBody::SetGeometry(int32_t geometryCount, neGeometry * geometryArray)
 {
 	//todo
 }
@@ -1557,7 +1557,7 @@ void neRigidBody::ApplyTwist(const neV3 & twist)
 *
 ****************************************************************************/ 
 
-neRigidBodyController * neRigidBody::AddController(neRigidBodyControllerCallback * controller, s32 period)
+neRigidBodyController * neRigidBody::AddController(neRigidBodyControllerCallback * controller, int32_t period)
 {
 	CAST_THIS(neRigidBody_, rb);
 
@@ -2119,7 +2119,7 @@ neCollisionTable * neSimulator::GetCollisionTable()
 *
 ****************************************************************************/ 
 
-bool neSimulator::SetMaterial(s32 index, f32 friction, f32 restitution)
+bool neSimulator::SetMaterial(int32_t index, f32 friction, f32 restitution)
 {
 	CAST_THIS(neFixedTimeStepSimulator, sim);
 
@@ -2132,7 +2132,7 @@ bool neSimulator::SetMaterial(s32 index, f32 friction, f32 restitution)
 *
 ****************************************************************************/ 
 
-bool neSimulator::GetMaterial(s32 index, f32& friction, f32& restitution)
+bool neSimulator::GetMaterial(int32_t index, f32& friction, f32& restitution)
 {
 	CAST_THIS(neFixedTimeStepSimulator, sim);
 
@@ -2147,7 +2147,7 @@ bool neSimulator::GetMaterial(s32 index, f32& friction, f32& restitution)
 *
 ****************************************************************************/ 
 
-void neSimulator::Advance(f32 sec, s32 step, nePerformanceReport * perfReport)
+void neSimulator::Advance(f32 sec, int32_t step, nePerformanceReport * perfReport)
 {
 	CAST_THIS(neFixedTimeStepSimulator, sim);
 
@@ -2581,7 +2581,7 @@ neSimulatorSizeInfo neSimulator::GetStartSizeInfo()
 *
 ****************************************************************************/ 
 
-void neSimulator::GetMemoryAllocated(s32 & memoryAllocated)
+void neSimulator::GetMemoryAllocated(int32_t & memoryAllocated)
 {
 	CAST_THIS(neFixedTimeStepSimulator, sim);
 
@@ -2890,7 +2890,7 @@ f32 neJoint::GetEpsilon()
 *
 ****************************************************************************/ 
 
-void neJoint::SetIteration(s32 i)
+void neJoint::SetIteration(int32_t i)
 {
 	CAST_THIS(_neConstraint, c);
 
@@ -2903,7 +2903,7 @@ void neJoint::SetIteration(s32 i)
 *
 ****************************************************************************/ 
 
-s32 neJoint::GetIteration()
+int32_t neJoint::GetIteration()
 {
 	CAST_THIS(_neConstraint, c);
 
@@ -3193,7 +3193,7 @@ void neJoint::EnableLimit2(neBool yes)
 *
 ****************************************************************************/ 
 
-neJointController * neJoint::AddController(neJointControllerCallback * controller, s32 period)
+neJointController * neJoint::AddController(neJointControllerCallback * controller, int32_t period)
 {
 	CAST_THIS(_neConstraint, c);
 
@@ -3331,7 +3331,7 @@ void neSensor::SetLineSensor(const neV3 & pos, const neV3 & lineVector)
 *
 ****************************************************************************/ 
 
-void neSensor::SetUserData(u32 cookies)
+void neSensor::SetUserData(uint32_t cookies)
 {
 	CAST_THIS(neSensor_, sensor);
 
@@ -3480,7 +3480,7 @@ neAnimatedBody * neSensor::GetDetectAnimatedBody()
 *
 ****************************************************************************/ 
 
-s32	neSensor::GetDetectMaterial()
+int32_t	neSensor::GetDetectMaterial()
 {
 	CAST_THIS(neSensor_, sensor);
 
@@ -3727,7 +3727,7 @@ void neJointController::SetControllerTorqueBodyB(const neV3 & torque)
 *
 ****************************************************************************/ 
 
-void neCollisionTable::Set(s32 collisionID1, s32 collisionID2, neReponseBitFlag response)
+void neCollisionTable::Set(int32_t collisionID1, int32_t collisionID2, neReponseBitFlag response)
 {
 	CAST_THIS(neCollisionTable_, ct);
 
@@ -3740,7 +3740,7 @@ void neCollisionTable::Set(s32 collisionID1, s32 collisionID2, neReponseBitFlag 
 *
 ****************************************************************************/ 
 
-neCollisionTable::neReponseBitFlag neCollisionTable::Get(s32 collisionID1, s32 collisionID2)
+neCollisionTable::neReponseBitFlag neCollisionTable::Get(int32_t collisionID1, int32_t collisionID2)
 {
 	CAST_THIS(neCollisionTable_, ct);
 
@@ -3765,7 +3765,7 @@ neCollisionTable::neReponseBitFlag neCollisionTable::Get(s32 collisionID1, s32 c
 *
 ****************************************************************************/ 
 
-s32 neCollisionTable::GetMaxCollisionID()
+int32_t neCollisionTable::GetMaxCollisionID()
 {
 	return NE_COLLISION_TABLE_MAX;
 }

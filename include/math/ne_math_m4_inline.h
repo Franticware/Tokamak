@@ -40,7 +40,7 @@ NEINLINE void neM4::SetZero( void )
 
 //=========================================================================
 
-NEINLINE f32& neM4::operator[]( s32 I )
+NEINLINE f32& neM4::operator[]( int32_t I )
 {
     ASSERT( I >= 0  );
     ASSERT( I < 4*4 );
@@ -105,7 +105,7 @@ NEINLINE void neM4::GetRows( neV3& V1, neV3& V2, neV3& V3 ) const
 
 //==============================================================================
 
-NEINLINE void neM4::GetColumn(neV3& V1, u32 col) const
+NEINLINE void neM4::GetColumn(neV3& V1, uint32_t col) const
 {
     V1.Set( M[col][0], M[col][1], M[col][2] );
 	//V1.Set( M[0][row], M[1][row], M[2][row] );

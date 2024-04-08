@@ -36,12 +36,12 @@ struct DCDEdge
 
 struct DCDMesh
 {
-	s32 numFaces;
-	s32 numVerts;
-	s32 numEdges;
+	int32_t numFaces;
+	int32_t numVerts;
+	int32_t numEdges;
 	neByte pad0;
 
-	s32 numNeighbour;
+	int32_t numNeighbour;
 
 	neV3 * normals;
 	neV3 * vertices;
@@ -51,16 +51,16 @@ struct DCDMesh
 	DCDEdge * edges;
 
 	void SetConvex(const TConvex & convex, neV3 * vertArray);
-	neV3 GetVertOnFace(s32 faceIndex, s32 vertIndex);
-	neV3 GetVert(s32 vertIndex);
-	neV3  GetNormal(s32 faceIndex);
-//	neByte FaceGetNumFaceNeighbour(s32 faceIndex);
-	neByte FaceGetFaceNeighbour(s32 faceIndex, s32 neighbourIndex);
-	neByte FaceGetEdgeNeighbour(s32 faceIndex, s32 neighbourIndex);
-//	neByte VertGetNumEdgeNeighbour(s32 vertIndex);
-	neByte VertGetEdgeNeighbour(s32 vertIndex, s32 neighbourIndex);
-	neByte EdgeGetVert1(s32 edgeIndex);
-	neByte EdgeGetVert2(s32 edgeIndex);
+	neV3 GetVertOnFace(int32_t faceIndex, int32_t vertIndex);
+	neV3 GetVert(int32_t vertIndex);
+	neV3  GetNormal(int32_t faceIndex);
+//	neByte FaceGetNumFaceNeighbour(int32_t faceIndex);
+	neByte FaceGetFaceNeighbour(int32_t faceIndex, int32_t neighbourIndex);
+	neByte FaceGetEdgeNeighbour(int32_t faceIndex, int32_t neighbourIndex);
+//	neByte VertGetNumEdgeNeighbour(int32_t vertIndex);
+	neByte VertGetEdgeNeighbour(int32_t vertIndex, int32_t neighbourIndex);
+	neByte EdgeGetVert1(int32_t edgeIndex);
+	neByte EdgeGetVert2(int32_t edgeIndex);
 };
 
 bool TestDCD(neCollisionResult & result, TConvex & convexA, neT3 & transA, TConvex & convexB, neT3 & transB, const neV3 & backupVector);

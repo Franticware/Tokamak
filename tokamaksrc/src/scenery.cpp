@@ -30,7 +30,7 @@
 
 /********************************************************/
 /* AABB-triangle overlap test code                      */
-/* by Tomas Akenine-Möller                              */
+/* by Tomas Akenine-Moller                              */
 /* Function: int triBoxOverlap(float boxcenter[3],      */
 /*          float boxhalfsize[3],float triverts[3][3]); */
 /* History:                                             */
@@ -214,13 +214,13 @@ int _triBoxOverlap_(float boxcenter[3],float boxhalfsize[3],float triverts[3][3]
 }
 
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
-s32 neTreeNode::numOfChildren = 4;//NE_TREE_DIM * NE_TREE_DIM;
+int32_t neTreeNode::numOfChildren = 4;//NE_TREE_DIM * NE_TREE_DIM;
 
-void FindCenterOfMass(neTriangleTree * tree, neSimpleArray<s32>& triIndex, neV3 * com)
+void FindCenterOfMass(neTriangleTree * tree, neSimpleArray<int32_t>& triIndex, neV3 * com)
 {
-	s32 i;
+    int32_t i;
 	
 	neV3 ret;
 
@@ -230,7 +230,7 @@ void FindCenterOfMass(neTriangleTree * tree, neSimpleArray<s32>& triIndex, neV3 
 	{
 		neTriangle_ & t = tree->triangles[triIndex[i]];
 
-		for (s32 j = 0; j < 3; j++)
+        for (int32_t j = 0; j < 3; j++)
 		{
 			ret += tree->vertices[t.indices[j]];
 		}
@@ -244,9 +244,9 @@ void FindCenterOfMass(neTriangleTree * tree, neSimpleArray<s32>& triIndex, neV3 
 	//_mm_store_ps(&com->v[0], ret.m);
 }
 
-void FindMinMaxBound(neTriangleTree * tree, neSimpleArray<s32>& triIndex, neV3 & minBound, neV3 & maxBound)
+void FindMinMaxBound(neTriangleTree * tree, neSimpleArray<int32_t>& triIndex, neV3 & minBound, neV3 & maxBound)
 {
-	s32 i;
+    int32_t i;
 	
 	minBound.Set(1.0e6f, 1.0e6f, 1.0e6f);
 
@@ -256,7 +256,7 @@ void FindMinMaxBound(neTriangleTree * tree, neSimpleArray<s32>& triIndex, neV3 &
 	{
 		neTriangle_ & t = tree->triangles[triIndex[i]];
 
-		for (s32 j = 0; j < 3; j++)
+        for (int32_t j = 0; j < 3; j++)
 		{
 			minBound.SetMin(minBound, tree->vertices[t.indices[j]]);
 
@@ -367,9 +367,9 @@ neTreeNode::neTreeNode()
 	Initialise(NULL, 0, minBound, maxBound);
 }
 
-void neTreeNode::Initialise(neTriangleTree * _tree, s32 _parent, const neV3 & minBound, const neV3 & maxBound)
+void neTreeNode::Initialise(neTriangleTree * _tree, int32_t _parent, const neV3 & minBound, const neV3 & maxBound)
 {
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < 3; i++)
 	{
@@ -391,7 +391,7 @@ void neTreeNode::Initialise(neTriangleTree * _tree, s32 _parent, const neV3 & mi
 *
 ****************************************************************************/ 
 
-void neTreeNode::SelectBound(const neV3 & com, neV3 & minBound, neV3 & maxBound, s32 sector)
+void neTreeNode::SelectBound(const neV3 & com, neV3 & minBound, neV3 & maxBound, int32_t sector)
 {
 	switch (sector)
 	{
@@ -414,7 +414,7 @@ void neTreeNode::SelectBound(const neV3 & com, neV3 & minBound, neV3 & maxBound,
 	}
 }
 
-void neTreeNode::CountTriangleInSector(neSimpleArray<s32> &tris, neSimpleArray<s32> &sectorTris, const neV3 & com, s32 sector)
+void neTreeNode::CountTriangleInSector(neSimpleArray<int32_t> &tris, neSimpleArray<int32_t> &sectorTris, const neV3 & com, int32_t sector)
 {
 	neV3 maxBound;
 
@@ -422,11 +422,11 @@ void neTreeNode::CountTriangleInSector(neSimpleArray<s32> &tris, neSimpleArray<s
 
 	SelectBound(com, minBound, maxBound, sector);
 
-	neSimpleArray<s32> triSet;
+    neSimpleArray<int32_t> triSet;
 
 	triSet.Reserve(2000 , tree->alloc, 2000);
 
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < tris.GetUsedCount(); i++)
 	{
@@ -437,7 +437,7 @@ void neTreeNode::CountTriangleInSector(neSimpleArray<s32> &tris, neSimpleArray<s
 		// check triangle collide with this AABB
 		if (IntersectAABBTriangle(tree, minBound, maxBound, *triangle))
 		{
-			s32 * n = triSet.Alloc();
+            int32_t * n = triSet.Alloc();
 
 			ASSERT(n);
 
@@ -450,16 +450,16 @@ void neTreeNode::CountTriangleInSector(neSimpleArray<s32> &tris, neSimpleArray<s
 		
 		for (i = 0; i < triSet.GetUsedCount(); i++)
 		{
-			s32 * j = sectorTris.Alloc();
+            int32_t * j = sectorTris.Alloc();
 			ASSERT(j);
 			*j = triSet[i];
 		}
 	}
 }
 
-s32 neTreeNode::CountTriangleInSector2(neSimpleArray<s32> &tris, const neV3 & com, s32 sector)
+int32_t neTreeNode::CountTriangleInSector2(neSimpleArray<int32_t> &tris, const neV3 & com, int32_t sector)
 {
-	s32 ret = 0;
+    int32_t ret = 0;
 
 	neV3 maxBound;
 
@@ -467,9 +467,9 @@ s32 neTreeNode::CountTriangleInSector2(neSimpleArray<s32> &tris, const neV3 & co
 
 	SelectBound(com, minBound, maxBound, sector);
 
-	neSimpleArray<s32> triSet;
+    neSimpleArray<int32_t> triSet;
 
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < tris.GetUsedCount(); i++)
 	{
@@ -488,13 +488,13 @@ s32 neTreeNode::CountTriangleInSector2(neSimpleArray<s32> &tris, const neV3 & co
 
 #pragma optimize( "", off )
 
-void neTreeNode::Build(neSimpleArray<s32> & triIndex, s32 level)
+void neTreeNode::Build(neSimpleArray<int32_t> & triIndex, int32_t level)
 {
 	neV3 maxBound, minBound, com;
 
 	FindCenterOfMass(tree, triIndex, &com);
 
-	s32 i;
+    int32_t i;
 
 	if (level > 10)
 	{
@@ -511,7 +511,7 @@ void neTreeNode::Build(neSimpleArray<s32> & triIndex, s32 level)
 
 	for (i = 0; i < 4; i++)
 	{
-		neSimpleArray<s32> sectorTris;
+        neSimpleArray<int32_t> sectorTris;
 
 		CountTriangleInSector(triIndex, sectorTris, com, i);
 
@@ -560,15 +560,15 @@ void neTreeNode::Build(neSimpleArray<s32> & triIndex, s32 level)
 	}
 }
 #pragma optimize( "", on )
-void neTreeNode::MakeLeaf(neSimpleArray<s32> &tris)
+void neTreeNode::MakeLeaf(neSimpleArray<int32_t> &tris)
 {
 	triangleIndices.Reserve(tris.GetUsedCount(), tree->alloc);
 
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < tris.GetUsedCount(); i++)
 	{
-		s32 * n = triangleIndices.Alloc();
+        int32_t * n = triangleIndices.Alloc();
 
 		ASSERT(n);
 
@@ -583,8 +583,8 @@ void neTreeNode::MakeLeaf(neSimpleArray<s32> &tris)
 
 bool neTreeNode::IsOverlapped(const neV3 & minBound, const neV3 & maxBound)
 {
-	const s32 _min = 0;
-	const s32 _max = 1;
+    const int32_t _min = 0;
+    const int32_t _max = 1;
 
 	if (minBound[1] > bounds[1][_max])
 		return false;
@@ -610,7 +610,7 @@ bool neTreeNode::IsOverlapped(const neV3 & minBound, const neV3 & maxBound)
 void neTreeNode::DrawTriangles()
 {
 #if 0
-	s32 i;
+    int32_t i;
 
 	neV3 red;
 
@@ -671,7 +671,7 @@ void neTreeNode::DrawBounds()
 #endif
 }
 
-void neTreeNode::GetCandidateNodes(neSimpleArray<neTreeNode*> & nodes, const neV3 & minBound, const neV3 & maxBound, s32 level)
+void neTreeNode::GetCandidateNodes(neSimpleArray<neTreeNode*> & nodes, const neV3 & minBound, const neV3 & maxBound, int32_t level)
 {
 	if (!IsOverlapped(minBound, maxBound))
 	
@@ -699,7 +699,7 @@ void neTreeNode::GetCandidateNodes(neSimpleArray<neTreeNode*> & nodes, const neV
 		return;
 	}
 
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < 4; i++)
 	{
@@ -729,7 +729,7 @@ neTriangleTree::neTriangleTree()
 	sim = NULL;
 }
 #pragma optimize( "", off )
-void TreeBuild(neTriangleTree * tree, s32 nodeIndex, neSimpleArray<s32> & triIndex, s32 level)
+void TreeBuild(neTriangleTree * tree, int32_t nodeIndex, neSimpleArray<int32_t> & triIndex, int32_t level)
 {
 //	if (nodeIndex == 769)
 //		ASSERT(0);
@@ -740,7 +740,7 @@ void TreeBuild(neTriangleTree * tree, s32 nodeIndex, neSimpleArray<s32> & triInd
 	
 	FindCenterOfMass(tree, triIndex, &com);
 
-	s32 i;
+    int32_t i;
 
 	if (level > 4)
 	{
@@ -757,7 +757,7 @@ void TreeBuild(neTriangleTree * tree, s32 nodeIndex, neSimpleArray<s32> & triInd
 
 	for (i = 0; i < 4; i++)
 	{
-		neSimpleArray<s32> sectorTris;
+        neSimpleArray<int32_t> sectorTris;
 
 		tree->GetNode(nodeIndex).CountTriangleInSector(triIndex, sectorTris, com, i);
 
@@ -801,7 +801,7 @@ void TreeBuild(neTriangleTree * tree, s32 nodeIndex, neSimpleArray<s32> & triInd
 	}
 }
 #pragma optimize( "", on )
-neTreeNode & neTriangleTree::GetNode(s32 nodeIndex)
+neTreeNode & neTriangleTree::GetNode(int32_t nodeIndex)
 {
 	if (nodeIndex == -1)
 		return root;
@@ -819,7 +819,7 @@ neTreeNode & neTriangleTree::GetNode(s32 nodeIndex)
 *
 ****************************************************************************/ 
 
-neBool neTriangleTree::BuildTree(neV3 * _vertices, s32 _vertexCount, neTriangle * tris, s32 triCount, neAllocatorAbstract * _alloc)
+neBool neTriangleTree::BuildTree(neV3 * _vertices, int32_t _vertexCount, neTriangle * tris, int32_t triCount, neAllocatorAbstract * _alloc)
 {
 	if (!_vertices || _vertexCount <= 0)
 		return false;
@@ -842,7 +842,7 @@ neBool neTriangleTree::BuildTree(neV3 * _vertices, s32 _vertexCount, neTriangle 
 
 	vertexCount = _vertexCount;
 	
-	s32 i;
+    int32_t i;
 
 	for (i = 0; i < vertexCount; i++)
 	{
@@ -861,13 +861,13 @@ neBool neTriangleTree::BuildTree(neV3 * _vertices, s32 _vertexCount, neTriangle 
 
 	nodes.Reserve(sim->sizeInfo.terrainNodesStartCount, alloc, sim->sizeInfo.terrainNodesGrowByCount);
 
-	neSimpleArray<s32> triIndex;
+    neSimpleArray<int32_t> triIndex;
 
 	triIndex.Reserve(triCount, alloc);
 
 	for (i = 0; i < triCount; i++)
 	{
-		s32 * j = triIndex.Alloc();
+        int32_t * j = triIndex.Alloc();
 
 		*j = i;
 	}
@@ -882,7 +882,7 @@ neBool neTriangleTree::BuildTree(neV3 * _vertices, s32 _vertexCount, neTriangle 
 
 	TreeBuild(this, -1, triIndex, 0);
 
-	s32 nodeUsed = nodes.GetUsedCount();
+    int32_t nodeUsed = nodes.GetUsedCount();
 
 	triIndex.Free();
 

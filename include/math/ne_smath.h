@@ -57,10 +57,10 @@ template< class ta>						 NEINLINE void    neSwap    ( ta &  X, ta & Y) { ta tmp
 template< class ta >                     NEINLINE ta      neSqr     ( const ta&  A )                               { return A * A; }
 template< class ta >                     NEINLINE ta      neMin     ( const ta&  A, const ta& B )                  { return ( A < B ) ?  A : B;   }
 template< class ta >                     NEINLINE ta      neMax     ( const ta&  A, const ta& B )                  { return ( A > B ) ?  A : B;   }
-NEINLINE f32     neMin     ( const s32& A, const f32& B )                 { return ( A < B ) ?  A : B;   }
-NEINLINE f32     neMax     ( const s32& A, const f32& B )                 { return ( A > B ) ?  A : B;   }
-NEINLINE f32     neMin     ( const f32& A, const s32& B )                 { return ( A < B ) ?  A : B;   }
-NEINLINE f32     neMax     ( const f32& A, const s32& B )                 { return ( A > B ) ?  A : B;   }
+NEINLINE f32     neMin     ( const int32_t& A, const f32& B )                 { return ( A < B ) ?  A : B;   }
+NEINLINE f32     neMax     ( const int32_t& A, const f32& B )                 { return ( A > B ) ?  A : B;   }
+NEINLINE f32     neMin     ( const f32& A, const int32_t& B )                 { return ( A < B ) ?  A : B;   }
+NEINLINE f32     neMax     ( const f32& A, const int32_t& B )                 { return ( A > B ) ?  A : B;   }
 NEINLINE neBool	   neIsFinite	(f32 n) {return neFinite((double)n);} 
 
 #endif

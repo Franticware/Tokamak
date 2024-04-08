@@ -151,7 +151,7 @@ NEINLINE neBool SameSide(const neV3 & p1, const neV3 & p2, const neV3 & a, const
 
 		neV3 contact;
 
-		s32 i;
+		int32_t i;
 
 		for (i = 0; i < 3; i++)
 		{
@@ -182,7 +182,7 @@ NEINLINE neBool SameSide(const neV3 & p1, const neV3 & p2, const neV3 & a, const
 
 				contact = sensorA.pos + sensorA.dir * ratio;
 
-				s32 other1, other2;
+				int32_t other1, other2;
 
 				other1 = (i + 1)%3;
 				
@@ -309,15 +309,15 @@ void SensorTest(neSensor_ & sensorA, TConvex & convexB, neT3 & transB)
 	}
 	else if (convexB.type == TConvex::TERRAIN)
 	{
-		neSimpleArray<s32> & _triIndex = *convexB.as.terrain.triIndex;
+		neSimpleArray<int32_t> & _triIndex = *convexB.as.terrain.triIndex;
 
-		s32 triangleCount = _triIndex.GetUsedCount();
+		int32_t triangleCount = _triIndex.GetUsedCount();
 
 		neArray<neTriangle_> & triangleArray = *convexB.as.terrain.triangles;
 		
-		for (s32 i = 0; i < triangleCount; i++)
+		for (int32_t i = 0; i < triangleCount; i++)
 		{
-			s32 test = _triIndex[i];
+			int32_t test = _triIndex[i];
 
 			neTriangle_ * t = &triangleArray[_triIndex[i]];
 

@@ -32,8 +32,8 @@
 *
 ****************************************************************************/ 
 
-static s32 neNextDim1[] = {1, 2, 0};
-static s32 neNextDim2[] = {2, 0, 1};
+static int32_t neNextDim1[] = {1, 2, 0};
+static int32_t neNextDim2[] = {2, 0, 1};
 
 NEINLINE void suppress_neNextDim_notUsed(void)
 {
@@ -74,8 +74,8 @@ public:
 	NEINLINE void	Set  (f32 val[3]);
 	NEINLINE void	Get  (f32 val[3]);
 
-    NEINLINE f32&	operator   []   (s32 I);
-	NEINLINE f32	operator   []	(s32 I) const;
+    NEINLINE f32&	operator   []   (int32_t I);
+	NEINLINE f32	operator   []	(int32_t I) const;
 
 	NEINLINE f32 X() const;
 	NEINLINE f32 Y() const;
@@ -152,7 +152,7 @@ struct neV4
     NEINLINE void SetZero ( void );
     NEINLINE void Set ( f32 x, f32 y, f32 z, f32 w );
 
-    NEINLINE f32&    operator   []   ( s32 I );
+    NEINLINE f32&    operator   []   ( int32_t I );
     NEINLINE neV4&   operator   /=   ( f32 S );
     NEINLINE neV4&   operator   *=   ( f32 S );
     NEINLINE neV4&   operator   +=   ( const neV4& V );
@@ -179,8 +179,8 @@ struct neM3
 {
 	neV3 M[3];
 
-    NEINLINE neV3&  operator   [] ( s32 I );
-	NEINLINE neV3	operator   [] ( s32 I ) const;
+    NEINLINE neV3&  operator   [] ( int32_t I );
+	NEINLINE neV3	operator   [] ( int32_t I ) const;
 
     NEINLINE void SetZero ( void );
     NEINLINE void SetIdentity ( void );
@@ -237,7 +237,7 @@ struct neM4
     NEINLINE void  SetTranslation ( const neV3& V ); 
     NEINLINE void  SetScale       ( const neV3& V ); 
 
-    NEINLINE f32&  operator []    ( s32 I );
+    NEINLINE f32&  operator []    ( int32_t I );
     NEINLINE neM4& operator *=    ( const neM4& M );
 	NEINLINE neM4& operator =     ( const neM3& M );
     NEINLINE neV3  TransformAs3x3 ( const neV3& V ) const;
@@ -246,7 +246,7 @@ struct neM4
     NEINLINE void  SetRows        ( const neV3& V1, const neV3& V2, const neV3& V3 );
     NEINLINE void  GetColumns     ( neV3& V1, neV3& V2, neV3& V3 ) const;
     NEINLINE void  SetColumns     ( const neV3& V1, const neV3& V2, const neV3& V3 );
-	NEINLINE void  GetColumn	  ( neV3& V1, u32 col) const;
+	NEINLINE void  GetColumn	  ( neV3& V1, uint32_t col) const;
 
 	NEINLINE void SetTranspose(const neM4 & M);
 	NEINLINE void SetFastInvert  ( const neM4& Src );

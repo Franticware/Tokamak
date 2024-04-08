@@ -39,7 +39,7 @@
 *
 ****************************************************************************/ 
 /*
-TConvex * neRigidBodyBase::GetConvex(s32 index)
+TConvex * neRigidBodyBase::GetConvex(int32_t index)
 {
 	ASSERT(index < col.convexCount);
 
@@ -89,7 +89,7 @@ void neRigidBodyBase::RecalcBB()
 		sstart = sensor->pos;
 		send = sensor->pos + sensor->dir;
 
-		for (s32 j = 0; j < 3; j++)
+		for (int32_t j = 0; j < 3; j++)
 		{
 			maxExt[j] = neMax(maxExt[j], sstart[j]);
 			maxExt[j] = neMax(maxExt[j], send[j]);
@@ -98,7 +98,7 @@ void neRigidBodyBase::RecalcBB()
 		}
 	}
 
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		col.obb.as.box.boxSize[i] = ( maxExt[i] - minExt[i] ) * 0.5f;
 		col.obb.c2p.pos[i] = minExt[i] + col.obb.as.box.boxSize[i];
@@ -392,9 +392,9 @@ void neRigidBody_::DrawCPointLine()
 #if 0
 	neConstraintPointArray & pointArray = GetRBCData().GetCPointArray();
 
-	for (s32 i = 0; i < pointArray.GetUsedCount(); i++)
+	for (int32_t i = 0; i < pointArray.GetUsedCount(); i++)
 	{
-		for (s32 j = i + 1; j < pointArray.GetUsedCount(); j++)
+		for (int32_t j = i + 1; j < pointArray.GetUsedCount(); j++)
 		{
 //			if (pointArray[i].constraint == pointArray[j].constraint)
 //				continue;

@@ -24,7 +24,7 @@
 #include "simulator.h"
 #include "message.h"
 
-//extern void DrawLine(const neV3 & colour, neV3 * startpoint, s32 count);
+//extern void DrawLine(const neV3 & colour, neV3 * startpoint, int32_t count);
 
 #pragma inline_recursion( on )
 #pragma inline_depth( 50 )
@@ -386,8 +386,8 @@ void _neConstraint::Reset()
 	alreadySetup = false;
 
 /*	limitConstraintCount = 0;
-	for (s32 i = 0; i < 2; i++)
-		for (s32 j = 0; j < 2; j++)
+	for (int32_t i = 0; i < 2; i++)
+		for (int32_t j = 0; j < 2; j++)
 			limitRigidConstraint[i][j] = nullptr;
 
 	enableLimitMiniConstraint = false;
@@ -420,7 +420,7 @@ void _neConstraint::SetType(neJoint::ConstraintType t)
 	}
 }
 
-neController * _neConstraint::AddController(neJointControllerCallback * jc, s32 period)
+neController * _neConstraint::AddController(neJointControllerCallback * jc, int32_t period)
 {
 	if (!jc)
 		return nullptr;
@@ -542,7 +542,7 @@ void _neConstraint::UpdateConstraintPoint()
 		cbodyB = bodyB->AsCollisionBody();
 	}
 
-	for (s32 i = 0; i < pointCount; i++)
+	for (int32_t i = 0; i < pointCount; i++)
 	{
 		if (type == neJoint::NE_JOINT_BALLSOCKET || 
 			type == neJoint::NE_JOINT_HINGE)
@@ -597,7 +597,7 @@ void _neConstraint::FindGreatest()
 	case neJoint::NE_JOINT_HINGE:
 		{
 
-			for (s32 i = 0; i < pointCount; i++)
+			for (int32_t i = 0; i < pointCount; i++)
 			{
 				neCollisionResult * cresult = bodyA->sim->cresultHeap.Alloc(0);
 
@@ -632,7 +632,7 @@ void _neConstraint::FindGreatest()
 
 	case neJoint::NE_JOINT_SLIDE:
 		{
-			for (s32 i = 0; i < pointCount; i++)
+			for (int32_t i = 0; i < pointCount; i++)
 			{
 				neCollisionResult * cresult = bodyA->sim->cresultHeap.Alloc(0);
 
@@ -715,7 +715,7 @@ void _neConstraint::DrawCPointLine()
 //	if (limitConstraintCount == 1)
 //		return;
 
-	s32 i;
+	int32_t i;
 	for (i = 0; i < pointCount; i++)
 	{
 		points[0] = limitPt[i][0].PtWorld();
@@ -727,7 +727,7 @@ void _neConstraint::DrawCPointLine()
 
 	for (i = 0; i < pointCount; i++)
 	{
-		for (s32 j = 0; j < limitConstraintCount; j++)
+		for (int32_t j = 0; j < limitConstraintCount; j++)
 		{
 			neMiniConstraintItem * item = (neMiniConstraintItem *)limitRigidConstraint[i][j];
 
@@ -1301,11 +1301,11 @@ void neLimitState::CheckLimitPrimarySlider()
 	cresult->PrepareForSolver();
 }
 
-void neConstraintHeader::AddToSolver(f32 & epsilon, s32 & iteration)
+void neConstraintHeader::AddToSolver(f32 & epsilon, int32_t & iteration)
 {
 	_neConstraint * constraint = head;
 
-	s32 i = 0;
+	int32_t i = 0;
 
 	while (constraint)
 	{

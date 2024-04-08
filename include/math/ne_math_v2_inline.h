@@ -50,7 +50,7 @@ NEINLINE void neV2::Zero( void )
 
 //=========================================================================
 
-NEINLINE f32& neV2::operator[]( s32 I )
+NEINLINE f32& neV2::operator[]( int32_t I )
 {
     ASSERT( I >= 0 );
     ASSERT( I <= 1 );

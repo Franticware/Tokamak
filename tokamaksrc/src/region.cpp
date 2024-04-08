@@ -71,7 +71,7 @@ void neRegion::Initialise(neFixedTimeStepSimulator * s, neByte sortD)
 
 	sortDimension = sortD;
 
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		if (sortD & (1 << i ) )
 		{
@@ -140,7 +140,7 @@ void neRegion::RemoveBody(neRigidBodyBase * bb)
 		bb->pendingAddToRegion = 2; // to signify adding to region is aborted
 	}
 
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		if (sortDimension & (1 << i) )
 		{
@@ -187,7 +187,7 @@ void neRegion::RemoveBody(neRigidBodyBase * bb)
 void neRegion::Rebuild()
 {
 	// sort coordinate list
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		if (sortDimension & (1 << i) )
 		{
@@ -238,7 +238,7 @@ void neRegion::Rebuild()
 
 void neRegion::Update()
 {
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		if (sortDimension & (1 << i) )
 		{
@@ -246,7 +246,7 @@ void neRegion::Update()
 		}
 	}
 
-	for (s32 k = 0; k < newBodies.GetUsedCount(); k++)
+	for (int32_t k = 0; k < newBodies.GetUsedCount(); k++)
 	{
 		neAddBodyInfo * bi = &newBodies[k];
 
@@ -301,7 +301,7 @@ void neRegion::Update()
 	
 	if (debugOn)
 	{
-		for (s32 j = 0; j < 3; j++)
+		for (int32_t j = 0; j < 3; j++)
 		{
 			if (sortDimension & 1 << j)
 				coordLists[j].OuputDebug();
@@ -319,7 +319,7 @@ void neRegion::Update()
 
 neOverlapped * neRegion::GetOverlappedStatus(neRigidBodyBase * a, neRigidBodyBase * b)
 {
-	s32 smallIndex, largeIndex;
+	int32_t smallIndex, largeIndex;
 
 	if (a->id > b->id)
 	{
@@ -475,7 +475,7 @@ void neRegion::FreeTerrain()
 
 void neRegion::InsertCoordList(neRigidBodyBase * bb, neRigidBodyBase * hint)
 {
-	for (s32 i = 0; i < 3; i++)
+	for (int32_t i = 0; i < 3; i++)
 	{
 		if (sortDimension & (1 << i) )
 		{
@@ -495,7 +495,7 @@ void neRegion::InsertCoordList(neRigidBodyBase * bb, neRigidBodyBase * hint)
 *
 ****************************************************************************/ 
 
-void neCoordList::Add(neRigidBodyBase * bb, neRigidBodyBase * hint, s32 hintCoord)
+void neCoordList::Add(neRigidBodyBase * bb, neRigidBodyBase * hint, int32_t hintCoord)
 {
 	CCoordListEntryItem * startSearch = coordList.usedTail;
 
@@ -631,7 +631,7 @@ void neCoordList::Add(neRigidBodyBase * bb, neRigidBodyBase * hint, s32 hintCoor
 	{
 		//search from where the hint is
 
-		for (s32 i = 0; i < 2; i++)
+		for (int32_t i = 0; i < 2; i++)
 		{
 			CCoordListEntryItem * entryItem;
 
