@@ -7,8 +7,8 @@ const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME
 neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } };
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-// const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+// const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 // const f32 EPSILON = 0.1f;
 
 struct DemoData
@@ -40,13 +40,13 @@ public:
 
     void InititialiseRenderPrimitives();
 
-    void MakeParticle(neV3 position, s32 index);
+    void MakeParticle(neV3 position, int32_t index);
 
-    void MakeTree(neV3 position, s32 index);
+    void MakeTree(neV3 position, int32_t index);
 
-    void DisplayAnimatedBodies(neAnimatedBody** ab, s32 count);
+    void DisplayAnimatedBodies(neAnimatedBody** ab, int32_t count);
 
-    void DisplayRigidBodies(neRigidBody** rb, s32 count);
+    void DisplayRigidBodies(neRigidBody** rb, int32_t count);
 
 public:
     enum
@@ -85,11 +85,11 @@ public:
 
     CRenderPrimitive terrainRender;
 
-    s32 nextBullet;
+    int32_t nextBullet;
 
-    s32 nextFreeRenderPrimitive;
+    int32_t nextFreeRenderPrimitive;
 
-    s32 nextFreeBranch;
+    int32_t nextFreeBranch;
 };
 
 CSampleSCCollision sample;
@@ -105,7 +105,7 @@ void CSampleSCCollision::Initialise()
 
 void CSampleSCCollision::Process()
 {
-    static s32 nextBullet = 0;
+    static int32_t nextBullet = 0;
     if (sdlGetAsyncKeyStateOnce(SDLK_t))
     {
         neV3 pos;
@@ -135,11 +135,11 @@ void CSampleSCCollision::Shutdown()
     sim = NULL;
 }
 
-void CSampleSCCollision::MakeParticle(neV3 position, s32 index)
+void CSampleSCCollision::MakeParticle(neV3 position, int32_t index)
 {
     // const f32 groundLevel = -10.0f;
 
-    s32 cur;
+    int32_t cur;
 
     cur = index;
 
@@ -188,11 +188,11 @@ TreeData treeData[CSampleSCCollision::GEOMETRY_PER_TREE] =
 
 };
 
-void CSampleSCCollision::MakeTree(neV3 position, s32 index)
+void CSampleSCCollision::MakeTree(neV3 position, int32_t index)
 {
     // const f32 groundLevel = -10.0f;
 
-    s32 cur;
+    int32_t cur;
 
     cur = index;
 
@@ -200,7 +200,7 @@ void CSampleSCCollision::MakeTree(neV3 position, s32 index)
 
     trees[cur]->SetPos(position);
 
-    for (s32 i = 0; i < GEOMETRY_PER_TREE; i++)
+    for (int32_t i = 0; i < GEOMETRY_PER_TREE; i++)
     {
         neGeometry* geom = trees[cur]->AddGeometry();
 
@@ -256,9 +256,9 @@ neV3 treePosition[CSampleSCCollision::NUMBER_OF_TREES] =
 
 void CSampleSCCollision::InititialiseRenderPrimitives()
 {
-    s32 curToken = 0;
+    int32_t curToken = 0;
 
-    for (s32 i = 0; i < NUMBER_OF_PARTICLES; i++)
+    for (int32_t i = 0; i < NUMBER_OF_PARTICLES; i++)
     {
         particles[i]->BeginIterateGeometry();
 
@@ -300,7 +300,7 @@ void CSampleSCCollision::InititialiseRenderPrimitives()
         trees[i]->BeginIterateGeometry();
 
         neGeometry* geom = trees[i]->GetNextGeometry();
-        s32 b = 0;
+        int32_t b = 0;
         while (geom)
         {
             {
@@ -349,7 +349,7 @@ void CSampleSCCollision::InititialiseRenderPrimitives()
     nextFreeRenderPrimitive = curToken;
 }
 
-void CSampleSCCollision::DisplayRigidBodies(neRigidBody** rb, s32 count /* , IDirect3DDevice9* pd3dDevice*/)
+void CSampleSCCollision::DisplayRigidBodies(neRigidBody** rb, int32_t count /* , IDirect3DDevice9* pd3dDevice*/)
 {
     while (count-- && *rb)
     {
@@ -381,7 +381,7 @@ void CSampleSCCollision::DisplayRigidBodies(neRigidBody** rb, s32 count /* , IDi
     }
 }
 
-void CSampleSCCollision::DisplayAnimatedBodies(neAnimatedBody** ab, s32 count /*, IDirect3DDevice9* pd3dDevice*/)
+void CSampleSCCollision::DisplayAnimatedBodies(neAnimatedBody** ab, int32_t count /*, IDirect3DDevice9* pd3dDevice*/)
 {
     while (count-- && *ab)
     {
@@ -414,7 +414,7 @@ void CSampleSCCollision::DisplayAnimatedBodies(neAnimatedBody** ab, s32 count /*
 }
 void CSampleSCCollision::InititialisePhysics()
 {
-    for (s32 i = 0; i < NUMBER_OF_TREES * BRANCH_PER_TREE; i++)
+    for (int32_t i = 0; i < NUMBER_OF_TREES * BRANCH_PER_TREE; i++)
     {
         branches[i] = NULL;
     }
@@ -434,7 +434,7 @@ void CSampleSCCollision::InititialisePhysics()
         sizeInfo.constraintsCount = 0;
     }
 
-    s32 totalBody = sizeInfo.rigidBodiesCount + sizeInfo.animatedBodiesCount;
+    int32_t totalBody = sizeInfo.rigidBodiesCount + sizeInfo.animatedBodiesCount;
 
     sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
 
@@ -446,13 +446,13 @@ void CSampleSCCollision::InititialisePhysics()
 
     position.SetZero();
 
-    for (s32 j = 0; j < NUMBER_OF_PARTICLES; j++)
+    for (int32_t j = 0; j < NUMBER_OF_PARTICLES; j++)
     {
         position.Set(2.0f * j, 2.0f, 100.0f);
 
         MakeParticle(position, j);
     }
-    for (s32 j = 0; j < NUMBER_OF_TREES; j++)
+    for (int32_t j = 0; j < NUMBER_OF_TREES; j++)
     {
         MakeTree(treePosition[j], j);
     }
@@ -480,7 +480,7 @@ void CSampleSCCollision::InititialisePhysics()
 
     neTriangle* tri = new neTriangle[triMesh.triangleCount];
 
-    s32* triindex = new s32[triMesh.triangleCount * 3];
+    int32_t* triindex = new int32_t[triMesh.triangleCount * 3];
 
     for (int i = 0; i != triMesh.triangleCount * 3; ++i)
     {
@@ -491,7 +491,7 @@ void CSampleSCCollision::InititialisePhysics()
 
     //
 
-    for (s32 i = 0; i < triMesh.triangleCount; i++)
+    for (int32_t i = 0; i < triMesh.triangleCount; i++)
     {
         tri[i].indices[0] = triindex[i * 3];
         tri[i].indices[1] = triindex[i * 3 + 1];
@@ -527,7 +527,7 @@ void MyAppInit()
     vecAt.Set(0.0f, 10.0f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }

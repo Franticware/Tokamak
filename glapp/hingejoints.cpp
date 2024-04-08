@@ -7,8 +7,8 @@ neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } 
 
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-// const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+// const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 // const f32 EPSILON  = 0.1f;
 
 struct DemoData
@@ -71,7 +71,7 @@ void CSamplehingeJoints::Initialise()
 
 void CSamplehingeJoints::Process()
 {
-    s32 actOnBody = N_TOTAL_BODIES - 1;
+    int32_t actOnBody = N_TOTAL_BODIES - 1;
 
     if (sdlGetAsyncKeyState(SDLK_t))
     {
@@ -107,7 +107,7 @@ void CSamplehingeJoints::InititialisePhysics()
     sizeInfo.animatedBodiesCount = WALL_NUMBER;
     sizeInfo.geometriesCount = N_TOTAL_BODIES + WALL_NUMBER;
 
-    s32 totalBody = N_TOTAL_BODIES + WALL_NUMBER;
+    int32_t totalBody = N_TOTAL_BODIES + WALL_NUMBER;
     sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
 
     {
@@ -124,7 +124,7 @@ void CSamplehingeJoints::InititialisePhysics()
 
     f32 verticalPos = -5.0f;
 
-    for (s32 j = 0; j < N_BODY; j++)
+    for (int32_t j = 0; j < N_BODY; j++)
     {
         neRigidBody* rigidBody = sim->CreateRigidBody();
 
@@ -284,7 +284,7 @@ void MyAppInit()
     vecAt.Set(-25.0f, -1.0f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -313,7 +313,7 @@ void OnMyAppFrameRender()
 
     // Display the boxes
 
-    for (s32 i = 0; i < sample.N_BODY; i++)
+    for (int32_t i = 0; i < sample.N_BODY; i++)
     {
         t = sample.rigidBodies[i]->GetTransform();
         t.MakeD3DCompatibleMatrix();

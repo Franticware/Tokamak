@@ -7,8 +7,8 @@ neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } 
 
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 const f32 EPSILON = 0.1f;
 
 struct DemoData
@@ -69,7 +69,7 @@ void CSampleBallJoints::Initialise()
 
 void CSampleBallJoints::Process()
 {
-    s32 actOnBody = N_BODY - 1;
+    int32_t actOnBody = N_BODY - 1;
 
     if (sdlGetAsyncKeyState(SDLK_t))
     {
@@ -111,7 +111,7 @@ void CSampleBallJoints::InititialisePhysics()
 
     neRigidBody* lastbox = NULL;
 
-    for (s32 j = 0; j < N_BODY; j++)
+    for (int32_t j = 0; j < N_BODY; j++)
     {
         f32 mass = 0.1f;
 
@@ -220,7 +220,7 @@ void MyAppInit()
     vecAt.Set(-30.0f, 0.0f, 0.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -245,7 +245,7 @@ void OnMyAppFrameRender()
     sample.groundRender.Render(&t);
 
     // Display the boxes
-    for (s32 i = 0; i < sample.N_BODY; i++)
+    for (int32_t i = 0; i < sample.N_BODY; i++)
     {
         t = sample.box[i]->GetTransform();
         sample.boxRenderPrimitives[i].Render(&t);

@@ -7,8 +7,8 @@ neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } 
 
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 // const f32 EPSILON  = 0.1f;
 
 struct DemoData
@@ -38,7 +38,7 @@ public:
 
     void InititialisePhysics();
 
-    void MakeTable(neV3 position, s32 index);
+    void MakeTable(neV3 position, int32_t index);
 
 public:
     enum
@@ -65,7 +65,7 @@ public:
     CRenderPrimitive groundRender;
     neAnimatedBody* ground;
 
-    s32 currentBodyCount;
+    int32_t currentBodyCount;
 };
 
 CSampleBreakageObjects sample;
@@ -97,7 +97,7 @@ void CSampleBreakageObjects::Process()
 
     if (!dontSet)
     {
-        for (s32 i = 0; i < NUMBER_OF_TABLES; i++)
+        for (int32_t i = 0; i < NUMBER_OF_TABLES; i++)
         {
             rigidBodies[i]->SetVelocity(force);
         }
@@ -144,7 +144,7 @@ void CSampleBreakageObjects::InititialisePhysics()
 
     sim->SetBreakageCallback(BreakageCallbackFn);
 
-    for (s32 i = 0; i < NUMBER_OF_BODIES; i++)
+    for (int32_t i = 0; i < NUMBER_OF_BODIES; i++)
     {
         rigidBodies[i] = NULL;
     }
@@ -153,7 +153,7 @@ void CSampleBreakageObjects::InititialisePhysics()
 
     position.SetZero();
 
-    for (s32 j = 0; j < NUMBER_OF_TABLES; j++)
+    for (int32_t j = 0; j < NUMBER_OF_TABLES; j++)
     {
         position.Set(20.0f + 4.0f * j, 30.0f + 5.0f * j, 0.0f);
 
@@ -196,7 +196,7 @@ TableData tableData[CSampleBreakageObjects::GEOMETRY_PER_TABLE] =
 
 };
 
-void CSampleBreakageObjects::MakeTable(neV3 position, s32 index)
+void CSampleBreakageObjects::MakeTable(neV3 position, int32_t index)
 {
     // const f32 groundLevel = -10.0f;
 
@@ -204,7 +204,7 @@ void CSampleBreakageObjects::MakeTable(neV3 position, s32 index)
 
     tableSize.Set(3.0f, 1.0f, 3.0f);
 
-    s32 cur;
+    int32_t cur;
 
     cur = index;
 
@@ -229,11 +229,11 @@ void CSampleBreakageObjects::MakeTable(neV3 position, s32 index)
 
     rigidBodies[cur]->SetRotation(rot);
 
-    for (s32 i = 0; i < GEOMETRY_PER_TABLE; i++)
+    for (int32_t i = 0; i < GEOMETRY_PER_TABLE; i++)
     {
         neGeometry* geom = rigidBodies[cur]->AddGeometry();
 
-        geom->SetUserData((u32)(cur * GEOMETRY_PER_TABLE + i));
+        geom->SetUserData((uint32_t)(cur * GEOMETRY_PER_TABLE + i));
 
         geom->SetBoxSize(tableData[i].size);
 
@@ -288,7 +288,7 @@ void MyAppInit()
     vecAt.Set(47.0f, 0.0f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -315,7 +315,7 @@ void OnMyAppFrameRender()
     sample.groundRender.Render(&t);
 
     // Display the boxes
-    for (s32 i = 0; i < sample.currentBodyCount; i++)
+    for (int32_t i = 0; i < sample.currentBodyCount; i++)
     {
         neT3 trans = sample.rigidBodies[i]->GetTransform();
 
@@ -325,7 +325,7 @@ void OnMyAppFrameRender()
 
         while (geom)
         {
-            u32 index = geom->GetUserData().u;
+            uint32_t index = geom->GetUserData().u;
 
             neT3 geomTrans = geom->GetTransform();
 

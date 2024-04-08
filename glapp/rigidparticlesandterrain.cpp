@@ -8,8 +8,8 @@ neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } 
 
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-// const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+// const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 // const f32 EPSILON = 0.1f;
 
 struct DemoData
@@ -37,7 +37,7 @@ public:
 
     void InititialisePhysics();
 
-    void MakeParticle(neV3 position, s32 index);
+    void MakeParticle(neV3 position, int32_t index);
 
 public:
     enum
@@ -64,7 +64,7 @@ public:
 
     CRenderPrimitive terrainRender;
 
-    s32 nextBullet;
+    int32_t nextBullet;
 };
 
 CSampleRigidParticlesAndTerrain sample;
@@ -77,7 +77,7 @@ void CSampleRigidParticlesAndTerrain::Initialise()
 
 void CSampleRigidParticlesAndTerrain::Process()
 {
-    static s32 nextBullet = 0;
+    static int32_t nextBullet = 0;
     if (sdlGetAsyncKeyStateOnce(SDLK_t))
     {
         neV3 pos;
@@ -109,11 +109,11 @@ void CSampleRigidParticlesAndTerrain::Shutdown()
     sim = NULL;
 }
 
-void CSampleRigidParticlesAndTerrain::MakeParticle(neV3 position, s32 index)
+void CSampleRigidParticlesAndTerrain::MakeParticle(neV3 position, int32_t index)
 {
     // const f32 groundLevel = -10.0f;
 
-    s32 cur;
+    int32_t cur;
 
     cur = index;
 
@@ -176,7 +176,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
         sizeInfo.constraintsCount = 0;
     }
 
-    s32 totalBody = NUMBER_OF_PARTICLES + WALL_NUMBER;
+    int32_t totalBody = NUMBER_OF_PARTICLES + WALL_NUMBER;
     sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
 
     sim = neSimulator::CreateSimulator(sizeInfo, &all, &gravity);
@@ -185,7 +185,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
 
     position.SetZero();
 
-    for (s32 j = 0; j < NUMBER_OF_PARTICLES; j++)
+    for (int32_t j = 0; j < NUMBER_OF_PARTICLES; j++)
     {
         position.Set(0.0f, 2.0f * j + 20.0f, 0.0f);
         // position.Set(13.5f, 20.0f, 1.5f);
@@ -216,7 +216,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
 
     neTriangle* tri = new neTriangle[triMesh.triangleCount];
 
-    s32* triindex = new s32[triMesh.triangleCount * 3];
+    int32_t* triindex = new int32_t[triMesh.triangleCount * 3];
 
     for (int i = 0; i != triMesh.triangleCount * 3; ++i)
     {
@@ -225,7 +225,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
 
     //
 
-    for (s32 i = 0; i < triMesh.triangleCount; i++)
+    for (int32_t i = 0; i < triMesh.triangleCount; i++)
     {
         tri[i].indices[0] = triindex[i * 3];
         tri[i].indices[1] = triindex[i * 3 + 1];
@@ -261,7 +261,7 @@ void MyAppInit()
     vecAt.Set(0.0f, 0.0f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -293,7 +293,7 @@ void OnMyAppFrameRender()
 
     // Display the boxes
 
-    for (s32 i = 0; i < sample.NUMBER_OF_PARTICLES; i++)
+    for (int32_t i = 0; i < sample.NUMBER_OF_PARTICLES; i++)
     {
         t = sample.box[i]->GetTransform();
         t.MakeD3DCompatibleMatrix();

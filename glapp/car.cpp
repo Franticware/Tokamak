@@ -3,7 +3,7 @@
 #define TOKAMAK_SAMPLE_NAME "car"
 const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME;
 
-const s32 WALL_NUMBER = 1;
+const int32_t WALL_NUMBER = 1;
 
 #define XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE 7849
 #define XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE 8689
@@ -51,12 +51,12 @@ RampData gRamps[N_RAMPS] =
     { { 50.0f, -12.0f, -30.0f }, { 30.0f, 2.0f, 30.0f }, { 0.3f, 0.3f, 0.6f }, { -NE_PI * 0.07f, 0.0f, 0.0f } }
 };
 
-const s32 N_CARS = 10;
+const int32_t N_CARS = 10;
 //		TARGET_CAR = 0,
-const s32 N_BODY_BOXES = 2;
-const s32 N_PARTS = 3;
-const s32 N_RENDER_PRIMITIVES = (N_BODY_BOXES + N_PARTS);
-const s32 MAX_OVERLAPPED_PAIR = 1000;
+const int32_t N_BODY_BOXES = 2;
+const int32_t N_PARTS = 3;
+const int32_t N_RENDER_PRIMITIVES = (N_BODY_BOXES + N_PARTS);
+const int32_t MAX_OVERLAPPED_PAIR = 1000;
 const f32 WHEEL_DIAMETER = 0.9f;
 const f32 WHEEL_WIDTH = 0.3f;
 const f32 MAX_SPEED = 5.0f;
@@ -133,7 +133,7 @@ public:
 
     CSampleCar* gameWorld;
 
-    s32 id;
+    int32_t id;
 
     f32 accel;
 
@@ -143,7 +143,7 @@ public:
 
     neV3 steerDir;
 
-    s32 nextRenderPrim;
+    int32_t nextRenderPrim;
 };
 
 class CSampleCar
@@ -220,7 +220,7 @@ void CSampleCar::CreateGround()
 
     groundRender.SetGraphicBox(gFloor.boxSize[0], gFloor.boxSize[1], gFloor.boxSize[2]);
 
-    for (s32 i = 0; i < N_BARRIERS; i++)
+    for (int32_t i = 0; i < N_BARRIERS; i++)
     {
         barriers[i] = sim->CreateAnimatedBody();
 
@@ -237,7 +237,7 @@ void CSampleCar::CreateGround()
         barrierRenders[i].SetDiffuseColor(0.6f, 0.8f, 0.5f, 1);
     }
 
-    for (s32 i = 0; i < N_RAMPS; i++)
+    for (int32_t i = 0; i < N_RAMPS; i++)
     {
         ramps[i] = sim->CreateAnimatedBody();
 
@@ -291,9 +291,9 @@ void CSampleCar::Reset()
 
 void CSampleCar::Cleanup()
 {
-    for (s32 i = 0; i < N_CARS; i++)
+    for (int32_t i = 0; i < N_CARS; i++)
     {
-        for (s32 j = 0; j < N_RENDER_PRIMITIVES; j++)
+        for (int32_t j = 0; j < N_RENDER_PRIMITIVES; j++)
         {
             sample.cars[i].nextRenderPrim = 0;
         }
@@ -346,7 +346,7 @@ void CCar::MakeCar(neSimulator* sim, neV3& pos)
         // add 4 sensors to the rigid body
         neSensor* sn;
 
-        for (s32 si = 0; si < 4; si++)
+        for (int32_t si = 0; si < 4; si++)
         {
             sn = rigidBody->AddSensor();
 
@@ -462,7 +462,7 @@ PartData parts[] =
 
 void CCar::MakeParts(neSimulator* sim, neV3& pos)
 {
-    s32 i;
+    int32_t i;
 
     for (i = 0; i < N_PARTS; i++)
     {
@@ -528,7 +528,7 @@ void MyAppInit()
     vecAt.Set(0.0f, 0.0f, 1.0f); //(0.0f, -GROUND_Y + 1.7f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -576,7 +576,7 @@ void OnMyAppFrameRender()
 
     sample.groundRender.Render(&t);
 
-    for (s32 i = 0; i < N_BARRIERS; i++)
+    for (int32_t i = 0; i < N_BARRIERS; i++)
     {
         t = sample.barriers[i]->GetTransform();
 
@@ -585,7 +585,7 @@ void OnMyAppFrameRender()
         sample.barrierRenders[i].Render(&t);
     }
 
-    for (s32 i = 0; i < N_RAMPS; i++)
+    for (int32_t i = 0; i < N_RAMPS; i++)
     {
         t = sample.ramps[i]->GetTransform();
 
@@ -594,7 +594,7 @@ void OnMyAppFrameRender()
         sample.rampRenders[i].Render(&t);
     }
 
-    for (s32 i = 0; i < N_CARS; i++)
+    for (int32_t i = 0; i < N_CARS; i++)
     {
         CCar* car = &sample.cars[i];
 
@@ -615,7 +615,7 @@ void OnMyAppFrameRender()
             rp->Render(&t3);
         }
 
-        for (s32 j = 0; j < N_PARTS; j++)
+        for (int32_t j = 0; j < N_PARTS; j++)
         {
             t = car->carParts[j]->GetTransform();
 
@@ -630,7 +630,7 @@ void OnMyAppFrameRender()
             rp->Render(&t);
         }
 
-        for (s32 j = 0; j < 4; j++)
+        for (int32_t j = 0; j < 4; j++)
         {
             // GETDISPLAY->DrawLine(2, colour, &displayLines[i][0]);
 
@@ -728,7 +728,7 @@ void CCar::CarController(neRigidBodyController* controller)
 
     torque.SetZero();
 
-    s32 i = 0;
+    int32_t i = 0;
 
     while ((sn = carRigidBody->GetNextSensor()))
     {

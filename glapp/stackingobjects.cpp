@@ -9,8 +9,8 @@ const char* tokamakSampleTitle = TOKAMAK_SAMPLE_TITLE_COMMON TOKAMAK_SAMPLE_NAME
 neV4 vLightWorld[NUM_LIGHT] = { { 1.f, 2.f, 1.f, 0.f }, { -1.f, 1.f, 1.f, 0.f } };
 neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0.f } };
 
-// const s32 MAX_OVERLAPPED_PAIR = 300;
-const s32 WALL_NUMBER = 1;
+// const int32_t MAX_OVERLAPPED_PAIR = 300;
+const int32_t WALL_NUMBER = 1;
 // const f32 EPSILON  = 0.1f;
 
 struct DemoData
@@ -38,7 +38,7 @@ public:
 
     void InititialisePhysics();
 
-    void MakeStack(neV3 position, s32& index);
+    void MakeStack(neV3 position, int32_t& index);
 
     void MakeBullet(int);
 
@@ -93,7 +93,7 @@ void CSampleStackingObjects::Process()
         return;
     }
 
-    static s32 nextBullet = 0;
+    static int32_t nextBullet = 0;
     if (sdlGetAsyncKeyStateOnce(SDLK_t))
     {
         neV3 pos;
@@ -130,17 +130,17 @@ void CSampleStackingObjects::Reset()
     InititialisePhysics();
 }
 
-void CSampleStackingObjects::MakeStack(neV3 position, s32& index)
+void CSampleStackingObjects::MakeStack(neV3 position, int32_t& index)
 {
     (void)position;
     const f32 groundLevel = -10.0f;
 
-    s32 cur = 0;
+    int32_t cur = 0;
     ;
 
 #ifndef PYRAMID
 
-    for (s32 i = 0; i < STACK_HEIGHT; i++)
+    for (int32_t i = 0; i < STACK_HEIGHT; i++)
     {
         cur = index + i;
 
@@ -198,7 +198,7 @@ void CSampleStackingObjects::MakeStack(neV3 position, s32& index)
     neV3 boxSize;
     boxSize = boxRadii * 2.f;
     f32 stepX = boxSize[0] + 0.05f;
-    s32 baseSize = 10;
+    int32_t baseSize = 10;
 
     neV3 startPos;
     startPos.Set(0.0f, groundLevel + boxSize[1] * 0.5f, 0.0f);
@@ -269,13 +269,13 @@ void CSampleStackingObjects::MakeStack(neV3 position, s32& index)
 #endif
 }
 
-void CSampleStackingObjects::MakeBullet(s32 index)
+void CSampleStackingObjects::MakeBullet(int32_t index)
 {
 
     neV3 boxSize;
     boxSize.Set(1.0f, 1.0f, 1.0f);
 
-    s32 cur = N_BODY - 1 - index;
+    int32_t cur = N_BODY - 1 - index;
 
     box[cur] = sim->CreateRigidBody();
 
@@ -346,7 +346,7 @@ void CSampleStackingObjects::InititialisePhysics()
     sizeInfo.rigidBodiesCount = N_BODY;
     sizeInfo.animatedBodiesCount = WALL_NUMBER;
     sizeInfo.geometriesCount = N_BODY + WALL_NUMBER;
-    s32 totalBody = N_BODY + WALL_NUMBER;
+    int32_t totalBody = N_BODY + WALL_NUMBER;
     sizeInfo.overlappedPairsCount = totalBody * (totalBody - 1) / 2;
     {
         // dont need any of these
@@ -369,7 +369,7 @@ void CSampleStackingObjects::InititialisePhysics()
 
     position.SetZero();
 
-    s32 i = 0;
+    int32_t i = 0;
 
 #ifdef PYRAMID
 
@@ -378,11 +378,11 @@ void CSampleStackingObjects::InititialisePhysics()
 #else
     f32 gap = 2.f;
 
-    for (s32 j = 0; j < N_STACKS; j++)
+    for (int32_t j = 0; j < N_STACKS; j++)
     {
         // position.Set(3.05f * j, 0.0f, 0.0f);
 
-        for (s32 k = 0; k < N_DEPTH; k++)
+        for (int32_t k = 0; k < N_DEPTH; k++)
         {
             position.Set(gap * j, 0.0f, gap * k);
 
@@ -391,7 +391,7 @@ void CSampleStackingObjects::InititialisePhysics()
     }
 #endif
 
-    for (s32 jj = 0; jj < N_BULLET; jj++)
+    for (int32_t jj = 0; jj < N_BULLET; jj++)
     {
         MakeBullet(jj);
     }
@@ -419,7 +419,7 @@ void MyAppInit()
     vecAt.Set(0.0f, 0.0f, 1.0f);
     g_Camera.SetViewParams(vecEye, vecAt);
 
-    for (s32 i = 0; i < NUM_LIGHT; i++)
+    for (int32_t i = 0; i < NUM_LIGHT; i++)
     {
         vLightWorld[i].Normalize();
     }
@@ -449,7 +449,7 @@ void OnMyAppFrameRender()
 
     // Display the boxes
 
-    for (s32 i = 0; i < sample.N_BODY; i++)
+    for (int32_t i = 0; i < sample.N_BODY; i++)
     {
         t = sample.box[i]->GetTransform();
         t.MakeD3DCompatibleMatrix();

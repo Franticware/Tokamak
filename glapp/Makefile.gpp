@@ -3,7 +3,7 @@ LIBTOKAMAK_CXXFLAGS = $(CXXFLAGS) -Wno-unknown-pragmas -Wno-unused-variable  -Wn
 LFLAGS              = -Wl,-O1 -pipe -O2 -flto=6 -fno-fat-lto-objects -fuse-linker-plugin -fPIC
 CXX                 = g++
 LINK                = g++
-LIBTOKAMAK_OBJS     = boxcylinder.o collisionbody.o collision.o constraint.o cylinder.o dcd.o lines.o ne_interface.o perflinux.o region.o restcontact.o rigidbodybase.o rigidbody.o scenery.o simulator.o solver.o sphere.o stack.o tricollision.o
+LIBTOKAMAK_OBJS     = boxcylinder.o collisionbody.o collision.o constraint.o cylinder.o dcd.o lines.o ne_interface.o region.o restcontact.o rigidbodybase.o rigidbody.o scenery.o simulator.o solver.o sphere.o stack.o tricollision.o
 LIBTOKAMAK_TARGET   = libtokamak.a
 GLAPP_OBJ           = tok_sample_glapp.o
 GLAPP_TARGETS       = balljoints breakageobjects car hingejointmotoron hingejoints raddude rigidparticlesandterrain sccollision stackingobjects tank
