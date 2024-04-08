@@ -73,7 +73,7 @@ neFixedTimeStepSimulator::neFixedTimeStepSimulator(const neSimulatorSizeInfo & _
 		materials[i].friction = .5f;
 		materials[i].resititution = 0.4f;
 	}
-	perfReport = NULL;
+	perfReport = nullptr;
 
 	treeNodes.Reserve(100, allocator, 100);
 
@@ -105,17 +105,17 @@ neFixedTimeStepSimulator::neFixedTimeStepSimulator(const neSimulatorSizeInfo & _
 
 	//fastImpulseHeap.Reserve(500, allocator);
 
-	logCallback = NULL;
+	logCallback = nullptr;
 
-	collisionCallback = NULL;
+	collisionCallback = nullptr;
 
-	breakageCallback = NULL;
+	breakageCallback = nullptr;
 
-	terrainQueryCallback = NULL;
+	terrainQueryCallback = nullptr;
 
-	customCDRB2RBCallback = NULL;
+	customCDRB2RBCallback = nullptr;
 
-	customCDRB2ABCallback = NULL;
+	customCDRB2ABCallback = nullptr;
 
 	logLevel = neSimulator::LOG_OUTPUT_LEVEL_NONE;
 
@@ -139,7 +139,7 @@ neFixedTimeStepSimulator::neFixedTimeStepSimulator(const neSimulatorSizeInfo & _
 
 	perf->Init();
 #else
-	perf = NULL;
+	perf = nullptr;
 #endif
 
 	timeFromLastFrame = 0.0f;
@@ -344,7 +344,7 @@ neRigidBody_* neFixedTimeStepSimulator::CreateRigidBody(neBool isParticle)
 
 			LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
-			return NULL;
+			return nullptr;
 		}
 
 		//ASSERT(ret);
@@ -367,7 +367,7 @@ neRigidBody_* neFixedTimeStepSimulator::CreateRigidBody(neBool isParticle)
 
 			LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
-			return NULL;
+			return nullptr;
 		}
 		//ASSERT(ret);
 
@@ -413,7 +413,7 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 
 	if (ccount == 1 || !found)
 	{
-		return NULL;
+		return nullptr;
 	}
 	neBool isParticle = false;
 
@@ -428,7 +428,7 @@ neRigidBody_ * neFixedTimeStepSimulator::CreateRigidBodyFromConvex(TConvex * con
 
 	if (!newBody)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	newBody->mass = convex->breakInfo.mass;
@@ -1464,7 +1464,7 @@ if (perfReport)
 										bodyA->State().b2w,
 										triCol,
 										identity,
-										NULL);
+										nullptr);
 				}
 
 			}
@@ -1504,7 +1504,7 @@ if (perfReport)
 										bodyA->State().b2w,
 										triCol,
 										identity,
-										NULL);
+										nullptr);
 				}
 			}
 			if (result.penetrate)
@@ -1532,7 +1532,7 @@ if (perfReport)
 					cinfo.materialIdA = result.materialIdA;
 					cinfo.materialIdB = result.materialIdB;
 					cinfo.geometryA = (neGeometry*)result.convexA;
-					cinfo.geometryB = NULL;
+					cinfo.geometryB = nullptr;
 					cinfo.bodyContactPointA = result.contactABody;
 					cinfo.bodyContactPointB = result.contactBBody;
 					cinfo.worldContactPointA = result.contactAWorld;
@@ -1918,7 +1918,7 @@ neBool neFixedTimeStepSimulator::CheckBreakage(neRigidBodyBase * originalBody, T
 
 	breakImpulse *= convex->breakInfo.breakMagnitude / impulseMag;
 
-	neRigidBody_* newBody = NULL;
+	neRigidBody_* newBody = nullptr;
 
 	neV3 newImpulse, newContactPoint;
 

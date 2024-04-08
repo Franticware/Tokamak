@@ -276,7 +276,7 @@ public:
 		normal.SetZero();
 		depth = 0;
 		materialID = 0;
-		body = NULL;
+		body = nullptr;
 	}
 };
 /****************************************************************************
@@ -296,7 +296,7 @@ class neCollision
 public:
 	neCollision()
 	{
-		convex = NULL;
+		convex = nullptr;
 		convexCount = 0;
 		boundingRadius = 0.0f;
 		obb.SetBoxSize(1.0f, 1.0f, 1.0f);

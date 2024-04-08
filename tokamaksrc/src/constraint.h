@@ -282,9 +282,9 @@ public:
 
 	void Reset() 
 	{
-		head = NULL; 
+        head = nullptr;
 		
-		tail = NULL;
+		tail = nullptr;
 
 		flag = FLAG_NEED_SETUP;
 

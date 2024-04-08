@@ -1262,7 +1262,7 @@ bool TestDCDTri(ConvexTestResult & res, TConvex & convexA, neT3 & transA, const 
 
 	BigCLength = BigC.Length();
 
-	neV3 * aVertArray = NULL, * bVertArray = NULL;
+	neV3 * aVertArray = nullptr, * bVertArray = nullptr;
 
 	TConvex dummyB; dummyB.type = TConvex::TRIANGLE;
 

@@ -70,7 +70,7 @@ neBool neCollisionResult::CheckIdle()
 
 	neRigidBody_* ba = bodyA->AsRigidBody();
 
-	neRigidBody_* bb = NULL;
+    neRigidBody_* bb = nullptr;
 	
 	if (bodyB)
 	{
@@ -87,7 +87,7 @@ neBool neCollisionResult::CheckIdle()
 			}
 			else
 			{
-				bodyA = NULL;
+                bodyA = nullptr;
 
 				return false;
 			}
@@ -101,7 +101,7 @@ neBool neCollisionResult::CheckIdle()
 	{
 		if (ba)
 		{
-			bodyB = NULL;
+            bodyB = nullptr;
 
 			return false;
 		}
@@ -304,9 +304,9 @@ void neCollisionResult::CalcCollisionMatrix3(neRigidBody_* ba, neRigidBody_ * bb
 
 void neCollisionResult::PrepareForSolver(neBool aIdle, neBool bIdle)
 {
-	neRigidBody_ * ba = NULL;
+    neRigidBody_ * ba = nullptr;
 
-	neRigidBody_ * bb = NULL;
+    neRigidBody_ * bb = nullptr;
 
 	if (bodyA && bodyA->AsRigidBody() && !aIdle)
 	{

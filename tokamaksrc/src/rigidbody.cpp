@@ -110,7 +110,7 @@ neRigidBody_::neRigidBody_()
 
 	status = NE_RBSTATUS_NORMAL;
 	
-	SetConstraintHeader(NULL);
+	SetConstraintHeader(nullptr);
 
 	s32 i;
 
@@ -126,7 +126,7 @@ neRigidBody_::neRigidBody_()
 		davRecord[i].SetZero();
 	}
 
-	stackInfo = NULL;
+	stackInfo = nullptr;
 
 	lowEnergyCounter = 0;
 
@@ -134,9 +134,9 @@ neRigidBody_::neRigidBody_()
 
 	isShifted = isShifted2 = false;
 
-	controllers = NULL;
+	controllers = nullptr;
 
-	controllerCursor = NULL;
+	controllerCursor = nullptr;
 
 	gforce.SetZero();
 
@@ -181,7 +181,7 @@ void neRigidBody_::Free()
 
 		ci = next;
 	}
-	controllers = NULL;
+	controllers = nullptr;
 
 	//free constraint header
 
@@ -287,7 +287,7 @@ neController * neRigidBody_::AddController(neRigidBodyControllerCallback * rbc, 
 		
 		sim->LogOutput(neSimulator::LOG_OUTPUT_LEVEL_ONE);
 
-		return NULL;
+		return nullptr;
 	}
 	if (!controllers)
 	{
@@ -307,11 +307,11 @@ neController * neRigidBody_::AddController(neRigidBodyControllerCallback * rbc, 
 	}
 	c->rb = this;
 
-	c->constraint = NULL;
+	c->constraint = nullptr;
 
 	c->rbc = rbc;
 
-	c->jc = NULL;
+	c->jc = nullptr;
 
 	c->period = period;
 
@@ -348,7 +348,7 @@ void neRigidBody_::BeginIterateController()
 neController * neRigidBody_::GetNextController()
 {
 	if (!controllerCursor)
-		return NULL;
+		return nullptr;
 
 	neController * ret = (neController *)controllerCursor;
 
@@ -1096,11 +1096,11 @@ neBool neRestRecord::CanConsiderOtherBodyIdle()
 	if (rtype == REST_ON_WORLD)
 		return true;
 
-	ASSERT(otherBody != NULL);
+	ASSERT(otherBody != nullptr);
 
 	neRigidBody_ * rb = otherBody->AsRigidBody();
 
-	if (rb != NULL)
+	if (rb != nullptr)
 	{
 		return (rb->status == neRigidBody_::NE_RBSTATUS_IDLE);
 	}
@@ -1184,11 +1184,11 @@ void neRestRecord::SetInvalid()
 
 	counter = 0;
 
-//	body = NULL;
+//	body = nullptr;
 
 	if (otherBody)
 	{
 		otherBody->rbRestingOnMe.Remove(&restOnHandle);
 	}
-	otherBody = NULL;
+	otherBody = nullptr;
 }

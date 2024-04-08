@@ -136,7 +136,7 @@ void neStackInfo::Break()
 	}
 	stackHeader->CheckHeader();
 
-	neStackHeader * newHeader = body->sim->NewStackHeader(NULL);
+	neStackHeader * newHeader = body->sim->NewStackHeader(nullptr);
 
 	for (s32 i = 0; i < NE_RB_MAX_RESTON_RECORDS; i++)
 	{
@@ -208,7 +208,7 @@ void neStackHeader::Resolve()
 
 //	ASSERT(head);
 
-//	if (head == NULL)
+//	if (head == nullptr)
 //		return;
 
 	s32 c = 0;
@@ -370,7 +370,7 @@ neBool neStackHeader::CheckStackDisconnected()
 						}
 						else
 						{
-							neStackHeader * newStackHeader = sim->NewStackHeader(NULL);
+							neStackHeader * newStackHeader = sim->NewStackHeader(nullptr);
 
 							newStackHeader->dynamicSolved = dynamicSolved;
 
@@ -398,7 +398,7 @@ neBool neStackHeader::CheckStackDisconnected()
 				rb->GetRestRecord(i).SetInvalid();
 			}
 
-			rb->stackInfo = NULL;
+			rb->stackInfo = nullptr;
 		}
 	}
 
@@ -416,7 +416,7 @@ neBool neStackHeader::CheckStackDisconnected()
 //		sprintf(ss, "starting at %d\n", sinfo->body->id);
 //		OutputDebugString(ss);
 
-		neStackHeader * newStackHeader = sim->NewStackHeader(NULL);
+		neStackHeader * newStackHeader = sim->NewStackHeader(nullptr);
 
 //		hell[pop] = newStackHeader;
 //		pop++;
@@ -620,7 +620,7 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 
 	if (startTime > 0) // already visited
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	startTime = ++neStackHeader::golbalTime;
@@ -633,14 +633,14 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 		}
 		else
 		{
-			return NULL;
+			return nullptr;
 		}
 	}
 	if (isTerminator)
 	{
 		newHeader->Add(this);
 
-		return NULL;
+		return nullptr;
 	}
 	if (isBroken)
 	{
@@ -648,11 +648,11 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 
 		isTerminator = true;
 
-		return NULL;
+		return nullptr;
 	}
 	neBool anotherHeaderFound = false;
 
-	neStackHeader * anotherHeader = NULL;
+	neStackHeader * anotherHeader = nullptr;
 
 	neRigidBody_ * foundBody;
 
@@ -675,7 +675,7 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 
 		ASSERT(anotherHeader != newHeader);
 
-		if (anotherHeader != NULL)
+		if (anotherHeader != nullptr)
 		{
 			anotherHeaderFound = true;
 			foundBody = otherBody;
@@ -708,7 +708,7 @@ neStackHeader * neStackInfo::CheckAcceptNewHeader(neStackHeader * newHeader)
 	{
 		newHeader->Add(this);
 
-		return NULL;
+		return nullptr;
 	}
 }
 

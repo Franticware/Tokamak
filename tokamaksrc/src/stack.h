@@ -23,8 +23,8 @@ class neStackInfo
 public:
 	void Init()
 	{
-		stackHeader = NULL;
-		body = NULL;
+		stackHeader = nullptr;
+		body = nullptr;
 		isTerminator = true;
 		isBroken = false;
 	}
@@ -70,9 +70,9 @@ public:
 	
 	void Null()
 	{
-		head = NULL;
+		head = nullptr;
 
-		tail = NULL;
+		tail = nullptr;
 
 		infoCount = 0;
 
@@ -133,7 +133,7 @@ public:
 		{
 			head = tail = add;
 
-			ASSERT(((neStackInfoItem*)add)->next == NULL);
+			ASSERT(((neStackInfoItem*)add)->next == nullptr);
 		}
 		else
 		{
@@ -165,7 +165,7 @@ public:
 
 		infoCount--;
 
-		add->stackHeader = NULL;
+		add->stackHeader = nullptr;
 	}
 	neBool Check(neStackInfo * st)
 	{
@@ -195,9 +195,9 @@ public:
 
 	neRigidBody_ * GetBottomStackBody()
 	{
-		return NULL;
+		return nullptr;
 /*		if (!head)
-			return NULL;
+			return nullptr;
 
 		neStackInfoItem * item = (neStackInfoItem *) head;
 
@@ -207,7 +207,7 @@ public:
 
 			neRigidBody_ * body = sinfo->body;
 
-			neStackInfo * nextSinfo = NULL;
+			neStackInfo * nextSinfo = nullptr;
 
 			for (s32 i = 0; i < sinfo->restOnCount; i++)
 			{
@@ -215,7 +215,7 @@ public:
 
 				if (sinfo->restOn[i].body->stackInfo)
 				{
-					if (sinfo->restOn[i].body->stackHeader == NULL)
+					if (sinfo->restOn[i].body->stackHeader == nullptr)
 					{
 
 					}
@@ -230,7 +230,7 @@ public:
 					//return sinfo->restOn[i].body;
 				}
 			}
-			if (nextSinfo != NULL)
+			if (nextSinfo != nullptr)
 			{
 				item = (neStackInfoItem *)nextSinfo;
 			}
@@ -240,7 +240,7 @@ public:
 			}
 		}
 		ASSERT(0);
-		return NULL;
+		return nullptr;
 */	}
 	void ChangeHeader(neStackHeader * newHeader);
 

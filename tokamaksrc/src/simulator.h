@@ -91,7 +91,7 @@ public:
 
 	void Add(neRigidBodyBase * bb, neRigidBodyBase * hint, s32 hintCoord);
 
-	bool Reserve(s32 size, neAllocatorAbstract * all = NULL)
+	bool Reserve(s32 size, neAllocatorAbstract * all = nullptr)
 	{
 		return coordList.Reserve(size, all);
 	}
@@ -324,7 +324,7 @@ public:
 
 	enum {MAX_MATERIAL = 256,};
 
-	neFixedTimeStepSimulator(const neSimulatorSizeInfo & _sizeInfo, neAllocatorAbstract * alloc = NULL, const neV3 * grav = NULL);
+	neFixedTimeStepSimulator(const neSimulatorSizeInfo & _sizeInfo, neAllocatorAbstract * alloc = nullptr, const neV3 * grav = nullptr);
 	
 	~neFixedTimeStepSimulator();
 
@@ -338,11 +338,11 @@ public:
 
 	void Free(neRigidBodyBase * bb);
 	
-	void Advance(f32 time, u32 nStep, nePerformanceReport * _perfReport = NULL);
+	void Advance(f32 time, u32 nStep, nePerformanceReport * _perfReport = nullptr);
 
-	void Advance(f32 time, f32 minTimeStep, f32 maxTimeStep, nePerformanceReport * _perfReport = NULL);
+	void Advance(f32 time, f32 minTimeStep, f32 maxTimeStep, nePerformanceReport * _perfReport = nullptr);
 
-	void Advance(nePerformanceReport * _perfReport = NULL);
+	void Advance(nePerformanceReport * _perfReport = nullptr);
 
 	bool SetMaterial(s32 index, f32 friction, f32 restitution, f32 density);
 

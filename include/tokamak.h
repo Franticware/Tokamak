@@ -434,9 +434,9 @@ public:
 
 	neBool	CollideDirectlyConnected();
 
-	void	Active(neBool yes, neRigidBody * hint = NULL);
+    void	Active(neBool yes, neRigidBody * hint = nullptr);
 
-	void	Active(neBool yes, neAnimatedBody * hint = NULL);
+    void	Active(neBool yes, neAnimatedBody * hint = nullptr);
 
 	neBool	Active();
 };
@@ -604,9 +604,9 @@ public:
 
 	neBool	CollideDirectlyConnected();
 
-	void	Active(neBool yes, neRigidBody * hint = NULL);
+    void	Active(neBool yes, neRigidBody * hint = nullptr);
 
-	void	Active(neBool yes, neAnimatedBody * hint = NULL);
+    void	Active(neBool yes, neAnimatedBody * hint = nullptr);
 
 	neBool	Active();
 
@@ -1006,8 +1006,8 @@ public:
 	*/
 
 	static neSimulator * CreateSimulator(const neSimulatorSizeInfo & sizeInfo, 
-										neAllocatorAbstract * alloc = NULL, 
-										const neV3 * gravity = NULL);
+                                        neAllocatorAbstract * alloc = nullptr,
+                                        const neV3 * gravity = nullptr);
 	
 	static void DestroySimulator(neSimulator * sim);
 	
@@ -1039,9 +1039,9 @@ public:
 		Advancing the simulation
 	*/
 
-	void Advance(f32 sec, s32 nSteps = 1, nePerformanceReport * perfReport = NULL);
+    void Advance(f32 sec, s32 nSteps = 1, nePerformanceReport * perfReport = nullptr);
 
-	void Advance(f32 sec, f32 minTimeStep, f32 maxTimeStep, nePerformanceReport * perfReport = NULL);
+    void Advance(f32 sec, f32 minTimeStep, f32 maxTimeStep, nePerformanceReport * perfReport = nullptr);
 
 	/*
 		Terrain setup function

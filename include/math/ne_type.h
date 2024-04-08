@@ -14,15 +14,16 @@
 #ifndef NE_TYPE_H
 #define NE_TYPE_H
 
-#include <stdarg.h>
+#include <cstdint>
+//#include <stdarg.h>
 //#include <tchar.h>
 //#include <strsafe.h>
 ///////////////////////////////////////////////////////////////////////////
 // DEFINES
 ///////////////////////////////////////////////////////////////////////////
 
-#ifdef NULL
-#undef NULL
+#ifdef nullptr
+#undef nullptr
 #endif
 
 #ifdef TRUE
@@ -35,9 +36,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define FALSE       0                   // make sure that we know what false is
-#define TRUE        1                   // Make sure that we know what true is
-#define NULL        0                   // Make sure that null does have a type
+//#define FALSE       0                   // make sure that we know what false is
+//#define TRUE        1                   // Make sure that we know what true is
+//#define nullptr        0                   // Make sure that null does have a type
 
 ///////////////////////////////////////////////////////////////////////////
 // BASIC TYPES

@@ -844,7 +844,7 @@ neBool neRigidBody_::CheckStationary()
 	const f32 StationaryAngAcc = 10.5f;
 
 	if (oldCounter < oldCounterMax)
-		return FALSE;
+        return false;
 
 	neV3 deltaPos = State().b2w.pos - oldPosition;
 
@@ -856,7 +856,7 @@ neBool neRigidBody_::CheckStationary()
 	{
 		SyncOldState();
 
-		return FALSE;
+        return false;
 	}
 
 	neV3 deltaVel = Derive().linearVel - oldVelocity;
@@ -869,7 +869,7 @@ neBool neRigidBody_::CheckStationary()
 	{
 		SyncOldState();
 
-		return FALSE;
+        return false;
 	}
 
 	neQ oldQInvert = oldRotation;
@@ -888,7 +888,7 @@ neBool neRigidBody_::CheckStationary()
 	{
 		SyncOldState();
 
-		return FALSE;
+        return false;
 	}
 
 	neV3 deltaW = Derive().angularVel - oldAngularVelocity;
@@ -901,7 +901,7 @@ neBool neRigidBody_::CheckStationary()
 	{
 		SyncOldState();
 
-		return FALSE;
+        return false;
 	}
 /*	Derive().linearVel *= 0.9f;
 
@@ -1025,12 +1025,12 @@ void  neRigidBody_::FreeStackInfo()
 
 	sim->stackInfoHeap.Dealloc(stackInfo, 1);
 
-	stackInfo = NULL;
+    stackInfo = nullptr;
 }
 
 neBool neRigidBody_::NewStackInfo(neRestRecord & rc)
 {
-	ASSERT(stackInfo == NULL);
+    ASSERT(stackInfo == nullptr);
 
 	stackInfo = sim->stackInfoHeap.Alloc(1);
 
@@ -1109,7 +1109,7 @@ neBool neRigidBody_::NewStackInfo(neRestRecord & rc)
 
 neBool neRigidBody_::NewStackInfoTerminator(neStackHeader * header)
 {
-	ASSERT(stackInfo == NULL);
+    ASSERT(stackInfo == nullptr);
 
 	stackInfo = sim->stackInfoHeap.Alloc(1);
 
@@ -1254,7 +1254,7 @@ void neRigidBody_::ResolveRestingPenetration()
 		{
 			GetRestRecord(i).rtype = neRestRecord::REST_ON_NOT_VALID;
 
-			GetRestRecord(i).otherBody = NULL;
+            GetRestRecord(i).otherBody = nullptr;
 
 			continue;
 		}
@@ -1438,7 +1438,7 @@ void neRigidBody_::CorrectPenetrationRotation()
 		{
 			GetRestRecord(i).rtype = neRestRecord::REST_ON_NOT_VALID;
 
-			GetRestRecord(i).otherBody = NULL;
+            GetRestRecord(i).otherBody = nullptr;
 
 			continue;
 		}
@@ -1478,7 +1478,7 @@ void neRigidBody_::CorrectPenetrationTranslation()
 		{
 			GetRestRecord(i).rtype = neRestRecord::REST_ON_NOT_VALID;
 
-			GetRestRecord(i).otherBody = NULL;
+            GetRestRecord(i).otherBody = nullptr;
 
 			continue;
 		}
@@ -1642,7 +1642,7 @@ void neRigidBody_::CorrectPenetrationDrift()
 		{
 			GetRestRecord(i).rtype = neRestRecord::REST_ON_NOT_VALID;
 
-			GetRestRecord(i).otherBody = NULL;
+            GetRestRecord(i).otherBody = nullptr;
 
 			continue;
 		}

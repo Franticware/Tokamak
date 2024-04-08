@@ -124,7 +124,7 @@ public:
     CRenderPrimitive stepsRender[N_STEP];
 
     CSampleRadDude()
-        : sim(NULL) {};
+        : sim(nullptr) {};
 
     void CreateSimulator();
 
@@ -147,7 +147,7 @@ void CSampleRadDude::CreateSimulator()
     {
         neSimulator::DestroySimulator(sim);
 
-        sim = NULL;
+        sim = nullptr;
     }
     // creat the physics simulation
 
@@ -453,7 +453,7 @@ void CSampleRadDude::Cleanup()
 {
     neSimulator::DestroySimulator(sample.sim);
 
-    sim = NULL;
+    sim = nullptr;
 }
 
 void MyAppInit()
@@ -478,7 +478,7 @@ void OnMyAppFrameMove(double fTime, float fElapsedTime)
     f32 t = 1.0f / 30.0f; //(f32)delta / 1000.0f;
 
     // sim->Advance(TIME_STEP, 1, &g_PerfReport);
-    sample.sim->Advance(t, 1.0f / 60.0f, 1.0f / 30.0f, NULL);
+    sample.sim->Advance(t, 1.0f / 60.0f, 1.0f / 30.0f, nullptr);
 }
 
 void OnMyAppFrameRender()

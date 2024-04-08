@@ -60,14 +60,14 @@ public:
 			data = initArray;
 			nextFree = data;
 			size = initFixedSize;
-			alloc = NULL;
+			alloc = nullptr;
 			growBy = 0;
 			usedSize = 0;
 		}
 		else
 		{
-			data = NULL;
-			nextFree = NULL;
+			data = nullptr;
+			nextFree = nullptr;
 			size = 0;
 			alloc = &allocDef;
 			growBy = 0;
@@ -78,7 +78,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = NULL, s32 _growBy = 0) 
+	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr, s32 _growBy = 0) 
 	{
 		if (IsFixedSize())
 		{
@@ -113,7 +113,7 @@ public:
 		if (nextFree >= (data + size))
 		{
 			if (growBy == 0)
-				return NULL;
+				return nullptr;
 			
 			T * oldData = data;
 
@@ -126,7 +126,7 @@ public:
 			{
 				data = oldData;
 
-				return NULL;
+				return nullptr;
 			}
 
 			memcpy(data, oldData, size * sizeof(T));
@@ -173,8 +173,8 @@ public:
 		{
 			alloc->Free((neByte*)data);
 		}
-		data = NULL;
-		nextFree = NULL;
+		data = nullptr;
+		nextFree = nullptr;
 		size = 0;
 		usedSize = 0;
 	}
@@ -194,7 +194,7 @@ public:
 		size = makeSize;
 		usedSize = size;
 		nextFree = pdata + makeSize;
-		alloc = NULL;
+		alloc = nullptr;
 		growBy = 0;
 	}
 protected:
@@ -222,13 +222,13 @@ public:
 			data = initArray;
 			nextFree = data;
 			size = initFixedSize;
-			alloc = NULL;
+			alloc = nullptr;
 			growBy = 0;
 		}
 		else
 		{
-			data = NULL;
-			nextFree = NULL;
+			data = nullptr;
+			nextFree = nullptr;
 			size = 0;
 			alloc = &allocDef;
 			growBy = 0;
@@ -238,7 +238,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = NULL, s32 _growBy = 0) 
+	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr, s32 _growBy = 0) 
 	{
 		if (IsFixedSize())
 		{
@@ -272,7 +272,7 @@ public:
 		if (nextFree >= (data + size))
 		{
 			if (growBy == 0)
-				return NULL;
+				return nullptr;
 			
 			T * oldData = data;
 
@@ -285,7 +285,7 @@ public:
 			{
 				data = oldData;
 
-				return NULL;
+				return nullptr;
 			}
 
 			memcpy(data, oldData, size * sizeof(T));
@@ -330,8 +330,8 @@ public:
 
 			alloc->Free((neByte*)data);
 		}
-		data = NULL;
-		nextFree = NULL;
+		data = nullptr;
+		nextFree = nullptr;
 		size = 0;
 	}
 	NEINLINE void Clear()
@@ -348,7 +348,7 @@ public:
 		data = pdata;
 		size = makeSize;
 		nextFree = pdata + makeSize;
-		alloc = NULL;
+		alloc = nullptr;
 		growBy = 0;
 	}
 protected:
@@ -390,18 +390,18 @@ public:
 
 	NEINLINE neFreeListItem()
 	{
-		prev = NULL;
-		next = NULL;
+		prev = nullptr;
+		next = nullptr;
 		state = false;
 	}
 
 	NEINLINE void Remove()
 	{
-		if (next != NULL)
+		if (next != nullptr)
 		{
 			next->prev = prev;
 		}
-		if (prev != NULL)
+		if (prev != nullptr)
 		{
 			prev->next = next;
 		}
@@ -429,7 +429,7 @@ public:
 	}
 	NEINLINE void Concat(neFreeListItem * newItem)
 	{
-		ASSERT(next == NULL);
+		ASSERT(next == nullptr);
 
 		next = newItem;
 
@@ -437,8 +437,8 @@ public:
 	}
 	NEINLINE void Solo()
 	{
-		prev = NULL;
-		next = NULL;
+		prev = nullptr;
+		next = nullptr;
 	}
 };
 
@@ -469,11 +469,11 @@ public:
 	{
 		if (!IsFixedSize())
 		{
-			data = NULL;
-			unused = NULL;
-			used = NULL;
-			unusedTail = NULL;
-			usedTail = NULL;
+			data = nullptr;
+			unused = nullptr;
+			used = nullptr;
+			unusedTail = nullptr;
+			usedTail = nullptr;
 			size = 0;
 			usedCount = 0;
 			unusedCount = 0;
@@ -488,15 +488,15 @@ public:
 				data[i].prev = &(data[i-1]);
 				data[i].state = false;
 			}
-			data[0].prev = NULL;
-			data[size-1].next = NULL;
+			data[0].prev = nullptr;
+			data[size-1].next = nullptr;
 
 			unused = data;
 			unusedTail = data + size;
 			unusedCount = size;
 
-			used = NULL;
-			usedTail = NULL;
+			used = nullptr;
+			usedTail = nullptr;
 			usedCount = 0;
 		}
 	}
@@ -529,7 +529,7 @@ public:
 	NEINLINE T * Alloc(s32 flag = 0)
 	{
 		if (!unused)
-			return NULL;
+			return nullptr;
 		
 		T * ret = &(unused->thing);
 
@@ -564,9 +564,9 @@ public:
 
 		if (unused == unusedTail)
 		{
-			unusedTail = NULL;
-			unused = NULL;;
-			ASSERT(newUnusedHead == NULL);
+			unusedTail = nullptr;
+			unused = nullptr;;
+			ASSERT(newUnusedHead == nullptr);
 		}
 		else
 			unused = newUnusedHead;
@@ -575,7 +575,7 @@ public:
 		usedCount++;
 		return ret;
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = NULL)
+	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr)
 	{
 		if (IsFixedSize())
 		{
@@ -604,15 +604,15 @@ public:
 			data[i].prev = &(data[i-1]);
 			data[i].state = false;
 		}
-		data[0].prev = NULL;
-		data[n-1].next = NULL;
+		data[0].prev = nullptr;
+		data[n-1].next = nullptr;
 
 		unused = data;
 		unusedTail = data + size;
 		unusedCount = n;
 
-		used = NULL;
-		usedTail = NULL;
+		used = nullptr;
+		usedTail = nullptr;
 		usedCount = 0;
 
 		return true;
@@ -718,7 +718,7 @@ public:
 		{
 			if (cur)
 				return &(cur->thing);
-			return NULL;
+			return nullptr;
 		}
 		NEINLINE bool operator ++ (int) 
 		{
@@ -740,7 +740,7 @@ public:
 		}
 		NEINLINE bool Valid()
 		{
-			return (cur != NULL);
+			return (cur != nullptr);
 		}
 	public:
 		listItem * cur;
@@ -781,11 +781,11 @@ public:
 		if (IsFixedSize())
 		{
 			buffer = initArray;
-			alloc = NULL;
+			alloc = nullptr;
 		}
 		else
 		{
-			buffer = NULL;
+			buffer = nullptr;
 			alloc = &allocDef;
 		}
 	}
@@ -793,7 +793,7 @@ public:
 	{
 		Free();
 	}
-	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = NULL)
+	NEINLINE bool Reserve(s32 n, neAllocatorAbstract * al = nullptr)
 	{
 		if (IsFixedSize())
 		{
@@ -836,7 +836,7 @@ public:
 		new (*pt) T;
 		
 		if (!pt)
-			return NULL;
+			return nullptr;
 		else
 			return *pt;
 	}
@@ -956,8 +956,8 @@ public:
 	}
 	void Reset()
 	{
-		headItem = NULL;
-		tailItem = NULL;
+		headItem = nullptr;
+		tailItem = nullptr;
 		count = 0;
 	}
 	void Add(itemType * add)
@@ -1025,8 +1025,8 @@ public:
 	}
 	void Reset()
 	{
-		headItem = NULL;
-		tailItem = NULL;
+		headItem = nullptr;
+		tailItem = nullptr;
 		count = 0;
 	}
 	void Add(T * add)
