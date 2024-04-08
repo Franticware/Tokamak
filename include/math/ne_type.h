@@ -38,7 +38,7 @@
 
 //#define FALSE       0                   // make sure that we know what false is
 //#define TRUE        1                   // Make sure that we know what true is
-//#define nullptr        0                   // Make sure that null does have a type
+//#define NULL        0                   // Make sure that null does have a type
 
 ///////////////////////////////////////////////////////////////////////////
 // BASIC TYPES
@@ -51,7 +51,7 @@ typedef signed   char       s8;
 typedef signed   short      s16;
 typedef signed   int        s32;
 typedef float				f32;
-typedef double              f64;
+//typedef double              f64;
 typedef u8                  neByte;
 typedef s32                 neErr;
 typedef s32                 neBool;
@@ -63,18 +63,18 @@ union neUserData
 };
 
 #if _MSC_VER
-	typedef signed   __int64    s64;
-	typedef unsigned __int64    u64;
+    //typedef signed   __int64    s64;
+    //typedef unsigned __int64    u64;
 	#define neFinite _finite
 	#define inline   __forceinline       // Make sure that the compiler inlines when we tell him
 	#define NEINLINE __forceinline
-	const char PATH_SEP = '\\';
+    //const char PATH_SEP = '\\';
 #elif defined __GNUC__
-	typedef signed long long    s64;
-	typedef unsigned long long  u64;
+    //typedef signed long long    s64;
+    //typedef unsigned long long  u64;
 	#define neFinite isfinite
 	#define NEINLINE inline
-	const char PATH_SEP = '/';
+    //const char PATH_SEP = '/';
 #endif
 
 #endif //NE_TYPE_H
