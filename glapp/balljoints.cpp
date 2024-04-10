@@ -9,7 +9,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-const f32 EPSILON = 0.1f;
+const float EPSILON = 0.1f;
 
 struct DemoData
 {
@@ -91,7 +91,7 @@ void CSampleBallJoints::InititialisePhysics()
     neV3 gravity;
     gravity.Set(0.0f, -8.0f, 0.0f);
 
-    f32 linkLength = 1.2f;
+    float linkLength = 1.2f;
 
     neSimulatorSizeInfo sizeInfo;
 
@@ -113,7 +113,7 @@ void CSampleBallJoints::InititialisePhysics()
 
     for (int32_t j = 0; j < N_BODY; j++)
     {
-        f32 mass = 0.1f;
+        float mass = 0.1f;
 
         neRigidBody* rigidBody = sim->CreateRigidBody();
 
@@ -227,7 +227,7 @@ void MyAppInit()
     sample.Initialise();
 }
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

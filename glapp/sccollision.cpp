@@ -9,7 +9,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 // const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON = 0.1f;
+// const float EPSILON = 0.1f;
 
 struct DemoData
 {
@@ -137,7 +137,7 @@ void CSampleSCCollision::Shutdown()
 
 void CSampleSCCollision::MakeParticle(neV3 position, int32_t index)
 {
-    // const f32 groundLevel = -10.0f;
+    // const float groundLevel = -10.0f;
 
     int32_t cur;
 
@@ -153,7 +153,7 @@ void CSampleSCCollision::MakeParticle(neV3 position, int32_t index)
 
     particles[cur]->UpdateBoundingInfo();
 
-    f32 mass = 1.0f;
+    float mass = 1.0f;
 
     particles[cur]->SetInertiaTensor(neSphereInertiaTensor(0.8f, mass));
 
@@ -164,15 +164,15 @@ void CSampleSCCollision::MakeParticle(neV3 position, int32_t index)
 
 struct TreeData
 {
-    f32 diameter;
-    f32 height;
+    float diameter;
+    float height;
     neV3 pos;
     neV3 rotation;
     neV3 colour;
     neGeometry::neBreakFlag breakFlag;
-    f32 breakageMass;
-    f32 breakageMagnitude;
-    f32 breakageAbsorption;
+    float breakageMass;
+    float breakageMagnitude;
+    float breakageAbsorption;
 };
 
 TreeData treeData[CSampleSCCollision::GEOMETRY_PER_TREE] =
@@ -190,7 +190,7 @@ TreeData treeData[CSampleSCCollision::GEOMETRY_PER_TREE] =
 
 void CSampleSCCollision::MakeTree(neV3 position, int32_t index)
 {
-    // const f32 groundLevel = -10.0f;
+    // const float groundLevel = -10.0f;
 
     int32_t cur;
 
@@ -267,7 +267,7 @@ void CSampleSCCollision::InititialiseRenderPrimitives()
         while (geom)
         {
 
-            f32 diameter;
+            float diameter;
             geom->GetSphereDiameter(diameter);
             renderPrimitives[curToken].SetGraphicSphere(diameter / 2.0f);
 
@@ -311,7 +311,7 @@ void CSampleSCCollision::InititialiseRenderPrimitives()
                 }
                 else
                 {
-                    f32 height, diameter;
+                    float height, diameter;
 
                     if (geom->GetCylinder(diameter, height))
                     {
@@ -459,7 +459,7 @@ void CSampleSCCollision::InititialisePhysics()
 
     // SetUpTerrain
 
-    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(f32) / 3, terNorm, sizeof(terNorm) / sizeof(f32) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
+    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(float) / 3, terNorm, sizeof(terNorm) / sizeof(float) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
     terrainRender.SetDiffuseColor(0.1f, 0.5f, 0.1f, 1.0f);
 
     neTriangleMesh triMesh;
@@ -534,7 +534,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

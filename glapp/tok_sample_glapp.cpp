@@ -94,14 +94,14 @@ void MyRenderText(const char** str, int count)
             c -= 32;
             int fx = c % 16;
             int fy = c / 16;
-            f32 textScale = 1;
-            const f32 texCoords[] = {
+            float textScale = 1;
+            const float texCoords[] = {
                 (fx+0)*fontCharWidth*1.f/fontWidth,(fy+0)*fontCharHeight*1.f/fontHeight,
                 (fx+0)*fontCharWidth*1.f/fontWidth,(fy+1)*fontCharHeight*1.f/fontHeight,
                 (fx+1)*fontCharWidth*1.f/fontWidth,(fy+1)*fontCharHeight*1.f/fontHeight,
                 (fx+1)*fontCharWidth*1.f/fontWidth,(fy+0)*fontCharHeight*1.f/fontHeight
                 };
-            const f32 verts[] = {
+            const float verts[] = {
                 (x+0.51f)*fontCharWidth*textScale,(y+0.51f)*fontCharHeight*textScale,0,
                 (x+0.51f)*fontCharWidth*textScale,(y+1.51f)*fontCharHeight*textScale,0,
                 (x+1.51f)*fontCharWidth*textScale,(y+1.51f)*fontCharHeight*textScale,0,
@@ -130,7 +130,7 @@ CRenderPrimitive::CRenderPrimitive()
     mColor[3] = 1.f;
 }
 
-void CRenderPrimitive::SetDiffuseColor(f32 r, f32 g, f32 b, f32 a)
+void CRenderPrimitive::SetDiffuseColor(float r, float g, float b, float a)
 {
     mColor[0] = r;
     mColor[1] = g;
@@ -138,17 +138,17 @@ void CRenderPrimitive::SetDiffuseColor(f32 r, f32 g, f32 b, f32 a)
     mColor[3] = a;
 }
 
-void CRenderPrimitive::SetGraphicBox(f32 Width, f32 Height, f32 Depth)
+void CRenderPrimitive::SetGraphicBox(float Width, float Height, float Depth)
 {
     //create the render mesh
-    static const f32 boxVerts[] =
+    static const float boxVerts[] =
     {
         -0.500000,0.500000,0.500000,0.500000,-0.500000,0.500000,0.500000,0.500000,0.500000,0.500000,-0.500000,0.500000,-0.500000,-0.500000,-0.500000,0.500000,-0.500000,-0.500000,-0.500000,-0.500000,0.500000,
             -0.500000,0.500000,-0.500000,-0.500000,-0.500000,-0.500000,0.500000,0.500000,-0.500000,-0.500000,-0.500000,-0.500000,-0.500000,0.500000,-0.500000,0.500000,0.500000,0.500000,0.500000,-0.500000,
             -0.500000,0.500000,0.500000,-0.500000,-0.500000,0.500000,0.500000,0.500000,0.500000,-0.500000,-0.500000,0.500000,-0.500000,-0.500000,-0.500000,0.500000,-0.500000,-0.500000,0.500000,-0.500000,
             0.500000,0.500000,0.500000,-0.500000,-0.500000,0.500000,-0.500000,0.500000,0.500000,0.500000,0.500000,
         };
-    static const f32 boxNormals[] =
+    static const float boxNormals[] =
     {
         0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,
         0.000000,0.000000,-1.000000,0.000000,0.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,1.000000,0.000000,-0.000000,1.000000,0.000000,-0.000000,1.000000,
@@ -165,10 +165,10 @@ void CRenderPrimitive::SetGraphicBox(f32 Width, f32 Height, f32 Depth)
     mVerts.clear();
     mNormals.clear();
 
-    mVerts.resize(sizeof(boxVerts)/sizeof(f32));
-    mNormals.resize(sizeof(boxNormals)/sizeof(f32));
+    mVerts.resize(sizeof(boxVerts)/sizeof(float));
+    mNormals.resize(sizeof(boxNormals)/sizeof(float));
 
-    for (int i = 0; i != sizeof(boxVerts)/sizeof(f32)/3; ++i)
+    for (int i = 0; i != sizeof(boxVerts)/sizeof(float)/3; ++i)
     {
         mVerts[i * 3 + 0] = boxVerts[i * 3 + 0] * Width;
         mVerts[i * 3 + 1] = boxVerts[i * 3 + 1] * Height;
@@ -180,9 +180,9 @@ void CRenderPrimitive::SetGraphicBox(f32 Width, f32 Height, f32 Depth)
     }
 }
 
-void CRenderPrimitive::SetGraphicSphere(f32 radius)
+void CRenderPrimitive::SetGraphicSphere(float radius)
 {
-    static const f32 sphereVerts[] =
+    static const float sphereVerts[] =
     {
         0.000000,0.000000,-1.000000,0.203181,-0.147618,-0.967950,-0.077607,-0.238853,-0.967950,0.723607,-0.525725,-0.447220,0.609547,-0.442856,-0.657519,0.812729,-0.295238,-0.502301,-0.251147,0.000000,-0.967949,-0.077607,0.238853,-0.967950,0.203181,0.147618,-0.967950,0.860698,-0.442858,-0.251151,-0.276388,-0.850649,
         -0.447220,-0.029639,-0.864184,-0.502302,-0.155215,-0.955422,-0.251152,-0.894426,0.000000,-0.447216,-0.831051,-0.238853,-0.502299,-0.956626,-0.147618,-0.251149,-0.276388,0.850649,-0.447220,-0.483971,0.716565,-0.502302,-0.436007,0.864188,-0.251152,0.723607,0.525725,-0.447220,0.531941,0.681712,-0.502302,0.687159,
@@ -220,10 +220,10 @@ void CRenderPrimitive::SetGraphicSphere(f32 radius)
     mVerts.clear();
     mNormals.clear();
 
-    mVerts.resize(sizeof(sphereVerts)/sizeof(f32));
-    mNormals.resize(sizeof(sphereVerts)/sizeof(f32));
+    mVerts.resize(sizeof(sphereVerts)/sizeof(float));
+    mNormals.resize(sizeof(sphereVerts)/sizeof(float));
 
-    for (int i = 0; i != sizeof(sphereVerts)/sizeof(f32)/3; ++i)
+    for (int i = 0; i != sizeof(sphereVerts)/sizeof(float)/3; ++i)
     {
         mVerts[i * 3 + 0] = sphereVerts[i * 3 + 0] * radius;
         mVerts[i * 3 + 1] = sphereVerts[i * 3 + 1] * radius;
@@ -235,9 +235,9 @@ void CRenderPrimitive::SetGraphicSphere(f32 radius)
     }
 }
 
-void CRenderPrimitive::SetGraphicCylinder(f32 radius, f32 length)
+void CRenderPrimitive::SetGraphicCylinder(float radius, float length)
 {
-    static const f32 cylVerts[] =
+    static const float cylVerts[] =
     {
         0.000000,0.500000,-1.000000,0.382683,-0.500000,-0.923880,0.000000,-0.500000,-1.000000,0.382683,0.500000,-0.923879,0.707107,-0.500000,-0.707107,0.707107,0.500000,-0.707107,0.923880,-0.500000,-0.382683,
         0.923880,0.500000,-0.382683,1.000000,-0.500000,0.000000,1.000000,0.500000,0.000000,0.923880,-0.500000,0.382683,0.923880,0.500000,0.382683,0.707107,-0.500000,0.707107,0.707107,0.500000,0.707107,
@@ -250,7 +250,7 @@ void CRenderPrimitive::SetGraphicCylinder(f32 radius, f32 length)
         1.000000,-0.500000,0.000000,0.923880,-0.500000,0.382683,0.707107,-0.500000,0.707107,-0.000000,-0.500000,1.000000,-0.382683,-0.500000,0.923879,-0.707107,-0.500000,0.707107,-1.000000,-0.500000,
         -0.000000,-0.923879,-0.500000,-0.382684,-0.707107,-0.500000,-0.707107,
     };
-    static const f32 cylNormals[] =
+    static const float cylNormals[] =
     {
         0.000000,0.000000,-1.000000,0.382672,0.000000,-0.923856,0.000000,0.000000,-1.000000,0.382672,0.000000,-0.923856,0.707083,0.000000,-0.707083,0.707083,0.000000,-0.707083,0.923856,0.000000,-0.382672,
         0.923856,0.000000,-0.382672,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.923856,0.000000,0.382672,0.923856,0.000000,0.382672,0.707083,0.000000,0.707083,0.707083,0.000000,0.707083,0.382672,
@@ -275,10 +275,10 @@ void CRenderPrimitive::SetGraphicCylinder(f32 radius, f32 length)
     mVerts.clear();
     mNormals.clear();
 
-    mVerts.resize(sizeof(cylVerts)/sizeof(f32));
-    mNormals.resize(sizeof(cylVerts)/sizeof(f32));
+    mVerts.resize(sizeof(cylVerts)/sizeof(float));
+    mNormals.resize(sizeof(cylVerts)/sizeof(float));
 
-    for (int i = 0; i != sizeof(cylVerts)/sizeof(f32)/3; ++i)
+    for (int i = 0; i != sizeof(cylVerts)/sizeof(float)/3; ++i)
     {
         mVerts[i * 3 + 0] = cylVerts[i * 3 + 0] * radius;
         mVerts[i * 3 + 1] = cylVerts[i * 3 + 1] * length;
@@ -296,7 +296,7 @@ void CRenderPrimitive::SetGraphicMesh(const char* strFilename)
     // loading of *.x not implemented
 }
 
-void CRenderPrimitive::SetGraphicMesh(const f32* vert, int vertCount, const f32* norm, int normCount, const uint16_t* ind, int indCount, int prim)
+void CRenderPrimitive::SetGraphicMesh(const float* vert, int vertCount, const float* norm, int normCount, const uint16_t* ind, int indCount, int prim)
 {
     mTris.clear();
     for (int i = 0; i != indCount/prim; ++i)
@@ -337,7 +337,7 @@ void CRenderPrimitive::Render(const neT3 * matrix)
 
     neT3 ct = g_Camera.GetViewMatrix();
 
-    f32 gl_Matrix[16];
+    float gl_Matrix[16];
     toGlMatrix(gl_Matrix, ct);
     glLoadMatrixf(gl_Matrix);
 
@@ -412,10 +412,10 @@ int main(int argc, char** argv)
 
     glMatrixMode(GL_PROJECTION);
 
-    const f32 aspect = width/height;
-    f32 near = 1;
-    f32 far = 500;
-    f32 atanFov = std::atan(60.f * 0.5f * M_PI/180.f);
+    const float aspect = width/height;
+    float near = 1;
+    float far = 500;
+    float atanFov = std::atan(60.f * 0.5f * M_PI/180.f);
     glLoadIdentity();
     glFrustum(atanFov*near*(-1), atanFov*near*1, -atanFov*near/(aspect), atanFov*near/(aspect), near, far);
     glGetFloatv(GL_PROJECTION_MATRIX, projectionFrustum);

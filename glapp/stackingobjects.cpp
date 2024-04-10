@@ -11,7 +11,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 // const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON  = 0.1f;
+// const float EPSILON  = 0.1f;
 
 struct DemoData
 {
@@ -133,7 +133,7 @@ void CSampleStackingObjects::Reset()
 void CSampleStackingObjects::MakeStack(neV3 position, int32_t& index)
 {
     (void)position;
-    const f32 groundLevel = -10.0f;
+    const float groundLevel = -10.0f;
 
     int32_t cur = 0;
     ;
@@ -156,7 +156,7 @@ void CSampleStackingObjects::MakeStack(neV3 position, int32_t& index)
 
         box[cur]->UpdateBoundingInfo();
 
-        f32 mass = 1.0f;
+        float mass = 1.0f;
 
         box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize1[0], boxSize1[1], boxSize1[2], mass));
 
@@ -197,7 +197,7 @@ void CSampleStackingObjects::MakeStack(neV3 position, int32_t& index)
     boxRadii.Set(.5f, .5f, .5f);
     neV3 boxSize;
     boxSize = boxRadii * 2.f;
-    f32 stepX = boxSize[0] + 0.05f;
+    float stepX = boxSize[0] + 0.05f;
     int32_t baseSize = 10;
 
     neV3 startPos;
@@ -233,7 +233,7 @@ void CSampleStackingObjects::MakeStack(neV3 position, int32_t& index)
 
             box[cur]->UpdateBoundingInfo();
 
-            f32 mass = 1.f;
+            float mass = 1.f;
 
             box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize[0], boxSize[1], boxSize[2], mass));
 
@@ -285,7 +285,7 @@ void CSampleStackingObjects::MakeBullet(int32_t index)
 
     box[cur]->UpdateBoundingInfo();
 
-    f32 mass = 0.6f;
+    float mass = 0.6f;
 
     box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize, mass));
 
@@ -376,7 +376,7 @@ void CSampleStackingObjects::InititialisePhysics()
     MakeStack(position, i);
 
 #else
-    f32 gap = 2.f;
+    float gap = 2.f;
 
     for (int32_t j = 0; j < N_STACKS; j++)
     {
@@ -427,7 +427,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

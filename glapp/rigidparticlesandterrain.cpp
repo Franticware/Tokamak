@@ -10,7 +10,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 // const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON = 0.1f;
+// const float EPSILON = 0.1f;
 
 struct DemoData
 {
@@ -111,7 +111,7 @@ void CSampleRigidParticlesAndTerrain::Shutdown()
 
 void CSampleRigidParticlesAndTerrain::MakeParticle(neV3 position, int32_t index)
 {
-    // const f32 groundLevel = -10.0f;
+    // const float groundLevel = -10.0f;
 
     int32_t cur;
 
@@ -128,7 +128,7 @@ void CSampleRigidParticlesAndTerrain::MakeParticle(neV3 position, int32_t index)
 
     box[cur]->UpdateBoundingInfo();
 
-    f32 mass = 0.1f;
+    float mass = 0.1f;
 
     box[cur]->SetInertiaTensor(neBoxInertiaTensor(boxSize1[0], boxSize1[1], boxSize1[2], mass));
 
@@ -195,7 +195,7 @@ void CSampleRigidParticlesAndTerrain::InititialisePhysics()
 
     // SetUpTerrain
 
-    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(f32) / 3, terNorm, sizeof(terNorm) / sizeof(f32) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
+    terrainRender.SetGraphicMesh(terVert, sizeof(terVert) / sizeof(float) / 3, terNorm, sizeof(terNorm) / sizeof(float) / 3, terQuad, sizeof(terQuad) / sizeof(uint16_t), 4);
     terrainRender.SetDiffuseColor(0.1f, 0.5f, 0.1f, 1.0f);
 
     neTriangleMesh triMesh;
@@ -269,7 +269,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

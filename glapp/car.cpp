@@ -57,12 +57,12 @@ const int32_t N_BODY_BOXES = 2;
 const int32_t N_PARTS = 3;
 const int32_t N_RENDER_PRIMITIVES = (N_BODY_BOXES + N_PARTS);
 const int32_t MAX_OVERLAPPED_PAIR = 1000;
-const f32 WHEEL_DIAMETER = 0.9f;
-const f32 WHEEL_WIDTH = 0.3f;
-const f32 MAX_SPEED = 5.0f;
-const f32 MAX_REVERSE_SPEED = -2.0f;
-const f32 MAX_STEER = 0.7f;
-const f32 MAX_SLIDE = 0.90f;
+const float WHEEL_DIAMETER = 0.9f;
+const float WHEEL_WIDTH = 0.3f;
+const float MAX_SPEED = 5.0f;
+const float MAX_REVERSE_SPEED = -2.0f;
+const float MAX_STEER = 0.7f;
+const float MAX_SLIDE = 0.90f;
 
 struct SensorData
 {
@@ -80,7 +80,7 @@ SensorData sensorData[4] =
 class CControllerCB : public neRigidBodyControllerCallback
 {
 public:
-    void RigidBodyControllerCallback(neRigidBodyController* controller, f32 timeStep);
+    void RigidBodyControllerCallback(neRigidBodyController* controller, float timeStep);
 };
 
 CControllerCB cb;
@@ -129,17 +129,17 @@ public:
 
     neV3 displayLines[4][2];
 
-    f32 suspensionLength[4];
+    float suspensionLength[4];
 
     CSampleCar* gameWorld;
 
     int32_t id;
 
-    f32 accel;
+    float accel;
 
-    f32 steer;
+    float steer;
 
-    f32 slide;
+    float slide;
 
     neV3 steerDir;
 
@@ -306,7 +306,7 @@ void CSampleCar::Cleanup()
 
 void CCar::MakeCar(neSimulator* sim, neV3& pos)
 {
-    f32 mass = 1.0f;
+    float mass = 1.0f;
 
     neRigidBody* rigidBody = sim->CreateRigidBody();
 
@@ -425,8 +425,8 @@ struct PartData
     neV3 position;
     neV3 jointPos;
     neV3 jointRot;
-    f32 lowerLimit;
-    f32 upperLimit;
+    float lowerLimit;
+    float upperLimit;
 };
 
 PartData parts[] =
@@ -535,11 +535,11 @@ void MyAppInit()
     sample.Reset();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;
-    f32 t = 1.0f / 30.0f; //(f32)delta / 1000.0f;
+    float t = 1.0f / 30.0f; //(float)delta / 1000.0f;
 
     // sim->Advance(TIME_STEP, 1, &g_PerfReport);
     sample.sim->Advance(t, 1.0f / 30.0f, 1.0f / 30.0f, NULL);
@@ -704,7 +704,7 @@ void MyAppKeyboardProc(SDL_Keycode nChar, bool bKeyDown, bool bAltDown)
     }
 }
 
-void CControllerCB::RigidBodyControllerCallback(neRigidBodyController* controller, f32 timeStep)
+void CControllerCB::RigidBodyControllerCallback(neRigidBodyController* controller, float timeStep)
 {
     (void)timeStep;
     neRigidBody* rb = controller->GetRigidBody();
@@ -732,9 +732,9 @@ void CCar::CarController(neRigidBodyController* controller)
 
     while ((sn = carRigidBody->GetNextSensor()))
     {
-        f32 k = 15.0f; // spring constant
+        float k = 15.0f; // spring constant
 
-        f32 u = 3.f; // damping constant
+        float u = 3.f; // damping constant
 
         if (i == 2 || i == 3)
         {
@@ -743,7 +743,7 @@ void CCar::CarController(neRigidBodyController* controller)
 
         // add spring force
 
-        f32 depth = sn->GetDetectDepth();
+        float depth = sn->GetDetectDepth();
 
         // gw.car.suspensionLength[i] = 1.0f - depth;
         suspensionLength[i] = 1.0f - depth;
@@ -762,7 +762,7 @@ void CCar::CarController(neRigidBodyController* controller)
 
         neV3 linePos = body2World * sn->GetLinePos();
 
-        // f32 dot = lineNormal.Dot(groundNormal) * -1.0f;
+        // float dot = lineNormal.Dot(groundNormal) * -1.0f;
 
         // if (dot <= 0.7f)
         //	continue;
@@ -777,7 +777,7 @@ void CCar::CarController(neRigidBodyController* controller)
 
         // add damping force
 
-        f32 speed = carRigidBody->GetVelocityAtPoint(r).Dot(lineNormal);
+        float speed = carRigidBody->GetVelocityAtPoint(r).Dot(lineNormal);
 
         f = -speed * lineNormal * u;
 
@@ -845,11 +845,11 @@ void CCar::CarController(neRigidBodyController* controller)
     }
 
     // drag
-    f32 dragConstant = 0.3f;
+    float dragConstant = 0.3f;
 
     neV3 vel = carRigidBody->GetVelocity();
 
-    f32 dot = vel.Dot(body2World.rot[0]);
+    float dot = vel.Dot(body2World.rot[0]);
 
     neV3 drag = dot * body2World.rot[0] * -dragConstant;
 

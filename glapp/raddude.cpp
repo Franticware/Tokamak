@@ -32,7 +32,7 @@ DemoData gFloor = { { 0.0f, -11.0f, 0.0f }, { 200.0f, 2.0f, 200.0f }, { 0.3f, 0.
 struct BoneData
 {
     int32_t geometryType;
-    f32 zRotation;
+    float zRotation;
     neV3 pos;
     neV3 size;
     neV3 colour;
@@ -76,12 +76,12 @@ struct JointData
     int32_t bodyB;
     neV3 pos;
     int32_t type; // 0 = ball joint, 1 = hinge joint
-    f32 xAxisAngle;
-    f32 lowerLimit;
-    f32 upperLimit;
+    float xAxisAngle;
+    float lowerLimit;
+    float upperLimit;
     neBool enableLimit;
     neBool enableTwistLimit;
-    f32 twistLimit;
+    float twistLimit;
 };
 
 JointData joints[] =
@@ -193,9 +193,9 @@ void CSampleRadDude::CreateSteps()
 
         neGeometry* geom = steps[i]->AddGeometry();
 
-        const f32 stepHeight = 0.5f; // 1.2f;
+        const float stepHeight = 0.5f; // 1.2f;
 
-        const f32 stepDepth = 0.5f; // 1.2f;
+        const float stepDepth = 0.5f; // 1.2f;
 
         neV3 stepSize;
         stepSize.Set(30.0f, stepHeight, stepDepth);
@@ -216,11 +216,11 @@ void CSampleRadDude::CreateSteps()
 
 void CSampleRadDude::CreateRadDude(neV3 position, int32_t& index)
 {
-    //		const f32 groundLevel = -10.0f;
+    //		const float groundLevel = -10.0f;
 
     int32_t cur = 0;
 
-    f32 scale = 1.0f;
+    float scale = 1.0f;
 
     for (int32_t i = 0; i < BONES_PER_DUDE; i++)
     {
@@ -232,7 +232,7 @@ void CSampleRadDude::CreateRadDude(neV3 position, int32_t& index)
 
         neV3 inertiaTensor;
 
-        f32 mass;
+        float mass;
 
         mass = 8.0f;
 
@@ -471,11 +471,11 @@ void MyAppInit()
     sample.Reset();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;
-    f32 t = 1.0f / 30.0f; //(f32)delta / 1000.0f;
+    float t = 1.0f / 30.0f; //(float)delta / 1000.0f;
 
     // sim->Advance(TIME_STEP, 1, &g_PerfReport);
     sample.sim->Advance(t, 1.0f / 60.0f, 1.0f / 30.0f, nullptr);

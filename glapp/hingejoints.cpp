@@ -9,7 +9,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 // const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON  = 0.1f;
+// const float EPSILON  = 0.1f;
 
 struct DemoData
 {
@@ -96,7 +96,7 @@ void CSamplehingeJoints::InititialisePhysics()
     neV3 gravity;
     gravity.Set(0.0f, -9.0f, 0.0f);
 
-    f32 linkLength = 0.0f;
+    float linkLength = 0.0f;
 
     neBool fixedHead = false; // make this true to make chain fix to world
     neBool fixedTail = false;
@@ -122,7 +122,7 @@ void CSamplehingeJoints::InititialisePhysics()
 
     lastJoint = NULL;
 
-    f32 verticalPos = -5.0f;
+    float verticalPos = -5.0f;
 
     for (int32_t j = 0; j < N_BODY; j++)
     {
@@ -143,7 +143,7 @@ void CSamplehingeJoints::InititialisePhysics()
             boxSize.Set(1.0f, 0.5f, 2.2f);
         }
 
-        f32 mass = 0.01f;
+        float mass = 0.01f;
 
         neV3 tensorSize;
         tensorSize = boxSize; //.Set(1.0f, 0.5f, 1.0f);
@@ -292,7 +292,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

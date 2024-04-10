@@ -9,7 +9,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 // const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON  = 0.1f;
+// const float EPSILON  = 0.1f;
 
 struct DemoData
 {
@@ -194,14 +194,14 @@ void CSampleTank::Reset()
 void CSampleTank::InititialisePhysics()
 {
 
-    f32 ypos = -7;
+    float ypos = -7;
 
     neV3 gravity;
     gravity.Set(0.0f, -9.0f, 0.0f);
     // neV3 gravity; gravity.Set(-9.0f, 0.0f, 0.0f);
 
-    // f32 linkLength = 2.2f;
-    // f32 linkLength = -0.0f;
+    // float linkLength = 2.2f;
+    // float linkLength = -0.0f;
 
     neSimulatorSizeInfo sizeInfo;
 
@@ -220,7 +220,7 @@ void CSampleTank::InititialisePhysics()
 
     // create the kart body
 
-    f32 mass = TANK_MASS;
+    float mass = TANK_MASS;
 
     rigidBodies[0] = sim->CreateRigidBody();
 
@@ -323,7 +323,7 @@ void CSampleTank::InititialisePhysics()
         }
         else
         {
-            f32 height, diameter;
+            float height, diameter;
 
             if (geom->GetCylinder(diameter, height))
             {
@@ -371,7 +371,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;

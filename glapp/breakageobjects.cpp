@@ -9,7 +9,7 @@ neV4 vLightColor[NUM_LIGHT] = { { 0.7f, 0.7f, 0.7f, 0.f }, { 0.5f, 0.5f, 0.5f, 0
 
 const int32_t MAX_OVERLAPPED_PAIR = 300;
 const int32_t WALL_NUMBER = 1;
-// const f32 EPSILON  = 0.1f;
+// const float EPSILON  = 0.1f;
 
 struct DemoData
 {
@@ -84,7 +84,7 @@ void CSampleBreakageObjects::Process()
 
     neBool dontSet = false;
 
-    f32 v = 5.0f;
+    float v = 5.0f;
 
     if (sdlGetAsyncKeyState(SDLK_t))
     {
@@ -181,9 +181,9 @@ struct TableData
     neV3 pos;
     neV3 colour;
     neGeometry::neBreakFlag breakFlag;
-    f32 breakageMass;
-    f32 breakageMagnitude;
-    f32 breakageAbsorption;
+    float breakageMass;
+    float breakageMagnitude;
+    float breakageAbsorption;
 };
 
 TableData tableData[CSampleBreakageObjects::GEOMETRY_PER_TABLE] =
@@ -198,7 +198,7 @@ TableData tableData[CSampleBreakageObjects::GEOMETRY_PER_TABLE] =
 
 void CSampleBreakageObjects::MakeTable(neV3 position, int32_t index)
 {
-    // const f32 groundLevel = -10.0f;
+    // const float groundLevel = -10.0f;
 
     neV3 tableSize;
 
@@ -220,10 +220,10 @@ void CSampleBreakageObjects::MakeTable(neV3 position, int32_t index)
 
     neQ rot;
 
-    rot.X = ((f32)rand()) / (f32)RAND_MAX;
-    rot.Y = ((f32)rand()) / (f32)RAND_MAX;
-    rot.Z = ((f32)rand()) / (f32)RAND_MAX;
-    rot.W = ((f32)rand()) / (f32)RAND_MAX;
+    rot.X = ((float)rand()) / (float)RAND_MAX;
+    rot.Y = ((float)rand()) / (float)RAND_MAX;
+    rot.Z = ((float)rand()) / (float)RAND_MAX;
+    rot.W = ((float)rand()) / (float)RAND_MAX;
 
     rot.Normalize();
 
@@ -296,7 +296,7 @@ void MyAppInit()
     sample.Initialise();
 };
 
-void OnMyAppFrameMove(double fTime, f32 fElapsedTime)
+void OnMyAppFrameMove(double fTime, float fElapsedTime)
 {
     (void)fTime;
     (void)fElapsedTime;
